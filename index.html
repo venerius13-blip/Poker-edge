@@ -2,427 +2,906 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Poker Study</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Poker Tracker</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0d0f14;
-    --surface: #161920;
-    --surface2: #1e2130;
-    --border: #2a2f42;
-    --accent: #e8c97a;
-    --accent2: #5b8af0;
-    --accent3: #4fd1a0;
-    --danger: #f06b6b;
-    --text: #e8eaf2;
-    --text2: #8891b0;
-    --text3: #545c7a;
-    --radius: 12px;
-    --radius-sm: 8px;
-    --shadow: 0 4px 24px rgba(0,0,0,0.4);
-    --font-head: 'Syne', sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
+/* ═══════════════════════════════════════
+   VARIABLES & RESET
+═══════════════════════════════════════ */
+:root {
+  --accent: #e8c97a;
+  --accent-rgb: 232, 201, 122;
+  --accent2: #5b8af0;
+  --accent3: #4fd1a0;
+  --danger: #e05c5c;
+
+  --bg: #0c0e12;
+  --surface: #14161c;
+  --surface2: #1c1f28;
+  --surface3: #222636;
+  --border: #272b3a;
+  --border2: #2e334a;
+
+  --text: #eaecf4;
+  --text2: #7c849e;
+  --text3: #454d66;
+
+  --radius: 10px;
+  --radius-sm: 6px;
+  --font: 'DM Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+  --nav-h: 64px;
+  --header-h: 52px;
+}
+.light {
+  --bg: #f5f6fa;
+  --surface: #ffffff;
+  --surface2: #eef0f6;
+  --surface3: #e4e7f0;
+  --border: #dde0ec;
+  --border2: #cdd0e0;
+  --text: #151828;
+  --text2: #5a6080;
+  --text3: #a0a8c0;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ═══════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════ */
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  height: 100dvh;
+}
+
+/* Header */
+.app-header {
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  z-index: 50;
+}
+.app-logo {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.app-logo span { color: var(--accent); }
+.header-actions { display: flex; gap: 8px; align-items: center; }
+
+/* Main scrollable area */
+.app-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+.app-body::-webkit-scrollbar { display: none; }
+
+/* Bottom nav */
+.bottom-nav {
+  height: var(--nav-h);
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 0 4px;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.nav-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text3);
+  transition: color 0.2s;
+  font-family: var(--font);
+}
+.nav-btn span {
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.nav-btn.active { color: var(--accent); }
+.nav-btn:hover:not(.active) { color: var(--text2); }
+
+/* ═══════════════════════════════════════
+   PAGES
+═══════════════════════════════════════ */
+.page {
+  display: none;
+  padding: 20px 16px 24px;
+  max-width: 680px;
+  margin: 0 auto;
+  min-height: 100%;
+}
+.page.active { display: block; animation: fadeUp 0.25s ease; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* PC layout */
+@media (min-width: 768px) {
+  #app { flex-direction: row; }
+  .app-header { display: none; }
+  .bottom-nav {
+    width: 220px;
+    height: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+    border-top: none;
+    border-right: 1px solid var(--border);
+    padding: 24px 12px;
+    gap: 4px;
   }
-  .light {
-    --bg: #f0f2f8; --surface: #ffffff; --surface2: #e8ebf5;
-    --border: #d0d5e8; --text: #1a1d2e; --text2: #555b7a;
-    --text3: #9099bb; --shadow: 0 4px 24px rgba(0,0,0,0.10);
+  .nav-btn {
+    flex: none;
+    width: 100%;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 11px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
   }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: var(--font-head); background: var(--bg); color: var(--text); min-height: 100vh; transition: background 0.3s, color 0.3s; }
+  .nav-btn span { font-size: 0.82rem; text-transform: none; letter-spacing: 0; font-weight: 500; }
+  .nav-btn.active { background: rgba(var(--accent-rgb), 0.1); }
+  .app-body { flex: 1; }
+  .pc-logo {
+    padding: 12px 14px 20px;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 8px;
+  }
+  .pc-logo span { color: var(--accent); }
+  .page { padding: 28px 28px 40px; }
+}
 
-  .app-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
-  .app-header h1 { font-size: 1.05rem; font-weight: 800; letter-spacing: -0.03em; color: var(--accent); }
-  .app-header h1 span { color: var(--text2); font-weight: 600; }
-  .theme-btn { background: none; border: 1px solid var(--border); border-radius: 50px; padding: 6px 12px; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text2); cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 5px; }
-  .theme-btn:hover { color: var(--accent); border-color: var(--accent); }
+/* ═══════════════════════════════════════
+   TYPOGRAPHY & COMMON
+═══════════════════════════════════════ */
+.page-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 20px;
+  color: var(--text);
+}
+.section-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
 
-  .tab-nav { display: flex; gap: 4px; padding: 10px 16px; background: var(--surface); border-bottom: 1px solid var(--border); overflow-x: auto; }
-  .tab-nav::-webkit-scrollbar { display: none; }
-  .tab-btn { flex-shrink: 0; background: none; border: 1.5px solid var(--border); border-radius: 50px; padding: 7px 16px; font-family: var(--font-head); font-size: 0.78rem; font-weight: 600; color: var(--text2); cursor: pointer; transition: all 0.2s; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
-  .tab-btn.active { background: var(--accent); border-color: var(--accent); color: #0d0f14; }
-  .tab-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+/* Cards */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin-bottom: 12px;
+}
+.card-title {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 14px;
+}
 
-  .section { display: none; padding: 20px 16px 80px; max-width: 680px; margin: 0 auto; }
-  .section.active { display: block; animation: fadeIn 0.3s ease; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+/* Inputs */
+.input {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 13px;
+  font-family: var(--font);
+  font-size: 0.88rem;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+  margin-bottom: 10px;
+}
+.input:focus { border-color: var(--accent); }
+.input-row { display: flex; gap: 8px; }
+.input-row .input { margin-bottom: 0; }
 
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; box-shadow: var(--shadow); }
-  .card-title { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text3); margin-bottom: 14px; }
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: none; border-radius: var(--radius-sm);
+  padding: 9px 16px;
+  font-family: var(--font); font-size: 0.82rem; font-weight: 600;
+  cursor: pointer; transition: all 0.15s; white-space: nowrap;
+}
+.btn-primary { background: var(--accent); color: #111; }
+.btn-primary:hover { filter: brightness(1.08); transform: translateY(-1px); }
+.btn-ghost { background: none; border: 1px solid var(--border); color: var(--text2); }
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+.btn-danger { background: none; border: 1px solid var(--border); color: var(--text3); }
+.btn-danger:hover { border-color: var(--danger); color: var(--danger); }
+.btn-blue { background: var(--accent2); color: #fff; }
+.btn-sm { padding: 6px 11px; font-size: 0.75rem; }
+.btn-full { width: 100%; justify-content: center; }
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
 
-  .input, .textarea { width: 100%; background: var(--surface2); border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 10px 14px; font-family: var(--font-head); font-size: 0.88rem; color: var(--text); outline: none; transition: border-color 0.2s; margin-bottom: 10px; }
-  .input:focus, .textarea:focus { border-color: var(--accent2); }
-  .input-row { display: flex; gap: 8px; }
-  .input-row .input { margin-bottom: 0; }
+/* Tags */
+.tags-wrap { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; min-height: 26px; }
+.tag {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 4px; padding: 3px 9px;
+  font-size: 0.68rem; font-weight: 500; color: var(--text2);
+  font-family: var(--font-mono); display: flex; align-items: center; gap: 4px;
+}
+.tag-x { cursor: pointer; color: var(--text3); font-size: 0.95rem; line-height: 1; transition: color 0.15s; }
+.tag-x:hover { color: var(--danger); }
+.tag-filter { cursor: pointer; transition: all 0.15s; }
+.tag-filter.active { background: var(--accent2); border-color: var(--accent2); color: #fff; }
 
-  .btn { border: none; border-radius: var(--radius-sm); padding: 10px 18px; font-family: var(--font-head); font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: all 0.18s; display: inline-flex; align-items: center; gap: 6px; }
-  .btn-primary { background: var(--accent); color: #0d0f14; }
-  .btn-primary:hover { background: #f0d48a; transform: translateY(-1px); }
-  .btn-blue { background: var(--accent2); color: #fff; }
-  .btn-blue:hover { background: #7aa4f7; }
-  .btn-green { background: var(--accent3); color: #0d0f14; }
-  .btn-danger { background: transparent; border: 1px solid var(--border); color: var(--text3); }
-  .btn-danger:hover { border-color: var(--danger); color: var(--danger); background: rgba(240,107,107,0.06); }
-  .btn-ghost { background: none; border: 1.5px solid var(--border); color: var(--text2); }
-  .btn-ghost:hover { border-color: var(--accent2); color: var(--accent2); }
-  .btn-sm { padding: 6px 12px; font-size: 0.73rem; }
-  .btn-full { width: 100%; justify-content: center; }
-  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+/* List items */
+.list-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 14px; background: var(--surface2);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  margin-bottom: 8px; cursor: pointer; transition: border-color 0.15s;
+}
+.list-item:hover { border-color: var(--accent); }
+.list-item.active-item { border-color: var(--accent); background: rgba(var(--accent-rgb),0.05); }
+.list-item-icon { color: var(--text3); display: flex; flex-shrink: 0; }
+.list-item-name { flex: 1; font-size: 0.85rem; font-weight: 500; }
+.list-item-sub { font-family: var(--font-mono); font-size: 0.67rem; color: var(--text3); }
 
-  .tags-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; min-height: 28px; }
-  .tag { background: var(--surface2); border: 1px solid var(--border); border-radius: 50px; padding: 3px 10px; font-size: 0.7rem; font-weight: 600; color: var(--text2); font-family: var(--font-mono); display: flex; align-items: center; gap: 5px; }
-  .tag-x { cursor: pointer; color: var(--text3); font-size: 1rem; line-height: 1; transition: color 0.15s; }
-  .tag-x:hover { color: var(--danger); }
-  .tag-filter { cursor: pointer; transition: all 0.15s; }
-  .tag-filter.active { background: var(--accent2); border-color: var(--accent2); color: #fff; }
+/* Divider */
+.divider { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
 
-  .tag-existing-section { margin-bottom: 10px; }
-  .tag-existing-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); margin-bottom: 6px; }
-  .tag-existing-wrap { display: flex; flex-wrap: wrap; gap: 5px; }
-  .tag-existing { background: var(--surface2); border: 1.5px solid var(--border); border-radius: 50px; padding: 4px 11px; font-size: 0.7rem; font-weight: 600; color: var(--text3); font-family: var(--font-mono); cursor: pointer; transition: all 0.15s; user-select: none; }
-  .tag-existing:hover { border-color: var(--accent2); color: var(--accent2); }
-  .tag-existing.selected { background: var(--accent2); border-color: var(--accent2); color: #fff; }
+/* Empty state */
+.empty-state { text-align: center; padding: 32px 16px; color: var(--text3); font-size: 0.82rem; line-height: 1.7; }
 
-  .q-item { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 8px; display: flex; align-items: flex-start; gap: 10px; }
-  .q-item-body { flex: 1; min-width: 0; }
-  .q-item-q { font-size: 0.86rem; font-weight: 600; margin-bottom: 5px; line-height: 1.4; }
-  .q-item-meta { font-size: 0.7rem; color: var(--accent3); font-family: var(--font-mono); }
-  .q-item-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
-  .q-item-tag { background: var(--surface); border: 1px solid var(--border); border-radius: 50px; padding: 2px 8px; font-size: 0.65rem; font-family: var(--font-mono); color: var(--text3); }
-  .q-item-del { flex-shrink: 0; background: none; border: 1px solid var(--border); border-radius: 6px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s; color: var(--text3); }
-  .q-item-del:hover { border-color: var(--danger); color: var(--danger); background: rgba(240,107,107,0.08); }
+/* Subviews */
+.subview { display: none; }
+.subview.active { display: block; animation: fadeUp 0.2s; }
 
-  .quiz-progress { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
-  .quiz-bar-wrap { flex: 1; height: 4px; background: var(--surface2); border-radius: 99px; overflow: hidden; }
-  .quiz-bar { height: 100%; background: var(--accent); border-radius: 99px; transition: width 0.4s ease; }
-  .quiz-count { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text2); white-space: nowrap; }
-  .quiz-question { font-size: 1rem; font-weight: 700; line-height: 1.5; margin-bottom: 20px; }
-  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
-  .quiz-opt { background: var(--surface2); border: 2px solid var(--border); border-radius: var(--radius-sm); padding: 13px 16px; font-family: var(--font-head); font-size: 0.85rem; font-weight: 600; color: var(--text); cursor: pointer; text-align: left; transition: all 0.18s; display: flex; align-items: center; gap: 12px; }
-  .quiz-opt:hover:not(:disabled) { border-color: var(--accent2); color: var(--accent2); }
-  .quiz-opt.correct { border-color: var(--accent3); background: rgba(79,209,160,0.1); color: var(--accent3); }
-  .quiz-opt.wrong { border-color: var(--danger); background: rgba(240,107,107,0.1); color: var(--danger); }
-  .quiz-opt:disabled { cursor: default; }
-  .opt-letter { width: 24px; height: 24px; border-radius: 50%; background: var(--border); color: var(--text2); display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 700; flex-shrink: 0; font-family: var(--font-mono); }
-  .quiz-opt.correct .opt-letter { background: var(--accent3); color: #0d0f14; }
-  .quiz-opt.wrong .opt-letter { background: var(--danger); color: #fff; }
-  .quiz-feedback { margin-top: 12px; padding: 11px 14px; border-radius: var(--radius-sm); font-size: 0.82rem; font-weight: 600; display: none; }
-  .quiz-feedback.show { display: block; animation: fadeIn 0.2s; }
-  .quiz-feedback.ok { background: rgba(79,209,160,0.08); color: var(--accent3); border: 1px solid rgba(79,209,160,0.25); }
-  .quiz-feedback.ko { background: rgba(240,107,107,0.08); color: var(--danger); border: 1px solid rgba(240,107,107,0.25); }
+/* ═══════════════════════════════════════
+   DASHBOARD
+═══════════════════════════════════════ */
+.dashboard-greeting {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+.dashboard-sub { font-size: 0.85rem; color: var(--text2); margin-bottom: 24px; }
 
-  .score-display { text-align: center; padding: 28px 16px 16px; }
-  .score-big { font-size: 3.5rem; font-weight: 800; color: var(--accent); line-height: 1; }
-  .score-label { color: var(--text2); margin-top: 6px; font-size: 0.85rem; }
-  .score-msg { margin-top: 14px; font-size: 0.9rem; font-weight: 600; color: var(--text2); }
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+.stat-card-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); margin-bottom: 6px; }
+.stat-card-value { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.03em; color: var(--text); font-family: var(--font-mono); }
+.stat-card-sub { font-size: 0.7rem; color: var(--text2); margin-top: 2px; }
 
-  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.65); display: flex; align-items: center; justify-content: center; z-index: 200; padding: 20px; animation: fadeIn 0.2s; }
-  .modal-overlay.hidden { display: none; }
-  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; width: 100%; max-width: 420px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
-  .modal-title { font-size: 1rem; font-weight: 800; margin-bottom: 20px; }
-  .modal-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text3); margin-bottom: 8px; display: block; }
+.dashboard-placeholder {
+  border: 1px dashed var(--border2);
+  border-radius: var(--radius);
+  padding: 28px 20px;
+  text-align: center;
+  color: var(--text3);
+  font-size: 0.82rem;
+  margin-bottom: 12px;
+}
+.dashboard-placeholder .dp-title { font-size: 0.78rem; font-weight: 600; margin-bottom: 4px; color: var(--text2); }
 
-  .tag-selector { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
-  .tag-sel-item { background: var(--surface2); border: 1.5px solid var(--border); border-radius: 50px; padding: 5px 12px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--text2); cursor: pointer; transition: all 0.15s; }
-  .tag-sel-item.selected { background: var(--accent2); border-color: var(--accent2); color: #fff; }
-  .tag-sel-all { background: var(--surface2); border: 1.5px solid var(--border); border-radius: 50px; padding: 5px 12px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--text2); cursor: pointer; transition: all 0.15s; }
-  .tag-sel-all.selected { background: var(--accent); border-color: var(--accent); color: #0d0f14; }
+/* ═══════════════════════════════════════
+   QUIZ
+═══════════════════════════════════════ */
+.quiz-subnav { display: flex; gap: 6px; margin-bottom: 16px; }
+.quiz-sub-btn {
+  flex: 1; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 9px 8px;
+  font-family: var(--font); font-size: 0.75rem; font-weight: 600;
+  color: var(--text2); cursor: pointer; transition: all 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+}
+.quiz-sub-btn.active { background: var(--accent); border-color: var(--accent); color: #111; }
+.quiz-sub-btn:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
 
-  .qty-btns { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
-  .qty-btn { background: var(--surface2); border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 8px 16px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--text2); cursor: pointer; transition: all 0.15s; font-weight: 600; }
-  .qty-btn.selected { background: var(--accent); border-color: var(--accent); color: #0d0f14; }
+.q-item { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 8px; display: flex; align-items: flex-start; gap: 10px; }
+.q-item-body { flex: 1; min-width: 0; }
+.q-item-q { font-size: 0.85rem; font-weight: 500; margin-bottom: 4px; line-height: 1.4; }
+.q-item-meta { font-size: 0.68rem; color: var(--accent3); font-family: var(--font-mono); }
+.q-item-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.q-item-tag { background: var(--surface); border: 1px solid var(--border); border-radius: 3px; padding: 2px 7px; font-size: 0.63rem; font-family: var(--font-mono); color: var(--text3); }
+.q-item-del { flex-shrink: 0; background: none; border: 1px solid var(--border); border-radius: var(--radius-sm); width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s; color: var(--text3); }
+.q-item-del:hover { border-color: var(--danger); color: var(--danger); }
 
-  .subview { display: none; }
-  .subview.active { display: block; animation: fadeIn 0.25s; }
+.tag-existing-section { margin-bottom: 12px; }
+.tag-existing-label { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); margin-bottom: 7px; }
+.tag-existing-wrap { display: flex; flex-wrap: wrap; gap: 5px; }
+.tag-existing { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 4px 10px; font-size: 0.68rem; font-weight: 500; color: var(--text3); font-family: var(--font-mono); cursor: pointer; transition: all 0.15s; }
+.tag-existing:hover { border-color: var(--accent2); color: var(--accent2); }
+.tag-existing.selected { background: var(--accent2); border-color: var(--accent2); color: #fff; }
 
-  .range-grid { display: grid; grid-template-columns: repeat(13, 1fr); gap: 2px; }
-  .range-cell { aspect-ratio: 1; border-radius: 3px; font-size: clamp(0.42rem, 1.4vw, 0.65rem); font-family: var(--font-mono); font-weight: 600; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: opacity 0.1s; user-select: none; }
-  .range-cell.pair    { background: #2a1f4a; color: #a585f0; }
-  .range-cell.suited  { background: #162638; color: #5b9fd4; }
-  .range-cell.offsuit { background: var(--surface2); color: var(--text3); }
-  .range-cell.selected-raise { background: var(--accent); color: #0d0f14; }
-  .range-cell.selected-call  { background: var(--accent2); color: #fff; }
-  .range-cell.selected-fold  { background: var(--danger); color: #fff; }
-  .range-cell:hover { opacity: 0.8; }
+.quiz-progress { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+.quiz-bar-wrap { flex: 1; height: 3px; background: var(--surface2); border-radius: 99px; overflow: hidden; }
+.quiz-bar { height: 100%; background: var(--accent); border-radius: 99px; transition: width 0.4s ease; }
+.quiz-count { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text2); white-space: nowrap; }
+.quiz-question { font-size: 1rem; font-weight: 600; line-height: 1.5; margin-bottom: 18px; }
+.quiz-options { display: flex; flex-direction: column; gap: 7px; }
+.quiz-opt {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px 14px;
+  font-family: var(--font); font-size: 0.85rem; font-weight: 500;
+  color: var(--text); cursor: pointer; text-align: left;
+  transition: all 0.15s; display: flex; align-items: center; gap: 10px;
+}
+.quiz-opt:hover:not(:disabled) { border-color: var(--accent); color: var(--text); }
+.quiz-opt.correct { border-color: var(--accent3); background: rgba(79,209,160,0.08); color: var(--accent3); }
+.quiz-opt.wrong { border-color: var(--danger); background: rgba(224,92,92,0.08); color: var(--danger); }
+.quiz-opt:disabled { cursor: default; }
+.opt-letter { width: 22px; height: 22px; border-radius: 4px; background: var(--surface3); color: var(--text3); display: flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 600; flex-shrink: 0; font-family: var(--font-mono); }
+.quiz-opt.correct .opt-letter { background: var(--accent3); color: #0d0f14; }
+.quiz-opt.wrong .opt-letter { background: var(--danger); color: #fff; }
+.quiz-feedback { margin-top: 10px; padding: 10px 13px; border-radius: var(--radius-sm); font-size: 0.8rem; font-weight: 500; display: none; }
+.quiz-feedback.show { display: block; animation: fadeUp 0.2s; }
+.quiz-feedback.ok { background: rgba(79,209,160,0.07); color: var(--accent3); border: 1px solid rgba(79,209,160,0.2); }
+.quiz-feedback.ko { background: rgba(224,92,92,0.07); color: var(--danger); border: 1px solid rgba(224,92,92,0.2); }
 
-  .range-legend { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 12px; }
-  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.7rem; font-family: var(--font-mono); color: var(--text2); }
-  .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+.score-display { text-align: center; padding: 24px 0 16px; }
+.score-big { font-size: 3.2rem; font-weight: 700; color: var(--accent); letter-spacing: -0.04em; font-family: var(--font-mono); }
+.score-label { color: var(--text2); margin-top: 4px; font-size: 0.82rem; }
+.score-msg { margin-top: 12px; font-size: 0.88rem; font-weight: 500; color: var(--text2); }
 
-  .range-mode-btns { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
-  .mode-btn { padding: 6px 14px; border-radius: 50px; font-family: var(--font-mono); font-size: 0.7rem; font-weight: 600; cursor: pointer; border: 1.5px solid var(--border); background: none; color: var(--text2); transition: all 0.15s; }
-  .mode-btn.active-raise { background: var(--accent); border-color: var(--accent); color: #0d0f14; }
-  .mode-btn.active-call  { background: var(--accent2); border-color: var(--accent2); color: #fff; }
-  .mode-btn.active-fold  { background: var(--danger); border-color: var(--danger); color: #fff; }
-  .mode-btn.active-erase { border-color: var(--text3); color: var(--text2); }
+/* Modal */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 200; padding: 20px; animation: fadeUp 0.2s; }
+.modal-overlay.hidden { display: none; }
+.modal { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; width: 100%; max-width: 400px; box-shadow: 0 24px 60px rgba(0,0,0,0.5); }
+.modal-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 16px; }
+.modal-label { font-size: 0.62rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text3); margin-bottom: 8px; display: block; }
+.tag-selector { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.tag-sel-item { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 5px 11px; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text2); cursor: pointer; transition: all 0.15s; }
+.tag-sel-item.selected { background: var(--accent2); border-color: var(--accent2); color: #fff; }
+.tag-sel-all { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 5px 11px; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text2); cursor: pointer; transition: all 0.15s; }
+.tag-sel-all.selected { background: var(--accent); border-color: var(--accent); color: #111; }
+.qty-btns { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 14px; }
+.qty-btn { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 14px; font-family: var(--font-mono); font-size: 0.78rem; color: var(--text2); cursor: pointer; transition: all 0.15s; font-weight: 500; }
+.qty-btn.selected { background: var(--accent); border-color: var(--accent); color: #111; }
 
-  .list-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 8px; cursor: pointer; transition: border-color 0.15s; }
-  .list-item:hover { border-color: var(--accent2); }
-  .list-item.active-item { border-color: var(--accent); background: rgba(232,201,122,0.06); }
-  .list-item-icon { color: var(--text3); display: flex; align-items: center; flex-shrink: 0; }
-  .list-item-name { flex: 1; font-size: 0.86rem; font-weight: 600; }
-  .list-item-sub { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text3); }
+/* ═══════════════════════════════════════
+   RANGES
+═══════════════════════════════════════ */
+.range-grid { display: grid; grid-template-columns: repeat(13, 1fr); gap: 2px; }
+.range-cell { aspect-ratio: 1; border-radius: 2px; font-size: clamp(0.4rem, 1.3vw, 0.62rem); font-family: var(--font-mono); font-weight: 500; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: opacity 0.1s; user-select: none; }
+.range-cell.pair    { background: #261b45; color: #9b7ae0; }
+.range-cell.suited  { background: #132030; color: #4d8fc0; }
+.range-cell.offsuit { background: var(--surface2); color: var(--text3); }
+.range-cell.selected-raise { background: var(--accent); color: #111; }
+.range-cell.selected-call  { background: var(--accent2); color: #fff; }
+.range-cell.selected-fold  { background: var(--danger); color: #fff; }
+.range-cell:hover { opacity: 0.75; }
+.range-legend { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.68rem; font-family: var(--font-mono); color: var(--text2); }
+.legend-dot { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
+.range-mode-btns { display: flex; gap: 5px; margin-bottom: 12px; flex-wrap: wrap; }
+.mode-btn { padding: 5px 13px; border-radius: 4px; font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: none; color: var(--text2); transition: all 0.15s; }
+.mode-btn.active-raise { background: var(--accent); border-color: var(--accent); color: #111; }
+.mode-btn.active-call  { background: var(--accent2); border-color: var(--accent2); color: #fff; }
+.mode-btn.active-fold  { background: var(--danger); border-color: var(--danger); color: #fff; }
+.mode-btn.active-erase { border-color: var(--text3); color: var(--text2); }
 
-  .blinds-stack-display { text-align: center; padding: 20px 0 8px; }
-  .blinds-chips { font-size: 2.8rem; font-weight: 800; color: var(--accent); font-family: var(--font-mono); letter-spacing: -0.04em; }
-  .blinds-sub-label { font-size: 0.75rem; color: var(--text3); margin-top: 3px; }
-  .blinds-answer { padding: 14px 16px; border-radius: var(--radius-sm); text-align: center; font-size: 1.4rem; font-weight: 800; margin-top: 14px; display: none; }
-  .blinds-answer.show { display: block; animation: fadeIn 0.3s; }
-  .blinds-answer.exact { background: rgba(79,209,160,0.1); color: var(--accent3); border: 1px solid rgba(79,209,160,0.25); }
-  .blinds-answer.close { background: rgba(232,201,122,0.1); color: var(--accent); border: 1px solid rgba(232,201,122,0.25); }
-  .blinds-answer.far   { background: rgba(240,107,107,0.1); color: var(--danger); border: 1px solid rgba(240,107,107,0.25); }
-  .blinds-answer-sub { font-size: 0.75rem; font-weight: 500; margin-top: 4px; opacity: 0.75; font-family: var(--font-mono); }
+/* ═══════════════════════════════════════
+   BLINDS
+═══════════════════════════════════════ */
+.blinds-hero { text-align: center; padding: 20px 0 12px; }
+.blinds-chips { font-size: 2.6rem; font-weight: 700; color: var(--accent); font-family: var(--font-mono); letter-spacing: -0.04em; }
+.blinds-sub-label { font-size: 0.72rem; color: var(--text3); margin-top: 2px; }
+.blinds-answer { padding: 13px 16px; border-radius: var(--radius-sm); text-align: center; font-size: 1.3rem; font-weight: 700; margin-top: 12px; display: none; }
+.blinds-answer.show { display: block; animation: fadeUp 0.25s; }
+.blinds-answer.exact { background: rgba(79,209,160,0.08); color: var(--accent3); border: 1px solid rgba(79,209,160,0.2); }
+.blinds-answer.close { background: rgba(var(--accent-rgb),0.08); color: var(--accent); border: 1px solid rgba(var(--accent-rgb),0.2); }
+.blinds-answer.far   { background: rgba(224,92,92,0.08); color: var(--danger); border: 1px solid rgba(224,92,92,0.2); }
+.blinds-answer-sub { font-size: 0.72rem; font-weight: 400; margin-top: 3px; opacity: 0.7; font-family: var(--font-mono); }
+.presets { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 8px; }
+.preset-btn { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 4px 10px; font-family: var(--font-mono); font-size: 0.68rem; color: var(--text2); cursor: pointer; transition: all 0.15s; }
+.preset-btn:hover { border-color: var(--accent); color: var(--accent); }
+.stat-row { display: flex; gap: 20px; }
+.stat-box { text-align: center; }
+.stat-num { font-size: 1.6rem; font-weight: 700; font-family: var(--font-mono); }
+.stat-lbl { font-size: 0.68rem; color: var(--text2); margin-top: 2px; }
 
-  .presets { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 8px; }
-  .preset-btn { background: var(--surface2); border: 1px solid var(--border); border-radius: 50px; padding: 4px 11px; font-family: var(--font-mono); font-size: 0.7rem; color: var(--text2); cursor: pointer; transition: all 0.15s; }
-  .preset-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+/* ═══════════════════════════════════════
+   SUIVI (placeholder)
+═══════════════════════════════════════ */
+.coming-soon {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 60px 20px; text-align: center;
+  gap: 12px;
+}
+.coming-soon-icon { color: var(--text3); margin-bottom: 4px; }
+.coming-soon h3 { font-size: 1rem; font-weight: 600; color: var(--text2); }
+.coming-soon p { font-size: 0.82rem; color: var(--text3); max-width: 260px; line-height: 1.6; }
 
-  .stat-row { display: flex; gap: 20px; }
-  .stat-box { text-align: center; }
-  .stat-num { font-size: 1.7rem; font-weight: 800; font-family: var(--font-mono); }
-  .stat-lbl { font-size: 0.7rem; color: var(--text2); margin-top: 2px; }
+/* ═══════════════════════════════════════
+   SETTINGS
+═══════════════════════════════════════ */
+.settings-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 0; border-bottom: 1px solid var(--border);
+}
+.settings-row:last-child { border-bottom: none; }
+.settings-row-label { font-size: 0.85rem; font-weight: 500; }
+.settings-row-sub { font-size: 0.72rem; color: var(--text2); margin-top: 2px; }
 
-  .divider { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
-  .text-sm { font-size: 0.78rem; color: var(--text2); }
-  .mt-8 { margin-top: 8px; } .mt-12 { margin-top: 12px; } .mt-16 { margin-top: 16px; }
-  .empty-state { text-align: center; padding: 28px 16px; color: var(--text3); font-size: 0.82rem; line-height: 1.7; }
+/* Toggle switch */
+.toggle { position: relative; width: 42px; height: 24px; flex-shrink: 0; }
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle-slider {
+  position: absolute; inset: 0; background: var(--surface3);
+  border-radius: 99px; cursor: pointer; transition: 0.2s;
+  border: 1px solid var(--border);
+}
+.toggle-slider::before {
+  content: ''; position: absolute; width: 16px; height: 16px;
+  left: 3px; top: 3px; background: var(--text3);
+  border-radius: 50%; transition: 0.2s;
+}
+.toggle input:checked + .toggle-slider { background: var(--accent); border-color: var(--accent); }
+.toggle input:checked + .toggle-slider::before { transform: translateX(18px); background: #111; }
+
+/* Color picker */
+.color-grid { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+.color-dot {
+  width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
+  border: 2px solid transparent; transition: all 0.15s;
+  position: relative;
+}
+.color-dot.selected { border-color: var(--text); transform: scale(1.1); }
+.color-dot.selected::after {
+  content: ''; position: absolute; inset: 5px;
+  border-radius: 50%; background: rgba(0,0,0,0.35);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+  background-size: 14px; background-repeat: no-repeat; background-position: center;
+}
+
+/* ═══════════════════════════════════════
+   STUDY SUB-TABS
+═══════════════════════════════════════ */
+.study-tabs { display: flex; gap: 0; margin-bottom: 20px; border-bottom: 1px solid var(--border); }
+.study-tab {
+  padding: 9px 16px; background: none; border: none;
+  font-family: var(--font); font-size: 0.8rem; font-weight: 500;
+  color: var(--text2); cursor: pointer; transition: all 0.15s;
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+}
+.study-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.study-tab:hover:not(.active) { color: var(--text); }
 </style>
 </head>
 <body>
+<div id="app">
 
-<header class="app-header">
-  <h1>Poker <span>Study</span></h1>
-  <button class="theme-btn" onclick="toggleTheme()" id="theme-btn">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-    Light
-  </button>
-</header>
-
-<nav class="tab-nav">
-  <button class="tab-btn active" onclick="showTab('quiz',this)">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-    Quiz
-  </button>
-  <button class="tab-btn" onclick="showTab('ranges',this)">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-    Ranges
-  </button>
-  <button class="tab-btn" onclick="showTab('blinds',this)">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-    Blinds
-  </button>
-</nav>
-
-<!-- QUIZ -->
-<section id="tab-quiz" class="section active">
-  <div class="btn-row" style="margin-bottom:16px;">
-    <button class="btn btn-ghost btn-sm" onclick="showQuizView('list')">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-      Questions
-    </button>
-    <button class="btn btn-ghost btn-sm" onclick="showQuizView('add')">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      Ajouter
-    </button>
-    <button class="btn btn-primary btn-sm" onclick="openQuizConfig()">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-      Lancer
-    </button>
-  </div>
-
-  <div id="quiz-view-list" class="subview active">
-    <div class="card">
-      <div class="card-title">Filtrer par tag</div>
-      <div id="tag-filters" class="tags-wrap">
-        <span class="tag tag-filter active" data-tag="all" onclick="filterByTag('all',this)">Tous</span>
-      </div>
-    </div>
-    <div id="questions-list"></div>
-  </div>
-
-  <div id="quiz-view-add" class="subview">
-    <div class="card">
-      <div class="card-title">Nouvelle question</div>
-      <input class="input" id="q-question" placeholder="Question...">
-      <input class="input" id="q-correct" placeholder="Bonne réponse">
-      <input class="input" id="q-wrong1" placeholder="Mauvaise réponse 1">
-      <input class="input" id="q-wrong2" placeholder="Mauvaise réponse 2">
-      <input class="input" id="q-wrong3" placeholder="Mauvaise réponse 3">
-      <div id="existing-tags-section" class="tag-existing-section" style="display:none;">
-        <div class="tag-existing-label">Tags existants — clique pour sélectionner</div>
-        <div id="existing-tags-wrap" class="tag-existing-wrap"></div>
-        <div style="border-top:1px solid var(--border);margin:10px 0;"></div>
-      </div>
-      <div class="input-row" style="margin-bottom:10px;">
-        <input class="input" id="q-tag-input" placeholder="Nouveau tag..." style="margin:0;" onkeydown="if(event.key==='Enter')addTagToForm();">
-        <button class="btn btn-ghost btn-sm" onclick="addTagToForm()">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </button>
-      </div>
-      <div id="form-tags" class="tags-wrap"></div>
-      <div class="btn-row mt-8">
-        <button class="btn btn-primary" onclick="addQuestion()">Sauvegarder</button>
-        <button class="btn btn-ghost" onclick="clearQuizForm()">Effacer</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="quiz-view-play" class="subview">
-    <div class="card">
-      <div class="quiz-progress">
-        <div class="quiz-bar-wrap"><div class="quiz-bar" id="quiz-bar"></div></div>
-        <div class="quiz-count" id="quiz-count">0/0</div>
-      </div>
-      <div class="quiz-question" id="quiz-question"></div>
-      <div class="quiz-options" id="quiz-options"></div>
-      <div class="quiz-feedback" id="quiz-feedback"></div>
-      <div class="btn-row mt-16">
-        <button class="btn btn-primary" id="quiz-next-btn" onclick="nextQuestion()" style="display:none;">Suivant</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="quiz-view-score" class="subview">
-    <div class="card">
-      <div class="score-display">
-        <div class="score-big" id="score-num">0/0</div>
-        <div class="score-label">bonnes réponses</div>
-        <div class="score-msg" id="score-msg"></div>
-      </div>
-      <div class="btn-row" style="justify-content:center;">
-        <button class="btn btn-primary" onclick="openQuizConfig()">Rejouer</button>
-        <button class="btn btn-ghost" onclick="showQuizView('list')">Retour</button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- RANGES -->
-<section id="tab-ranges" class="section">
-  <div id="range-view-folders">
-    <div class="btn-row" style="margin-bottom:16px;">
-      <button class="btn btn-ghost btn-sm" onclick="toggleAddFolder()">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Nouveau dossier
+  <!-- HEADER (mobile only) -->
+  <header class="app-header">
+    <div class="app-logo">Poker<span>IQ</span></div>
+    <div class="header-actions">
+      <button class="btn btn-ghost btn-sm" id="theme-btn" onclick="toggleTheme()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
       </button>
     </div>
-    <div id="add-folder-form" style="display:none;" class="card">
-      <div class="card-title">Nouveau dossier</div>
-      <div class="input-row">
-        <input class="input" id="folder-name-input" placeholder="Ex: BTN vs BB" style="margin:0;" onkeydown="if(event.key==='Enter')createFolder();">
-        <button class="btn btn-primary btn-sm" onclick="createFolder()">Créer</button>
-      </div>
-    </div>
-    <div id="folders-list"><div class="empty-state">Aucun dossier.<br>Crée-en un pour organiser tes ranges.</div></div>
-  </div>
+  </header>
 
-  <div id="range-view-editor" style="display:none;">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
-      <button class="btn btn-ghost btn-sm" onclick="closeRangeEditor()">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-        Retour
-      </button>
-      <span id="range-editor-title" style="font-weight:700;font-size:0.9rem;color:var(--text2);"></span>
-    </div>
-    <div class="card">
-      <div class="card-title">Mode d'action</div>
-      <div class="range-mode-btns">
-        <button class="mode-btn active-raise" id="mode-raise" onclick="setMode('raise')">Raise</button>
-        <button class="mode-btn" id="mode-call" onclick="setMode('call')">Call</button>
-        <button class="mode-btn" id="mode-fold" onclick="setMode('fold')">Fold</button>
-        <button class="mode-btn" id="mode-erase" onclick="setMode('erase')">Effacer</button>
-      </div>
-      <div class="range-legend">
-        <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>Raise</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--accent2)"></div>Call</div>
-        <div class="legend-item"><div class="legend-dot" style="background:var(--danger)"></div>Fold</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#2a1f4a;border:1px solid #a585f0;"></div>Paires</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#162638;border:1px solid #5b9fd4;"></div>Suited</div>
-      </div>
-      <div class="range-grid" id="range-grid"></div>
-      <div class="btn-row mt-12">
-        <button class="btn btn-danger btn-sm" onclick="clearRange()">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg>
-          Effacer tout
-        </button>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">Sauvegarder ce range</div>
-      <div class="input-row">
-        <input class="input" id="range-save-name" placeholder="Nom du range..." style="margin:0;" onkeydown="if(event.key==='Enter')saveRange();">
-        <button class="btn btn-primary btn-sm" onclick="saveRange()">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-          Sauver
-        </button>
-      </div>
-      <div id="saved-ranges-list" class="mt-12"><div class="empty-state" style="padding:10px 0;">Aucun range sauvegardé.</div></div>
-    </div>
-  </div>
-</section>
+  <!-- BODY -->
+  <div class="app-body">
 
-<!-- BLINDS -->
-<section id="tab-blinds" class="section">
-  <div class="card">
-    <div class="card-title">Exercice — Stack en Big Blinds</div>
-    <div class="blinds-stack-display">
-      <div class="blinds-chips" id="blinds-stack-display">—</div>
-      <div class="blinds-sub-label">jetons dans le stack</div>
-    </div>
-    <hr class="divider">
-    <div style="margin-bottom:14px;">
-      <div class="text-sm" style="margin-bottom:6px;">Stack (jetons)</div>
-      <div class="presets">
-        <button class="preset-btn" onclick="setStack(5000)">5 000</button>
-        <button class="preset-btn" onclick="setStack(10000)">10 000</button>
-        <button class="preset-btn" onclick="setStack(15000)">15 000</button>
-        <button class="preset-btn" onclick="setStack(25000)">25 000</button>
-        <button class="preset-btn" onclick="setStack(50000)">50 000</button>
+    <!-- ── DASHBOARD ── -->
+    <div id="page-dashboard" class="page active">
+      <div class="dashboard-greeting">Bonjour.</div>
+      <div class="dashboard-sub">Votre tableau de bord</div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-card-label">Sessions</div>
+          <div class="stat-card-value">—</div>
+          <div class="stat-card-sub">à venir</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Bankroll</div>
+          <div class="stat-card-value">—</div>
+          <div class="stat-card-sub">à venir</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Questions</div>
+          <div class="stat-card-value" id="dash-questions">0</div>
+          <div class="stat-card-sub">dans la base</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Ranges</div>
+          <div class="stat-card-value" id="dash-ranges">0</div>
+          <div class="stat-card-sub">sauvegardés</div>
+        </div>
       </div>
-      <input class="input" type="number" id="blinds-stack" placeholder="Ex: 12 500" oninput="updateBlindDisplay()">
-    </div>
-    <div style="margin-bottom:14px;">
-      <div class="text-sm" style="margin-bottom:6px;">Big Blind</div>
-      <div class="presets">
-        <button class="preset-btn" onclick="setBlind(100)">100</button>
-        <button class="preset-btn" onclick="setBlind(200)">200</button>
-        <button class="preset-btn" onclick="setBlind(300)">300</button>
-        <button class="preset-btn" onclick="setBlind(400)">400</button>
-        <button class="preset-btn" onclick="setBlind(500)">500</button>
-        <button class="preset-btn" onclick="setBlind(1000)">1 000</button>
+
+      <div class="dashboard-placeholder">
+        <div class="dp-title">Activité récente</div>
+        Disponible après vos premières sessions
       </div>
-      <input class="input" type="number" id="blinds-bb" placeholder="Ex: 200" oninput="updateBlindDisplay()">
+      <div class="dashboard-placeholder">
+        <div class="dp-title">Progression</div>
+        Les graphiques apparaîtront ici
+      </div>
     </div>
-    <div>
-      <div class="text-sm" style="margin-bottom:6px;">Ta réponse (en BB)</div>
-      <input class="input" type="number" id="blinds-guess" placeholder="Ex: 62" onkeydown="if(event.key==='Enter')checkBlinds();" style="margin-bottom:0;">
+
+    <!-- ── SESSION ── -->
+    <div id="page-session" class="page">
+      <div class="page-title">Session</div>
+      <div class="coming-soon">
+        <div class="coming-soon-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <h3>En cours de développement</h3>
+        <p>Les outils de session (timer de blinds, calculateur, suivi de stack) arriveront ici.</p>
+      </div>
     </div>
-    <div class="btn-row mt-12">
-      <button class="btn btn-primary btn-full" onclick="checkBlinds()">Valider</button>
+
+    <!-- ── STUDY ── -->
+    <div id="page-study" class="page">
+      <div class="page-title">Étude</div>
+
+      <div class="study-tabs">
+        <button class="study-tab active" onclick="showStudyTab('quiz', this)">Quiz</button>
+        <button class="study-tab" onclick="showStudyTab('ranges', this)">Ranges</button>
+        <button class="study-tab" onclick="showStudyTab('blinds', this)">Blinds</button>
+      </div>
+
+      <!-- QUIZ -->
+      <div id="study-quiz" class="subview active">
+        <div class="quiz-subnav">
+          <button class="quiz-sub-btn active" id="qnav-list" onclick="showQuizView('list', this)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+            Questions
+          </button>
+          <button class="quiz-sub-btn" id="qnav-add" onclick="showQuizView('add', this)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Ajouter
+          </button>
+          <button class="quiz-sub-btn" id="qnav-play" onclick="openQuizConfig()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Lancer
+          </button>
+        </div>
+
+        <!-- List -->
+        <div id="quiz-view-list" class="subview active">
+          <div class="card">
+            <div class="card-title">Filtrer par tag</div>
+            <div id="tag-filters" class="tags-wrap">
+              <span class="tag tag-filter active" onclick="filterByTag('all',this)">Tous</span>
+            </div>
+          </div>
+          <div id="questions-list"></div>
+        </div>
+
+        <!-- Add -->
+        <div id="quiz-view-add" class="subview">
+          <div class="card">
+            <div class="card-title">Nouvelle question</div>
+            <input class="input" id="q-question" placeholder="Question...">
+            <input class="input" id="q-correct" placeholder="Bonne réponse">
+            <input class="input" id="q-wrong1" placeholder="Mauvaise réponse 1">
+            <input class="input" id="q-wrong2" placeholder="Mauvaise réponse 2">
+            <input class="input" id="q-wrong3" placeholder="Mauvaise réponse 3">
+            <div id="existing-tags-section" class="tag-existing-section" style="display:none;">
+              <div class="tag-existing-label">Tags existants</div>
+              <div id="existing-tags-wrap" class="tag-existing-wrap"></div>
+              <div style="border-top:1px solid var(--border);margin:10px 0;"></div>
+            </div>
+            <div class="input-row" style="margin-bottom:10px;">
+              <input class="input" id="q-tag-input" placeholder="Nouveau tag..." style="margin:0;" onkeydown="if(event.key==='Enter')addTagToForm();">
+              <button class="btn btn-ghost btn-sm" onclick="addTagToForm()">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+            </div>
+            <div id="form-tags" class="tags-wrap"></div>
+            <div class="btn-row">
+              <button class="btn btn-primary" onclick="addQuestion()">Sauvegarder</button>
+              <button class="btn btn-ghost" onclick="clearQuizForm()">Effacer</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Play -->
+        <div id="quiz-view-play" class="subview">
+          <div class="card">
+            <div class="quiz-progress">
+              <div class="quiz-bar-wrap"><div class="quiz-bar" id="quiz-bar"></div></div>
+              <div class="quiz-count" id="quiz-count">0/0</div>
+            </div>
+            <div class="quiz-question" id="quiz-question"></div>
+            <div class="quiz-options" id="quiz-options"></div>
+            <div class="quiz-feedback" id="quiz-feedback"></div>
+            <div class="btn-row">
+              <button class="btn btn-primary" id="quiz-next-btn" onclick="nextQuestion()" style="display:none;">Suivant</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Score -->
+        <div id="quiz-view-score" class="subview">
+          <div class="card">
+            <div class="score-display">
+              <div class="score-big" id="score-num">0/0</div>
+              <div class="score-label">bonnes réponses</div>
+              <div class="score-msg" id="score-msg"></div>
+            </div>
+            <div class="btn-row" style="justify-content:center;">
+              <button class="btn btn-primary" onclick="openQuizConfig()">Rejouer</button>
+              <button class="btn btn-ghost" onclick="showQuizView('list', document.getElementById('qnav-list'))">Retour</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RANGES -->
+      <div id="study-ranges" class="subview">
+        <div id="range-view-folders">
+          <div class="btn-row" style="margin-bottom:14px;">
+            <button class="btn btn-ghost btn-sm" onclick="toggleAddFolder()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Nouveau dossier
+            </button>
+          </div>
+          <div id="add-folder-form" style="display:none;" class="card">
+            <div class="card-title">Nouveau dossier</div>
+            <div class="input-row">
+              <input class="input" id="folder-name-input" placeholder="Ex: BTN vs BB" style="margin:0;" onkeydown="if(event.key==='Enter')createFolder();">
+              <button class="btn btn-primary btn-sm" onclick="createFolder()">Créer</button>
+            </div>
+          </div>
+          <div id="folders-list"><div class="empty-state">Aucun dossier.<br>Crée-en un pour organiser tes ranges.</div></div>
+        </div>
+
+        <div id="range-view-editor" style="display:none;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+            <button class="btn btn-ghost btn-sm" onclick="closeRangeEditor()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+              Retour
+            </button>
+            <span id="range-editor-title" style="font-weight:600;font-size:0.88rem;color:var(--text2);"></span>
+          </div>
+          <div class="card">
+            <div class="card-title">Mode d'action</div>
+            <div class="range-mode-btns">
+              <button class="mode-btn active-raise" id="mode-raise" onclick="setMode('raise')">Raise</button>
+              <button class="mode-btn" id="mode-call" onclick="setMode('call')">Call</button>
+              <button class="mode-btn" id="mode-fold" onclick="setMode('fold')">Fold</button>
+              <button class="mode-btn" id="mode-erase" onclick="setMode('erase')">Effacer</button>
+            </div>
+            <div class="range-legend">
+              <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>Raise</div>
+              <div class="legend-item"><div class="legend-dot" style="background:var(--accent2)"></div>Call</div>
+              <div class="legend-item"><div class="legend-dot" style="background:var(--danger)"></div>Fold</div>
+              <div class="legend-item"><div class="legend-dot" style="background:#261b45;border:1px solid #9b7ae0;"></div>Paires</div>
+              <div class="legend-item"><div class="legend-dot" style="background:#132030;border:1px solid #4d8fc0;"></div>Suited</div>
+            </div>
+            <div class="range-grid" id="range-grid"></div>
+            <div class="btn-row">
+              <button class="btn btn-danger btn-sm" onclick="clearRange()">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" pointer-events="none"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg>
+                Effacer tout
+              </button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Sauvegarder</div>
+            <div class="input-row">
+              <input class="input" id="range-save-name" placeholder="Nom du range..." style="margin:0;" onkeydown="if(event.key==='Enter')saveRange();">
+              <button class="btn btn-primary btn-sm" onclick="saveRange()">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" pointer-events="none"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                Sauver
+              </button>
+            </div>
+            <div id="saved-ranges-list" style="margin-top:10px;"><div class="empty-state" style="padding:10px 0;">Aucun range sauvegardé.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLINDS -->
+      <div id="study-blinds" class="subview">
+        <div class="card">
+          <div class="card-title">Stack en Big Blinds</div>
+          <div class="blinds-hero">
+            <div class="blinds-chips" id="blinds-stack-display">—</div>
+            <div class="blinds-sub-label">jetons dans le stack</div>
+          </div>
+          <hr class="divider">
+          <div style="margin-bottom:12px;">
+            <div style="font-size:0.72rem;color:var(--text2);margin-bottom:6px;">Stack</div>
+            <div class="presets">
+              <button class="preset-btn" onclick="setStack(5000)">5k</button>
+              <button class="preset-btn" onclick="setStack(10000)">10k</button>
+              <button class="preset-btn" onclick="setStack(15000)">15k</button>
+              <button class="preset-btn" onclick="setStack(25000)">25k</button>
+              <button class="preset-btn" onclick="setStack(50000)">50k</button>
+            </div>
+            <input class="input" type="number" id="blinds-stack" placeholder="Jetons..." oninput="updateBlindDisplay()">
+          </div>
+          <div style="margin-bottom:12px;">
+            <div style="font-size:0.72rem;color:var(--text2);margin-bottom:6px;">Big Blind</div>
+            <div class="presets">
+              <button class="preset-btn" onclick="setBlind(100)">100</button>
+              <button class="preset-btn" onclick="setBlind(200)">200</button>
+              <button class="preset-btn" onclick="setBlind(300)">300</button>
+              <button class="preset-btn" onclick="setBlind(500)">500</button>
+              <button class="preset-btn" onclick="setBlind(1000)">1k</button>
+            </div>
+            <input class="input" type="number" id="blinds-bb" placeholder="Big blind..." oninput="updateBlindDisplay()">
+          </div>
+          <div>
+            <div style="font-size:0.72rem;color:var(--text2);margin-bottom:6px;">Ta réponse (en BB)</div>
+            <input class="input" type="number" id="blinds-guess" placeholder="Ex: 62" onkeydown="if(event.key==='Enter')checkBlinds();" style="margin-bottom:0;">
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-primary btn-full" onclick="checkBlinds()">Valider</button>
+          </div>
+          <div class="blinds-answer" id="blinds-answer">
+            <div id="blinds-answer-text"></div>
+            <div class="blinds-answer-sub" id="blinds-answer-sub"></div>
+          </div>
+          <div id="blinds-next-row" style="display:none;margin-top:10px;">
+            <button class="btn btn-ghost btn-full" onclick="randomBlindExercise()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+              Exercice aléatoire
+            </button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Session</div>
+          <div class="stat-row">
+            <div class="stat-box"><div class="stat-num" style="color:var(--accent3);" id="b-correct">0</div><div class="stat-lbl">Corrects</div></div>
+            <div class="stat-box"><div class="stat-num" style="color:var(--danger);" id="b-wrong">0</div><div class="stat-lbl">Erronés</div></div>
+            <div class="stat-box"><div class="stat-num" style="color:var(--accent2);" id="b-total">0</div><div class="stat-lbl">Total</div></div>
+          </div>
+          <div style="margin-top:12px;">
+            <button class="btn btn-ghost btn-sm" onclick="resetBlindStats()">Réinitialiser</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /page-study -->
+
+    <!-- ── SUIVI ── -->
+    <div id="page-suivi" class="page">
+      <div class="page-title">Suivi</div>
+      <div class="coming-soon">
+        <div class="coming-soon-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <h3>En cours de développement</h3>
+        <p>L'historique des sessions, la bankroll et les graphiques de progression seront ici.</p>
+      </div>
     </div>
-    <div class="blinds-answer" id="blinds-answer">
-      <div id="blinds-answer-text"></div>
-      <div class="blinds-answer-sub" id="blinds-answer-sub"></div>
+
+    <!-- ── PARAMETRES ── -->
+    <div id="page-settings" class="page">
+      <div class="page-title">Paramètres</div>
+
+      <div class="card">
+        <div class="card-title">Apparence</div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-row-label">Mode sombre</div>
+            <div class="settings-row-sub">Thème de l'interface</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" id="dark-toggle" checked onchange="toggleThemeSwitch(this)">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:12px;">
+          <div>
+            <div class="settings-row-label">Couleur principale</div>
+            <div class="settings-row-sub">Appliquée aux boutons et éléments actifs</div>
+          </div>
+          <div class="color-grid" id="color-grid"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Données</div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-row-label">Questions</div>
+            <div class="settings-row-sub" id="settings-q-count">0 dans la base</div>
+          </div>
+        </div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-row-label">Ranges sauvegardés</div>
+            <div class="settings-row-sub" id="settings-r-count">0 au total</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">À propos</div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-row-label">PokerIQ</div>
+            <div class="settings-row-sub">Version 0.1 — en développement</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div id="blinds-next-row" style="display:none;" class="mt-12">
-      <button class="btn btn-ghost btn-full" onclick="randomBlindExercise()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
-        Exercice aléatoire
-      </button>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-title">Session</div>
-    <div class="stat-row">
-      <div class="stat-box"><div class="stat-num" style="color:var(--accent3);" id="b-correct">0</div><div class="stat-lbl">Corrects</div></div>
-      <div class="stat-box"><div class="stat-num" style="color:var(--danger);" id="b-wrong">0</div><div class="stat-lbl">Erronés</div></div>
-      <div class="stat-box"><div class="stat-num" style="color:var(--accent2);" id="b-total">0</div><div class="stat-lbl">Total</div></div>
-    </div>
-    <div class="mt-12"><button class="btn btn-ghost btn-sm" onclick="resetBlindStats()">Réinitialiser</button></div>
-  </div>
-</section>
+
+  </div><!-- /app-body -->
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav" id="bottom-nav">
+    <div class="pc-logo" style="display:none;">Poker<span>IQ</span></div>
+    <button class="nav-btn active" onclick="showPage('dashboard', this)">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      <span>Accueil</span>
+    </button>
+    <button class="nav-btn" onclick="showPage('session', this)">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span>Session</span>
+    </button>
+    <button class="nav-btn" onclick="showPage('study', this)">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      <span>Étude</span>
+    </button>
+    <button class="nav-btn" onclick="showPage('suivi', this)">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <span>Suivi</span>
+    </button>
+    <button class="nav-btn" onclick="showPage('settings', this)">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span>Réglages</span>
+    </button>
+  </nav>
+
+</div><!-- /app -->
 
 <!-- MODAL QUIZ CONFIG -->
 <div class="modal-overlay hidden" id="quiz-modal" onclick="if(event.target===this)closeQuizConfig()">
@@ -438,7 +917,7 @@
       <button class="qty-btn" onclick="selectQty(20,this)">20</button>
       <button class="qty-btn" onclick="selectQty(999,this)">Tout</button>
     </div>
-    <div id="modal-available" class="text-sm" style="margin-bottom:16px;"></div>
+    <div id="modal-available" style="font-size:0.75rem;color:var(--text3);margin-bottom:16px;"></div>
     <div class="btn-row">
       <button class="btn btn-primary" onclick="startQuiz()" style="flex:1;justify-content:center;">Démarrer</button>
       <button class="btn btn-ghost" onclick="closeQuizConfig()">Annuler</button>
@@ -446,20 +925,22 @@
   </div>
 </div>
 
-
-<!-- MODALE CONFIRMATION -->
-<div class="modal-overlay hidden" id="confirm-modal">
-  <div class="modal" style="max-width:340px;">
+<!-- MODAL CONFIRMATION -->
+<div class="modal-overlay hidden" id="confirm-modal" onclick="if(event.target===this)closeConfirm()">
+  <div class="modal" style="max-width:320px;">
     <div class="modal-title" id="confirm-title">Confirmer</div>
-    <p id="confirm-msg" style="font-size:0.85rem;color:var(--text2);margin-bottom:20px;line-height:1.5;"></p>
+    <p id="confirm-msg" style="font-size:0.83rem;color:var(--text2);margin-bottom:20px;line-height:1.6;"></p>
     <div class="btn-row">
-      <button class="btn" id="confirm-ok" style="border:none;background:var(--danger);color:#fff;flex:1;justify-content:center;">Supprimer</button>
-      <button class="btn btn-ghost" onclick="closeConfirm()">Annuler</button>
+      <button class="btn btn-sm" id="confirm-ok" style="background:var(--danger);color:#fff;border:none;flex:1;justify-content:center;">Supprimer</button>
+      <button class="btn btn-ghost btn-sm" onclick="closeConfirm()">Annuler</button>
     </div>
   </div>
 </div>
+
 <script>
-// STATE
+// ═══════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════
 let questions = [];
 let nextId = 1;
 let formTags = [];
@@ -471,31 +952,105 @@ let folders = [], nextFolderId = 1, currentFolderId = null;
 let currentRangeMode = 'raise', currentRangeData = {}, isMouseDown = false;
 let bCorrect = 0, bWrong = 0;
 
-// THEME
+// ═══════════════════════════════════════
+//  NAVIGATION
+// ═══════════════════════════════════════
+function showPage(page, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  btn.classList.add('active');
+  updateDashboard();
+  updateSettingsStats();
+}
+
+function showStudyTab(tab, btn) {
+  document.querySelectorAll('.study-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#page-study > div.study-tabs ~ .subview').forEach(v => v.classList.remove('active'));
+  document.getElementById('study-' + tab).classList.add('active');
+}
+
+// ═══════════════════════════════════════
+//  THEME
+// ═══════════════════════════════════════
 function toggleTheme() {
   const light = document.body.classList.toggle('light');
-  document.getElementById('theme-btn').innerHTML = light
-    ? `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg> Dark`
-    : `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg> Light`;
+  document.getElementById('dark-toggle').checked = !light;
+}
+function toggleThemeSwitch(input) {
+  if (!input.checked) document.body.classList.add('light');
+  else document.body.classList.remove('light');
 }
 
-// TABS
-function showTab(tab, btn) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-' + tab).classList.add('active');
-  btn.classList.add('active');
+// ═══════════════════════════════════════
+//  COLOR PICKER
+// ═══════════════════════════════════════
+const COLORS = [
+  { name: 'Or',       value: '#e8c97a', rgb: '232,201,122' },
+  { name: 'Bleu',     value: '#5b8af0', rgb: '91,138,240' },
+  { name: 'Vert',     value: '#4fd1a0', rgb: '79,209,160' },
+  { name: 'Corail',   value: '#f07a6b', rgb: '240,122,107' },
+  { name: 'Violet',   value: '#a07af0', rgb: '160,122,240' },
+  { name: 'Cyan',     value: '#38bdf8', rgb: '56,189,248' },
+  { name: 'Rose',     value: '#f472b6', rgb: '244,114,182' },
+  { name: 'Blanc',    value: '#e8eaf2', rgb: '232,234,242' },
+];
+let selectedColor = 0;
+
+function initColorGrid() {
+  const grid = document.getElementById('color-grid');
+  COLORS.forEach((c, i) => {
+    const dot = document.createElement('div');
+    dot.className = `color-dot${i === 0 ? ' selected' : ''}`;
+    dot.style.background = c.value;
+    dot.title = c.name;
+    dot.addEventListener('click', () => setAccentColor(i));
+    grid.appendChild(dot);
+  });
 }
 
-// QUIZ VIEWS
-function showQuizView(view) {
-  document.querySelectorAll('[id^="quiz-view-"]').forEach(v => v.classList.remove('active'));
+function setAccentColor(idx) {
+  selectedColor = idx;
+  const c = COLORS[idx];
+  document.documentElement.style.setProperty('--accent', c.value);
+  document.documentElement.style.setProperty('--accent-rgb', c.rgb);
+  document.querySelectorAll('.color-dot').forEach((d, i) => d.classList.toggle('selected', i === idx));
+}
+
+// ═══════════════════════════════════════
+//  DASHBOARD
+// ═══════════════════════════════════════
+function updateDashboard() {
+  const totalRanges = folders.reduce((s, f) => s + f.ranges.length, 0);
+  const qEl = document.getElementById('dash-questions');
+  const rEl = document.getElementById('dash-ranges');
+  if (qEl) qEl.textContent = questions.length;
+  if (rEl) rEl.textContent = totalRanges;
+}
+function updateSettingsStats() {
+  const totalRanges = folders.reduce((s, f) => s + f.ranges.length, 0);
+  const qEl = document.getElementById('settings-q-count');
+  const rEl = document.getElementById('settings-r-count');
+  if (qEl) qEl.textContent = `${questions.length} dans la base`;
+  if (rEl) rEl.textContent = `${totalRanges} au total`;
+}
+
+// ═══════════════════════════════════════
+//  QUIZ VIEWS
+// ═══════════════════════════════════════
+function showQuizView(view, btn) {
+  document.querySelectorAll('#study-quiz .subview').forEach(v => v.classList.remove('active'));
   document.getElementById('quiz-view-' + view).classList.add('active');
+  document.querySelectorAll('.quiz-sub-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
   if (view === 'list') renderQuestions();
   if (view === 'add') renderExistingTagsInForm();
 }
 
-// TAGS FORM
+// ═══════════════════════════════════════
+//  QUIZ — TAGS
+// ═══════════════════════════════════════
 function renderExistingTagsInForm() {
   const allTags = getAllTags();
   const section = document.getElementById('existing-tags-section');
@@ -511,7 +1066,6 @@ function renderExistingTagsInForm() {
     wrap.appendChild(sp);
   });
 }
-
 function toggleExistingTag(tag, el) {
   const idx = formTags.indexOf(tag);
   if (idx >= 0) { formTags.splice(idx, 1); el.classList.remove('selected'); }
@@ -520,60 +1074,57 @@ function toggleExistingTag(tag, el) {
 }
 function addTagToForm() {
   const input = document.getElementById('q-tag-input');
-  const val = input.value.trim().toLowerCase().replace(/\s+/g,'-');
+  const val = input.value.trim().toLowerCase().replace(/\s+/g, '-');
   if (!val || formTags.includes(val)) { input.value = ''; return; }
   formTags.push(val); input.value = ''; renderFormTags();
 }
 function renderFormTags() {
-  document.getElementById('form-tags').innerHTML = formTags.map((t,i) =>
+  document.getElementById('form-tags').innerHTML = formTags.map((t, i) =>
     `<span class="tag">${h(t)}<span class="tag-x" onclick="removeFormTag(${i})">×</span></span>`
   ).join('');
-  // sync existing tags highlight
   document.querySelectorAll('.tag-existing').forEach(el => {
     el.classList.toggle('selected', formTags.includes(el.textContent));
   });
 }
-function removeFormTag(i) { formTags.splice(i,1); renderFormTags(); }
+function removeFormTag(i) { formTags.splice(i, 1); renderFormTags(); }
 
-// ADD QUESTION
+// ═══════════════════════════════════════
+//  QUIZ — QUESTIONS
+// ═══════════════════════════════════════
 function addQuestion() {
   const q  = document.getElementById('q-question').value.trim();
   const c  = document.getElementById('q-correct').value.trim();
   const w1 = document.getElementById('q-wrong1').value.trim();
   const w2 = document.getElementById('q-wrong2').value.trim();
   const w3 = document.getElementById('q-wrong3').value.trim();
-  if (!q||!c||!w1||!w2||!w3) { alert('Tous les champs sont obligatoires.'); return; }
-  questions.push({ id: nextId++, q, correct:c, wrong:[w1,w2,w3], tags:[...formTags] });
+  if (!q || !c || !w1 || !w2 || !w3) { showToast('Tous les champs sont obligatoires.'); return; }
+  questions.push({ id: nextId++, q, correct: c, wrong: [w1, w2, w3], tags: [...formTags] });
   clearQuizForm();
-  showQuizView('list');
+  showQuizView('list', document.getElementById('qnav-list'));
+  updateDashboard();
 }
 function clearQuizForm() {
-  ['q-question','q-correct','q-wrong1','q-wrong2','q-wrong3','q-tag-input'].forEach(id => document.getElementById(id).value='');
-  formTags=[]; renderFormTags();
+  ['q-question','q-correct','q-wrong1','q-wrong2','q-wrong3','q-tag-input']
+    .forEach(id => document.getElementById(id).value = '');
+  formTags = []; renderFormTags();
 }
 
-// CUSTOM CONFIRM MODAL
-let confirmCallback = null;
+// CONFIRM MODAL
 function showConfirm(msg, cb) {
-  confirmCallback = cb;
   document.getElementById('confirm-msg').textContent = msg;
   document.getElementById('confirm-modal').classList.remove('hidden');
   document.getElementById('confirm-ok').onclick = () => { closeConfirm(); cb(); };
 }
-function closeConfirm() {
-  document.getElementById('confirm-modal').classList.add('hidden');
-  confirmCallback = null;
-}
+function closeConfirm() { document.getElementById('confirm-modal').classList.add('hidden'); }
 
-// DELETE QUESTION
 function deleteQuestion(id) {
   showConfirm('Supprimer cette question ?', () => {
     questions = questions.filter(q => q.id !== id);
     renderQuestions();
+    updateDashboard();
   });
 }
 
-// FILTER
 function filterByTag(tag, el) {
   filterTag = tag;
   document.querySelectorAll('.tag-filter').forEach(t => t.classList.remove('active'));
@@ -585,10 +1136,10 @@ function getAllTags() { return [...new Set(questions.flatMap(q => q.tags))].sort
 function renderTagFilters() {
   const allTags = getAllTags();
   const wrap = document.getElementById('tag-filters');
-  wrap.innerHTML = `<span class="tag tag-filter ${filterTag==='all'?'active':''}" data-tag="all" onclick="filterByTag('all',this)">Tous</span>`;
+  wrap.innerHTML = `<span class="tag tag-filter ${filterTag==='all'?'active':''}" onclick="filterByTag('all',this)">Tous</span>`;
   allTags.forEach(t => {
     const sp = document.createElement('span');
-    sp.className = `tag tag-filter${filterTag===t?' active':''}`;
+    sp.className = `tag tag-filter${filterTag === t ? ' active' : ''}`;
     sp.textContent = t;
     sp.onclick = () => filterByTag(t, sp);
     wrap.appendChild(sp);
@@ -598,39 +1149,41 @@ function renderTagFilters() {
 function renderQuestions() {
   renderTagFilters();
   const list = document.getElementById('questions-list');
-  const filtered = filterTag==='all' ? questions : questions.filter(q => q.tags.includes(filterTag));
+  const filtered = filterTag === 'all' ? questions : questions.filter(q => q.tags.includes(filterTag));
   if (!filtered.length) {
     list.innerHTML = '<div class="empty-state">Aucune question.<br>Commence par en ajouter une.</div>';
     return;
   }
-  list.innerHTML = filtered.map(q => `
-    <div class="q-item">
+  list.innerHTML = '';
+  filtered.forEach(q => {
+    const div = document.createElement('div');
+    div.className = 'q-item';
+    div.innerHTML = `
       <div class="q-item-body">
         <div class="q-item-q">${h(q.q)}</div>
         <div class="q-item-meta">${h(q.correct)}</div>
-        ${q.tags.length ? `<div class="q-item-tags">${q.tags.map(t=>`<span class="q-item-tag">${h(t)}</span>`).join('')}</div>` : ''}
+        ${q.tags.length ? `<div class="q-item-tags">${q.tags.map(t => `<span class="q-item-tag">${h(t)}</span>`).join('')}</div>` : ''}
       </div>
-      <button class="q-item-del" data-del="${q.id}" title="Supprimer">
+      <button class="q-item-del" title="Supprimer">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" pointer-events="none"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
       </button>
-    </div>
-  `).join('');
-
-  // Attach delete listeners
-  list.querySelectorAll('[data-del]').forEach(btn => {
-    btn.addEventListener('click', () => deleteQuestion(parseInt(btn.dataset.del)));
+    `;
+    div.querySelector('.q-item-del').addEventListener('click', () => deleteQuestion(q.id));
+    list.appendChild(div);
   });
 }
 
-// QUIZ CONFIG MODAL
+// ═══════════════════════════════════════
+//  QUIZ CONFIG & PLAY
+// ═══════════════════════════════════════
 function openQuizConfig() {
-  if (!questions.length) { alert('Aucune question. Ajoutes-en d\'abord.'); return; }
+  if (!questions.length) { showToast('Ajoute des questions d\'abord.'); return; }
   const allTags = getAllTags();
   const sel = document.getElementById('modal-tag-selector');
   sel.innerHTML = `<span class="tag-sel-all ${quizSelectedTags.length===0?'selected':''}" onclick="toggleModalTag('__all__',this)">Tous</span>`;
   allTags.forEach(t => {
     const sp = document.createElement('span');
-    sp.className = `tag-sel-item${quizSelectedTags.includes(t)?' selected':''}`;
+    sp.className = `tag-sel-item${quizSelectedTags.includes(t) ? ' selected' : ''}`;
     sp.textContent = t;
     sp.onclick = () => toggleModalTag(t, sp);
     sel.appendChild(sp);
@@ -641,14 +1194,14 @@ function openQuizConfig() {
 function closeQuizConfig() { document.getElementById('quiz-modal').classList.add('hidden'); }
 
 function toggleModalTag(tag, el) {
-  if (tag==='__all__') {
-    quizSelectedTags=[];
-    document.querySelectorAll('.tag-sel-item').forEach(s=>s.classList.remove('selected'));
+  if (tag === '__all__') {
+    quizSelectedTags = [];
+    document.querySelectorAll('.tag-sel-item').forEach(s => s.classList.remove('selected'));
     document.querySelector('.tag-sel-all').classList.add('selected');
   } else {
     document.querySelector('.tag-sel-all').classList.remove('selected');
     const idx = quizSelectedTags.indexOf(tag);
-    if (idx>=0) { quizSelectedTags.splice(idx,1); el.classList.remove('selected'); }
+    if (idx >= 0) { quizSelectedTags.splice(idx, 1); el.classList.remove('selected'); }
     else { quizSelectedTags.push(tag); el.classList.add('selected'); }
     if (!quizSelectedTags.length) document.querySelector('.tag-sel-all').classList.add('selected');
   }
@@ -656,7 +1209,7 @@ function toggleModalTag(tag, el) {
 }
 function selectQty(n, el) {
   quizQty = n;
-  document.querySelectorAll('.qty-btn').forEach(b=>b.classList.remove('selected'));
+  document.querySelectorAll('.qty-btn').forEach(b => b.classList.remove('selected'));
   el.classList.add('selected');
   updateModalAvailable();
 }
@@ -668,33 +1221,34 @@ function updateModalAvailable() {
   const pool = getQuizPool();
   const real = Math.min(quizQty, pool.length);
   const el = document.getElementById('modal-available');
-  if (!pool.length) { el.textContent='Aucune question pour ces filtres.'; el.style.color='var(--danger)'; }
-  else { el.textContent=`${real} question${real>1?'s':''} sur ${pool.length} disponible${pool.length>1?'s':''}.`; el.style.color='var(--text3)'; }
+  el.textContent = pool.length
+    ? `${real} question${real > 1 ? 's' : ''} sur ${pool.length} disponible${pool.length > 1 ? 's' : ''}.`
+    : 'Aucune question pour ces filtres.';
+  el.style.color = pool.length ? 'var(--text3)' : 'var(--danger)';
 }
 
-// QUIZ PLAY
-function shuffle(arr) { return [...arr].sort(()=>Math.random()-0.5); }
+function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
 
 function startQuiz() {
   closeQuizConfig();
   const pool = getQuizPool();
-  if (!pool.length) { alert('Aucune question disponible.'); return; }
+  if (!pool.length) return;
   quizQuestions = shuffle(pool).slice(0, Math.min(quizQty, pool.length));
   quizIndex = 0; quizScore = 0;
-  showQuizView('play');
+  showQuizView('play', null);
   renderQuizQuestion();
 }
 
 function renderQuizQuestion() {
   const q = quizQuestions[quizIndex];
   const total = quizQuestions.length;
-  document.getElementById('quiz-bar').style.width = (quizIndex/total*100)+'%';
-  document.getElementById('quiz-count').textContent = `${quizIndex+1} / ${total}`;
+  document.getElementById('quiz-bar').style.width = (quizIndex / total * 100) + '%';
+  document.getElementById('quiz-count').textContent = `${quizIndex + 1} / ${total}`;
   document.getElementById('quiz-question').textContent = q.q;
   document.getElementById('quiz-feedback').className = 'quiz-feedback';
   document.getElementById('quiz-next-btn').style.display = 'none';
   const opts = shuffle([q.correct, ...q.wrong]);
-  const letters = ['A','B','C','D'];
+  const letters = ['A', 'B', 'C', 'D'];
   const container = document.getElementById('quiz-options');
   container.innerHTML = '';
   opts.forEach((opt, i) => {
@@ -712,18 +1266,17 @@ function selectAnswer(btn, chosen, correct) {
   quizAnswered = true;
   document.querySelectorAll('.quiz-opt').forEach(o => {
     o.disabled = true;
-    const text = o.textContent.slice(1).trim();
-    if (text === correct) o.classList.add('correct');
+    if (o.textContent.slice(1).trim() === correct) o.classList.add('correct');
   });
   const fb = document.getElementById('quiz-feedback');
   if (chosen === correct) {
     btn.classList.add('correct'); quizScore++;
-    fb.className='quiz-feedback ok show'; fb.textContent='Correct.';
+    fb.className = 'quiz-feedback ok show'; fb.textContent = 'Correct.';
   } else {
     btn.classList.add('wrong');
-    fb.className='quiz-feedback ko show'; fb.textContent=`Incorrect. Bonne réponse : ${correct}`;
+    fb.className = 'quiz-feedback ko show'; fb.textContent = `Incorrect. Bonne réponse : ${correct}`;
   }
-  document.getElementById('quiz-next-btn').style.display='inline-flex';
+  document.getElementById('quiz-next-btn').style.display = 'inline-flex';
 }
 
 function nextQuestion() {
@@ -733,198 +1286,238 @@ function nextQuestion() {
 }
 
 function showScore() {
-  showQuizView('score');
+  showQuizView('score', null);
   const total = quizQuestions.length;
-  const pct = quizScore/total;
-  document.getElementById('score-num').textContent = `${quizScore} / ${total}`;
+  const pct = quizScore / total;
+  document.getElementById('score-num').textContent = `${quizScore}/${total}`;
   let msg = 'Continue à travailler.';
-  if (pct===1) msg='Score parfait.';
-  else if (pct>=0.8) msg='Excellent résultat.';
-  else if (pct>=0.6) msg='Bon travail, continue.';
-  else if (pct>=0.4) msg='Il faut réviser davantage.';
+  if (pct === 1) msg = 'Score parfait.';
+  else if (pct >= 0.8) msg = 'Excellent résultat.';
+  else if (pct >= 0.6) msg = 'Bon travail, continue.';
+  else if (pct >= 0.4) msg = 'Il faut réviser davantage.';
   document.getElementById('score-msg').textContent = msg;
 }
 
-// RANGES
+// ═══════════════════════════════════════
+//  RANGES
+// ═══════════════════════════════════════
 function renderFolders() {
   const list = document.getElementById('folders-list');
-  if (!folders.length) { list.innerHTML='<div class="empty-state">Aucun dossier.<br>Crée-en un pour organiser tes ranges.</div>'; return; }
-  list.innerHTML='';
+  if (!folders.length) { list.innerHTML = '<div class="empty-state">Aucun dossier.<br>Crée-en un pour organiser tes ranges.</div>'; return; }
+  list.innerHTML = '';
   folders.forEach(f => {
     const div = document.createElement('div');
-    div.className = `list-item${currentFolderId===f.id?' active-item':''}`;
+    div.className = `list-item${currentFolderId === f.id ? ' active-item' : ''}`;
     div.innerHTML = `
-      <span class="list-item-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></span>
+      <span class="list-item-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></span>
       <span class="list-item-name">${h(f.name)}</span>
-      <span class="list-item-sub">${f.ranges.length} range${f.ranges.length!==1?'s':''}</span>
-      <button class="btn btn-danger btn-sm" data-delfolder="${f.id}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg></button>
+      <span class="list-item-sub">${f.ranges.length} range${f.ranges.length !== 1 ? 's' : ''}</span>
+      <button class="btn btn-danger btn-sm" data-delfolder="${f.id}">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" pointer-events="none"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg>
+      </button>
     `;
     div.addEventListener('click', e => { if (!e.target.closest('[data-delfolder]')) openFolder(f.id); });
-    div.querySelector('[data-delfolder]').addEventListener('click', e => { e.stopPropagation(); deleteFolder(f.id); });
+    div.querySelector('[data-delfolder]').addEventListener('click', e => {
+      e.stopPropagation();
+      showConfirm('Supprimer ce dossier et tous ses ranges ?', () => {
+        folders = folders.filter(ff => ff.id !== f.id);
+        if (currentFolderId === f.id) currentFolderId = null;
+        renderFolders(); updateDashboard();
+      });
+    });
     list.appendChild(div);
   });
 }
 
 function toggleAddFolder() {
   const form = document.getElementById('add-folder-form');
-  form.style.display = form.style.display==='none' ? 'block' : 'none';
-  if (form.style.display!=='none') document.getElementById('folder-name-input').focus();
+  form.style.display = form.style.display === 'none' ? 'block' : 'none';
+  if (form.style.display !== 'none') document.getElementById('folder-name-input').focus();
 }
 function createFolder() {
   const name = document.getElementById('folder-name-input').value.trim();
   if (!name) return;
-  folders.push({id:nextFolderId++,name,ranges:[]});
-  document.getElementById('folder-name-input').value='';
-  document.getElementById('add-folder-form').style.display='none';
+  folders.push({ id: nextFolderId++, name, ranges: [] });
+  document.getElementById('folder-name-input').value = '';
+  document.getElementById('add-folder-form').style.display = 'none';
   renderFolders();
 }
-function deleteFolder(id) {
-  showConfirm('Supprimer ce dossier et tous ses ranges ?', () => {
-    folders = folders.filter(f=>f.id!==id);
-    if (currentFolderId===id) currentFolderId=null;
-    renderFolders();
-  });
-}
 function openFolder(id) {
-  currentFolderId=id; currentRangeData={};
-  const folder = folders.find(f=>f.id===id);
-  document.getElementById('range-view-folders').style.display='none';
-  document.getElementById('range-view-editor').style.display='block';
-  document.getElementById('range-editor-title').textContent=folder.name;
+  currentFolderId = id; currentRangeData = {};
+  const folder = folders.find(f => f.id === id);
+  document.getElementById('range-view-folders').style.display = 'none';
+  document.getElementById('range-view-editor').style.display = 'block';
+  document.getElementById('range-editor-title').textContent = folder.name;
   buildRangeGrid(); renderSavedRanges();
 }
 function closeRangeEditor() {
-  currentFolderId=null;
-  document.getElementById('range-view-folders').style.display='block';
-  document.getElementById('range-view-editor').style.display='none';
+  currentFolderId = null;
+  document.getElementById('range-view-folders').style.display = 'block';
+  document.getElementById('range-view-editor').style.display = 'none';
   renderFolders();
 }
-
 function buildRangeGrid() {
-  const grid=document.getElementById('range-grid'); grid.innerHTML='';
-  for (let i=0;i<13;i++) for (let j=0;j<13;j++) {
-    const cell=document.createElement('div');
-    const r1=RANKS[i],r2=RANKS[j]; let label,type,key;
-    if (i===j){label=r1+r1;type='pair';key=label;}
-    else if(i<j){label=r1+r2+'s';type='suited';key=label;}
-    else{label=r2+r1+'o';type='offsuit';key=label;}
-    cell.className=`range-cell ${type}`; cell.textContent=label; cell.dataset.key=key;
+  const grid = document.getElementById('range-grid'); grid.innerHTML = '';
+  for (let i = 0; i < 13; i++) for (let j = 0; j < 13; j++) {
+    const cell = document.createElement('div');
+    const r1 = RANKS[i], r2 = RANKS[j]; let label, type, key;
+    if (i === j)    { label = r1+r1;    type = 'pair';    key = label; }
+    else if (i < j) { label = r1+r2+'s'; type = 'suited';  key = label; }
+    else            { label = r2+r1+'o'; type = 'offsuit'; key = label; }
+    cell.className = `range-cell ${type}`; cell.textContent = label; cell.dataset.key = key;
     if (currentRangeData[key]) applyActionClass(cell, currentRangeData[key]);
-    cell.addEventListener('mousedown',()=>{isMouseDown=true;toggleCell(cell,key);});
-    cell.addEventListener('mouseover',()=>{if(isMouseDown)toggleCell(cell,key);});
-    cell.addEventListener('touchstart',e=>{e.preventDefault();toggleCell(cell,key);},{passive:false});
-    cell.addEventListener('touchmove',e=>{e.preventDefault();const t=e.touches[0];const el=document.elementFromPoint(t.clientX,t.clientY);if(el&&el.classList.contains('range-cell'))toggleCell(el,el.dataset.key);},{passive:false});
+    cell.addEventListener('mousedown', () => { isMouseDown = true; toggleCell(cell, key); });
+    cell.addEventListener('mouseover', () => { if (isMouseDown) toggleCell(cell, key); });
+    cell.addEventListener('touchstart', e => { e.preventDefault(); toggleCell(cell, key); }, { passive: false });
+    cell.addEventListener('touchmove', e => {
+      e.preventDefault();
+      const t = e.touches[0];
+      const el = document.elementFromPoint(t.clientX, t.clientY);
+      if (el && el.classList.contains('range-cell')) toggleCell(el, el.dataset.key);
+    }, { passive: false });
     grid.appendChild(cell);
   }
 }
-document.addEventListener('mouseup',()=>{isMouseDown=false;});
-
-function applyActionClass(cell,action) {
-  cell.classList.remove('selected-raise','selected-call','selected-fold');
-  if(action) cell.classList.add('selected-'+action);
+document.addEventListener('mouseup', () => { isMouseDown = false; });
+function applyActionClass(cell, action) {
+  cell.classList.remove('selected-raise', 'selected-call', 'selected-fold');
+  if (action) cell.classList.add('selected-' + action);
 }
-function toggleCell(cell,key) {
-  if(currentRangeMode==='erase'){delete currentRangeData[key];cell.classList.remove('selected-raise','selected-call','selected-fold');}
-  else{currentRangeData[key]=currentRangeMode;applyActionClass(cell,currentRangeMode);}
+function toggleCell(cell, key) {
+  if (currentRangeMode === 'erase') { delete currentRangeData[key]; cell.classList.remove('selected-raise','selected-call','selected-fold'); }
+  else { currentRangeData[key] = currentRangeMode; applyActionClass(cell, currentRangeMode); }
 }
 function setMode(m) {
-  currentRangeMode=m;
-  ['raise','call','fold','erase'].forEach(mode=>{
-    document.getElementById('mode-'+mode).className=`mode-btn${mode===m?' active-'+m:''}`;
+  currentRangeMode = m;
+  ['raise','call','fold','erase'].forEach(mode => {
+    document.getElementById('mode-' + mode).className = `mode-btn${mode === m ? ' active-' + m : ''}`;
   });
 }
 function saveRange() {
-  const folder=folders.find(f=>f.id===currentFolderId); if(!folder)return;
-  const name=document.getElementById('range-save-name').value.trim()||'Range '+(folder.ranges.length+1);
-  folder.ranges.push({id:Date.now(),name,data:{...currentRangeData}});
-  document.getElementById('range-save-name').value=''; renderSavedRanges();
+  const folder = folders.find(f => f.id === currentFolderId); if (!folder) return;
+  const name = document.getElementById('range-save-name').value.trim() || 'Range ' + (folder.ranges.length + 1);
+  folder.ranges.push({ id: Date.now(), name, data: { ...currentRangeData } });
+  document.getElementById('range-save-name').value = '';
+  renderSavedRanges(); updateDashboard();
 }
 function loadRange(rid) {
-  const folder=folders.find(f=>f.id===currentFolderId);
-  const range=folder.ranges.find(r=>r.id===rid); if(!range)return;
-  currentRangeData={...range.data};
-  document.querySelectorAll('.range-cell').forEach(cell=>{
+  const folder = folders.find(f => f.id === currentFolderId);
+  const range = folder.ranges.find(r => r.id === rid); if (!range) return;
+  currentRangeData = { ...range.data };
+  document.querySelectorAll('.range-cell').forEach(cell => {
     cell.classList.remove('selected-raise','selected-call','selected-fold');
-    if(currentRangeData[cell.dataset.key]) applyActionClass(cell,currentRangeData[cell.dataset.key]);
+    if (currentRangeData[cell.dataset.key]) applyActionClass(cell, currentRangeData[cell.dataset.key]);
   });
 }
 function deleteRange(rid) {
-  const folder=folders.find(f=>f.id===currentFolderId);
-  folder.ranges=folder.ranges.filter(r=>r.id!==rid); renderSavedRanges();
+  showConfirm('Supprimer ce range ?', () => {
+    const folder = folders.find(f => f.id === currentFolderId);
+    folder.ranges = folder.ranges.filter(r => r.id !== rid);
+    renderSavedRanges(); updateDashboard();
+  });
 }
 function renderSavedRanges() {
-  const folder=folders.find(f=>f.id===currentFolderId);
-  const list=document.getElementById('saved-ranges-list');
-  if(!folder||!folder.ranges.length){list.innerHTML='<div class="empty-state" style="padding:10px 0;">Aucun range sauvegardé.</div>';return;}
-  list.innerHTML='';
-  folder.ranges.forEach(r=>{
-    const div=document.createElement('div');
-    div.className='list-item';
-    div.innerHTML=`
+  const folder = folders.find(f => f.id === currentFolderId);
+  const list = document.getElementById('saved-ranges-list');
+  if (!folder || !folder.ranges.length) { list.innerHTML = '<div class="empty-state" style="padding:10px 0;">Aucun range sauvegardé.</div>'; return; }
+  list.innerHTML = '';
+  folder.ranges.forEach(r => {
+    const div = document.createElement('div');
+    div.className = 'list-item';
+    div.innerHTML = `
       <span class="list-item-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
       <span class="list-item-name">${h(r.name)}</span>
       <button class="btn btn-blue btn-sm" data-load="${r.id}">Charger</button>
-      <button class="btn btn-danger btn-sm" data-delrange="${r.id}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg></button>
+      <button class="btn btn-danger btn-sm" data-delrange="${r.id}">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" pointer-events="none"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg>
+      </button>
     `;
-    div.querySelector('[data-load]').addEventListener('click',()=>loadRange(r.id));
-    div.querySelector('[data-delrange]').addEventListener('click',()=>deleteRange(r.id));
+    div.querySelector('[data-load]').addEventListener('click', () => loadRange(r.id));
+    div.querySelector('[data-delrange]').addEventListener('click', () => deleteRange(r.id));
     list.appendChild(div);
   });
 }
 function clearRange() {
   showConfirm('Effacer toute la range ?', () => {
-    currentRangeData={};
-    document.querySelectorAll('.range-cell').forEach(c=>c.classList.remove('selected-raise','selected-call','selected-fold'));
+    currentRangeData = {};
+    document.querySelectorAll('.range-cell').forEach(c => c.classList.remove('selected-raise','selected-call','selected-fold'));
   });
 }
 
-// BLINDS
-function setStack(v){document.getElementById('blinds-stack').value=v;updateBlindDisplay();}
-function setBlind(v){document.getElementById('blinds-bb').value=v;updateBlindDisplay();}
-function updateBlindDisplay(){
-  const stack=parseInt(document.getElementById('blinds-stack').value);
-  document.getElementById('blinds-stack-display').textContent=stack?stack.toLocaleString('fr-FR'):'—';
-  document.getElementById('blinds-answer').className='blinds-answer';
-  document.getElementById('blinds-next-row').style.display='none';
-  document.getElementById('blinds-guess').value='';
+// ═══════════════════════════════════════
+//  BLINDS
+// ═══════════════════════════════════════
+function setStack(v) { document.getElementById('blinds-stack').value = v; updateBlindDisplay(); }
+function setBlind(v) { document.getElementById('blinds-bb').value = v; updateBlindDisplay(); }
+function updateBlindDisplay() {
+  const stack = parseInt(document.getElementById('blinds-stack').value);
+  document.getElementById('blinds-stack-display').textContent = stack ? stack.toLocaleString('fr-FR') : '—';
+  document.getElementById('blinds-answer').className = 'blinds-answer';
+  document.getElementById('blinds-next-row').style.display = 'none';
+  document.getElementById('blinds-guess').value = '';
 }
-function checkBlinds(){
-  const stack=parseInt(document.getElementById('blinds-stack').value);
-  const bb=parseInt(document.getElementById('blinds-bb').value);
-  const guess=parseFloat(document.getElementById('blinds-guess').value);
-  if(!stack||!bb||isNaN(guess)){alert('Remplis tous les champs.');return;}
-  const real=Math.round((stack/bb)*10)/10;
-  const diff=Math.abs(guess-real); const pctOff=diff/real;
-  let cls,msg;
-  if(diff===0){cls='exact';msg='Parfait.';bCorrect++;}
-  else if(pctOff<=0.05||diff<=1){cls='close';msg='Très proche.';bCorrect++;}
-  else{cls='far';msg='Incorrect.';bWrong++;}
-  document.getElementById('blinds-answer-text').textContent=`${msg}  ${real} BB`;
-  document.getElementById('blinds-answer-sub').textContent=`${stack.toLocaleString('fr-FR')} ÷ ${bb} = ${real} BB`;
-  document.getElementById('blinds-answer').className=`blinds-answer show ${cls}`;
-  document.getElementById('blinds-next-row').style.display='block';
+function checkBlinds() {
+  const stack = parseInt(document.getElementById('blinds-stack').value);
+  const bb    = parseInt(document.getElementById('blinds-bb').value);
+  const guess = parseFloat(document.getElementById('blinds-guess').value);
+  if (!stack || !bb || isNaN(guess)) { showToast('Remplis tous les champs.'); return; }
+  const real = Math.round((stack / bb) * 10) / 10;
+  const diff = Math.abs(guess - real); const pctOff = diff / real;
+  let cls, msg;
+  if (diff === 0)              { cls = 'exact'; msg = 'Parfait.';      bCorrect++; }
+  else if (pctOff <= 0.05 || diff <= 1) { cls = 'close'; msg = 'Très proche.'; bCorrect++; }
+  else                         { cls = 'far';   msg = 'Incorrect.';    bWrong++; }
+  document.getElementById('blinds-answer-text').textContent = `${msg}  ${real} BB`;
+  document.getElementById('blinds-answer-sub').textContent  = `${stack.toLocaleString('fr-FR')} ÷ ${bb} = ${real} BB`;
+  document.getElementById('blinds-answer').className = `blinds-answer show ${cls}`;
+  document.getElementById('blinds-next-row').style.display = 'block';
   updateBlindStats();
 }
-function randomBlindExercise(){
-  const stacks=[5000,7500,10000,12500,15000,18000,20000,25000,30000,40000,50000];
-  const blinds=[100,150,200,250,300,400,500,600,800,1000];
-  setStack(stacks[Math.floor(Math.random()*stacks.length)]);
-  setBlind(blinds[Math.floor(Math.random()*blinds.length)]);
+function randomBlindExercise() {
+  const stacks = [5000,7500,10000,12500,15000,18000,20000,25000,30000,40000,50000];
+  const blinds = [100,150,200,250,300,400,500,600,800,1000];
+  setStack(stacks[Math.floor(Math.random() * stacks.length)]);
+  setBlind(blinds[Math.floor(Math.random() * blinds.length)]);
   document.getElementById('blinds-guess').focus();
 }
-function updateBlindStats(){
-  document.getElementById('b-correct').textContent=bCorrect;
-  document.getElementById('b-wrong').textContent=bWrong;
-  document.getElementById('b-total').textContent=bCorrect+bWrong;
+function updateBlindStats() {
+  document.getElementById('b-correct').textContent = bCorrect;
+  document.getElementById('b-wrong').textContent   = bWrong;
+  document.getElementById('b-total').textContent   = bCorrect + bWrong;
 }
-function resetBlindStats(){bCorrect=0;bWrong=0;updateBlindStats();}
+function resetBlindStats() { bCorrect = 0; bWrong = 0; updateBlindStats(); }
 
-// UTILS
-function h(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+// ═══════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════
+function showToast(msg) {
+  let t = document.getElementById('toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'toast';
+    t.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--border);color:var(--text);padding:10px 18px;border-radius:6px;font-size:0.8rem;font-weight:500;z-index:999;box-shadow:0 8px 24px rgba(0,0,0,0.3);transition:opacity 0.3s;white-space:nowrap;';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => { t.style.opacity = '0'; }, 2500);
+}
 
-// INIT
+// ═══════════════════════════════════════
+//  UTILS
+// ═══════════════════════════════════════
+function h(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ═══════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════
+initColorGrid();
 renderQuestions();
 renderFolders();
+updateDashboard();
 </script>
 </body>
 </html>
