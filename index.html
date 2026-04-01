@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Poker Tracker</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -100,14 +100,14 @@ body {
 
 /* Bottom nav */
 .bottom-nav {
-  height: var(--nav-h);
   background: var(--surface);
   border-top: 1px solid var(--border);
   display: flex;
-  align-items: center;
+  align-items: stretch;
   flex-shrink: 0;
   padding: 0 4px;
   padding-bottom: env(safe-area-inset-bottom);
+  min-height: var(--nav-h);
 }
 .nav-btn {
   flex: 1;
@@ -115,8 +115,8 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  padding: 8px 4px;
+  gap: 3px;
+  padding: 10px 4px 8px;
   background: none;
   border: none;
   cursor: pointer;
@@ -429,6 +429,20 @@ body {
 .mode-btn.active-call  { background: var(--accent2); border-color: var(--accent2); color: #fff; }
 .mode-btn.active-fold  { background: var(--danger); border-color: var(--danger); color: #fff; }
 .mode-btn.active-erase { border-color: var(--text3); color: var(--text2); }
+/* Range view/edit toggle */
+.range-mode-toggle {
+  display: flex; gap: 0; margin-bottom: 16px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 3px;
+}
+.rmt-btn {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 8px 12px; border: none; border-radius: 4px;
+  background: none; font-family: var(--font); font-size: 0.78rem;
+  font-weight: 500; color: var(--text2); cursor: pointer; transition: all 0.2s;
+}
+.rmt-btn.active { background: var(--surface); color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,0.25); }
+
 
 /* ═══════════════════════════════════════
    BLINDS
@@ -684,66 +698,114 @@ body {
 
       <!-- RANGES -->
       <div id="study-ranges" class="subview">
-        <div id="range-view-folders">
-          <div class="btn-row" style="margin-bottom:14px;">
-            <button class="btn btn-ghost btn-sm" onclick="toggleAddFolder()">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              Nouveau dossier
-            </button>
-          </div>
-          <div id="add-folder-form" style="display:none;" class="card">
-            <div class="card-title">Nouveau dossier</div>
-            <div class="input-row">
-              <input class="input" id="folder-name-input" placeholder="Ex: BTN vs BB" style="margin:0;" onkeydown="if(event.key==='Enter')createFolder();">
-              <button class="btn btn-primary btn-sm" onclick="createFolder()">Créer</button>
-            </div>
-          </div>
-          <div id="folders-list"><div class="empty-state">Aucun dossier.<br>Crée-en un pour organiser tes ranges.</div></div>
+
+        <!-- Mode toggle -->
+        <div class="range-mode-toggle" id="range-mode-toggle">
+          <button class="rmt-btn active" id="rmt-view" onclick="setRangeMode('view', this)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            Visualiser
+          </button>
+          <button class="rmt-btn" id="rmt-edit" onclick="setRangeMode('edit', this)">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Créer / Modifier
+          </button>
         </div>
 
-        <div id="range-view-editor" style="display:none;">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-            <button class="btn btn-ghost btn-sm" onclick="closeRangeEditor()">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-              Retour
-            </button>
-            <span id="range-editor-title" style="font-weight:600;font-size:0.88rem;color:var(--text2);"></span>
+        <!-- VIEW MODE - folders list -->
+        <div id="range-panel-view">
+          <div id="range-view-folders-v">
+            <div id="folders-list-view"><div class="empty-state">Aucun range sauvegardé.<br>Passe en mode Créer pour en ajouter.</div></div>
           </div>
-          <div class="card">
-            <div class="card-title">Mode d'action</div>
-            <div class="range-mode-btns">
-              <button class="mode-btn active-raise" id="mode-raise" onclick="setMode('raise')">Raise</button>
-              <button class="mode-btn" id="mode-call" onclick="setMode('call')">Call</button>
-              <button class="mode-btn" id="mode-fold" onclick="setMode('fold')">Fold</button>
-              <button class="mode-btn" id="mode-erase" onclick="setMode('erase')">Effacer</button>
-            </div>
-            <div class="range-legend">
-              <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>Raise</div>
-              <div class="legend-item"><div class="legend-dot" style="background:var(--accent2)"></div>Call</div>
-              <div class="legend-item"><div class="legend-dot" style="background:var(--danger)"></div>Fold</div>
-              <div class="legend-item"><div class="legend-dot" style="background:#261b45;border:1px solid #9b7ae0;"></div>Paires</div>
-              <div class="legend-item"><div class="legend-dot" style="background:#132030;border:1px solid #4d8fc0;"></div>Suited</div>
-            </div>
-            <div class="range-grid" id="range-grid"></div>
-            <div class="btn-row">
-              <button class="btn btn-danger btn-sm" onclick="clearRange()">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" pointer-events="none"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg>
-                Effacer tout
+          <!-- Read-only grid -->
+          <div id="range-readonly-panel" style="display:none;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+              <button class="btn btn-ghost btn-sm" onclick="closeReadonlyPanel()">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" pointer-events="none"><polyline points="15 18 9 12 15 6"/></svg>
+                Retour
+              </button>
+              <span id="range-readonly-title" style="font-weight:600;font-size:0.88rem;color:var(--text2);flex:1;"></span>
+              <button class="btn btn-ghost btn-sm" onclick="switchToEditFromView()" style="font-size:0.72rem;">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" pointer-events="none"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                Modifier
               </button>
             </div>
-          </div>
-          <div class="card">
-            <div class="card-title">Sauvegarder</div>
-            <div class="input-row">
-              <input class="input" id="range-save-name" placeholder="Nom du range..." style="margin:0;" onkeydown="if(event.key==='Enter')saveRange();">
-              <button class="btn btn-primary btn-sm" onclick="saveRange()">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" pointer-events="none"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                Sauver
-              </button>
+            <div class="card">
+              <div class="range-legend" style="margin-bottom:10px;">
+                <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>Raise</div>
+                <div class="legend-item"><div class="legend-dot" style="background:var(--accent2)"></div>Call</div>
+                <div class="legend-item"><div class="legend-dot" style="background:var(--danger)"></div>Fold</div>
+                <div class="legend-item"><div class="legend-dot" style="background:#261b45;border:1px solid #9b7ae0;"></div>Paires</div>
+                <div class="legend-item"><div class="legend-dot" style="background:#132030;border:1px solid #4d8fc0;"></div>Suited</div>
+              </div>
+              <div class="range-grid" id="range-grid-readonly"></div>
             </div>
-            <div id="saved-ranges-list" style="margin-top:10px;"><div class="empty-state" style="padding:10px 0;">Aucun range sauvegardé.</div></div>
           </div>
         </div>
+
+        <!-- EDIT MODE -->
+        <div id="range-panel-edit" style="display:none;">
+          <div id="range-view-folders">
+            <div class="btn-row" style="margin-bottom:14px;">
+              <button class="btn btn-ghost btn-sm" onclick="toggleAddFolder()">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Nouveau dossier
+              </button>
+            </div>
+            <div id="add-folder-form" style="display:none;" class="card">
+              <div class="card-title">Nouveau dossier</div>
+              <div class="input-row">
+                <input class="input" id="folder-name-input" placeholder="Ex: BTN vs BB" style="margin:0;" onkeydown="if(event.key==='Enter')createFolder();">
+                <button class="btn btn-primary btn-sm" onclick="createFolder()">Créer</button>
+              </div>
+            </div>
+            <div id="folders-list"><div class="empty-state">Aucun dossier.<br>Crée-en un pour organiser tes ranges.</div></div>
+          </div>
+
+          <div id="range-view-editor" style="display:none;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+              <button class="btn btn-ghost btn-sm" onclick="closeRangeEditor()">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" pointer-events="none"><polyline points="15 18 9 12 15 6"/></svg>
+                Retour
+              </button>
+              <span id="range-editor-title" style="font-weight:600;font-size:0.88rem;color:var(--text2);flex:1;"></span>
+            </div>
+            <div class="card">
+              <div class="card-title">Mode d'action</div>
+              <div class="range-mode-btns">
+                <button class="mode-btn active-raise" id="mode-raise" onclick="setMode('raise')">Raise</button>
+                <button class="mode-btn" id="mode-call" onclick="setMode('call')">Call</button>
+                <button class="mode-btn" id="mode-fold" onclick="setMode('fold')">Fold</button>
+                <button class="mode-btn" id="mode-erase" onclick="setMode('erase')">Effacer</button>
+              </div>
+              <div class="range-legend">
+                <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>Raise</div>
+                <div class="legend-item"><div class="legend-dot" style="background:var(--accent2)"></div>Call</div>
+                <div class="legend-item"><div class="legend-dot" style="background:var(--danger)"></div>Fold</div>
+                <div class="legend-item"><div class="legend-dot" style="background:#261b45;border:1px solid #9b7ae0;"></div>Paires</div>
+                <div class="legend-item"><div class="legend-dot" style="background:#132030;border:1px solid #4d8fc0;"></div>Suited</div>
+              </div>
+              <div class="range-grid" id="range-grid"></div>
+              <div class="btn-row">
+                <button class="btn btn-danger btn-sm" onclick="clearRange()">
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" pointer-events="none"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg>
+                  Effacer tout
+                </button>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-title">Sauvegarder</div>
+              <div class="input-row">
+                <input class="input" id="range-save-name" placeholder="Nom du range..." style="margin:0;" onkeydown="if(event.key==='Enter')saveRange();">
+                <button class="btn btn-primary btn-sm" onclick="saveRange()">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" pointer-events="none"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                  Sauver
+                </button>
+              </div>
+              <div id="saved-ranges-list" style="margin-top:10px;"><div class="empty-state" style="padding:10px 0;">Aucun range sauvegardé.</div></div>
+            </div>
+          </div>
+        </div>
+
       </div>
 
       <!-- BLINDS -->
@@ -988,13 +1050,13 @@ function toggleThemeSwitch(input) {
 // ═══════════════════════════════════════
 const COLORS = [
   { name: 'Or',       value: '#e8c97a', rgb: '232,201,122' },
-  { name: 'Bleu',     value: '#5b8af0', rgb: '91,138,240' },
-  { name: 'Vert',     value: '#4fd1a0', rgb: '79,209,160' },
-  { name: 'Corail',   value: '#f07a6b', rgb: '240,122,107' },
-  { name: 'Violet',   value: '#a07af0', rgb: '160,122,240' },
-  { name: 'Cyan',     value: '#38bdf8', rgb: '56,189,248' },
-  { name: 'Rose',     value: '#f472b6', rgb: '244,114,182' },
-  { name: 'Blanc',    value: '#e8eaf2', rgb: '232,234,242' },
+  { name: 'Bleu',     value: '#3d8ef5', rgb: '61,142,245' },
+  { name: 'Vert',     value: '#22d17a', rgb: '34,209,122' },
+  { name: 'Rouge',    value: '#f53d5b', rgb: '245,61,91' },
+  { name: 'Violet',   value: '#9b5cf5', rgb: '155,92,245' },
+  { name: 'Cyan',     value: '#00d4ff', rgb: '0,212,255' },
+  { name: 'Orange',   value: '#ff7b2f', rgb: '255,123,47' },
+  { name: 'Rose',     value: '#f53daa', rgb: '245,61,170' },
 ];
 let selectedColor = 0;
 
@@ -1299,7 +1361,121 @@ function showScore() {
 }
 
 // ═══════════════════════════════════════
-//  RANGES
+//  RANGES — MODE VIEW / EDIT
+// ═══════════════════════════════════════
+let currentRangeViewMode = 'view'; // 'view' or 'edit'
+let viewingRangeId = null;
+let viewingFolderId = null;
+
+function setRangeMode(mode, btn) {
+  currentRangeViewMode = mode;
+  document.querySelectorAll('.rmt-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (mode === 'view') {
+    document.getElementById('range-panel-view').style.display = 'block';
+    document.getElementById('range-panel-edit').style.display = 'none';
+    renderFoldersView();
+  } else {
+    document.getElementById('range-panel-view').style.display = 'none';
+    document.getElementById('range-panel-edit').style.display = 'block';
+    renderFolders();
+  }
+}
+
+function renderFoldersView() {
+  // Show all ranges from all folders flat list for viewing
+  const list = document.getElementById('folders-list-view');
+  const allRanges = folders.flatMap(f => f.ranges.map(r => ({ ...r, folderName: f.name, folderId: f.id })));
+  if (!allRanges.length) {
+    list.innerHTML = '<div class="empty-state">Aucun range sauvegardé.<br>Passe en mode Créer / Modifier pour en ajouter.</div>';
+    return;
+  }
+  list.innerHTML = '';
+  // Group by folder
+  folders.forEach(f => {
+    if (!f.ranges.length) return;
+    const label = document.createElement('div');
+    label.style.cssText = 'font-size:0.65rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin:14px 0 7px;';
+    label.textContent = f.name;
+    list.appendChild(label);
+    f.ranges.forEach(r => {
+      const div = document.createElement('div');
+      div.className = 'list-item';
+      div.innerHTML = `
+        <span class="list-item-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+        <span class="list-item-name">${h(r.name)}</span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text3)"><polyline points="9 18 15 12 9 6"/></svg>
+      `;
+      div.addEventListener('click', () => openReadonlyRange(f.id, r.id));
+      list.appendChild(div);
+    });
+  });
+}
+
+function openReadonlyRange(folderId, rangeId) {
+  const folder = folders.find(f => f.id === folderId);
+  const range = folder.ranges.find(r => r.id === rangeId);
+  if (!range) return;
+  viewingFolderId = folderId;
+  viewingRangeId = rangeId;
+  document.getElementById('range-view-folders-v').style.display = 'none';
+  document.getElementById('range-readonly-panel').style.display = 'block';
+  document.getElementById('range-readonly-title').textContent = range.name;
+  buildReadonlyGrid(range.data);
+}
+
+function closeReadonlyPanel() {
+  document.getElementById('range-view-folders-v').style.display = 'block';
+  document.getElementById('range-readonly-panel').style.display = 'none';
+  viewingRangeId = null; viewingFolderId = null;
+}
+
+function switchToEditFromView() {
+  // Switch to edit mode and open the same folder/range
+  const fid = viewingFolderId;
+  const rid = viewingRangeId;
+  closeReadonlyPanel();
+  setRangeMode('edit', document.getElementById('rmt-edit'));
+  if (fid) {
+    openFolder(fid);
+    // load range into editor
+    const folder = folders.find(f => f.id === fid);
+    const range = folder ? folder.ranges.find(r => r.id === rid) : null;
+    if (range) {
+      currentRangeData = { ...range.data };
+      document.querySelectorAll('#range-grid .range-cell').forEach(cell => {
+        cell.classList.remove('selected-raise','selected-call','selected-fold');
+        if (currentRangeData[cell.dataset.key]) applyActionClass(cell, currentRangeData[cell.dataset.key]);
+      });
+      document.getElementById('range-save-name').value = range.name;
+    }
+  }
+}
+
+function buildReadonlyGrid(data) {
+  const grid = document.getElementById('range-grid-readonly');
+  grid.innerHTML = '';
+  for (let i = 0; i < 13; i++) for (let j = 0; j < 13; j++) {
+    const cell = document.createElement('div');
+    const r1 = RANKS[i], r2 = RANKS[j]; let label, type, key;
+    if (i === j)    { label = r1+r1;    type = 'pair';    key = label; }
+    else if (i < j) { label = r1+r2+'s'; type = 'suited';  key = label; }
+    else            { label = r2+r1+'o'; type = 'offsuit'; key = label; }
+    cell.className = 'range-cell ' + type;
+    cell.textContent = label;
+    cell.style.cursor = 'default';
+    if (data && data[key]) applyActionClassGeneric(cell, data[key]);
+    grid.appendChild(cell);
+  }
+}
+
+function applyActionClassGeneric(cell, action) {
+  cell.classList.remove('selected-raise','selected-call','selected-fold');
+  if (action) cell.classList.add('selected-' + action);
+}
+
+// ═══════════════════════════════════════
+//  RANGES — EDIT
 // ═══════════════════════════════════════
 function renderFolders() {
   const list = document.getElementById('folders-list');
@@ -1340,7 +1516,7 @@ function createFolder() {
   folders.push({ id: nextFolderId++, name, ranges: [] });
   document.getElementById('folder-name-input').value = '';
   document.getElementById('add-folder-form').style.display = 'none';
-  renderFolders();
+  renderFolders(); renderFoldersView();
 }
 function openFolder(id) {
   currentFolderId = id; currentRangeData = {};
@@ -1398,7 +1574,7 @@ function saveRange() {
   const name = document.getElementById('range-save-name').value.trim() || 'Range ' + (folder.ranges.length + 1);
   folder.ranges.push({ id: Date.now(), name, data: { ...currentRangeData } });
   document.getElementById('range-save-name').value = '';
-  renderSavedRanges(); updateDashboard();
+  renderSavedRanges(); renderFoldersView(); updateDashboard();
 }
 function loadRange(rid) {
   const folder = folders.find(f => f.id === currentFolderId);
