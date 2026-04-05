@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="screen-orientation" content="portrait">
 <title>Poker Tracker</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -470,6 +471,8 @@ body {
 .rat-dot { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; cursor: pointer; }
 .rat-del { margin-left: 2px; color: var(--text3); font-size: 1rem; line-height: 1; cursor: pointer; padding: 0 1px; transition: color .15s; }
 .rat-del:hover { color: var(--danger); }
+.rat-dot-mix { width: 14px; height: 9px; border-radius: 2px; overflow: hidden; display: flex; flex-shrink: 0; }
+.rat-dot-mix span { height: 100%; }
 .range-toolbar-right { display: flex; gap: 6px; flex-shrink: 0; }
 .range-freq-control {
   display: flex; align-items: center; gap: 8px;
@@ -567,8 +570,8 @@ body {
 /* ═══════════════════════════════════════
    BLINDS
 ═══════════════════════════════════════ */
-.blinds-hero { text-align: center; padding: 20px 0 12px; }
-.blinds-chips { font-size: 2.6rem; font-weight: 700; color: var(--accent); font-family: var(--font-mono); letter-spacing: -0.04em; }
+.blinds-hero { text-align: center; padding: 10px 0 8px; }
+.blinds-chips { font-size: 2rem; font-weight: 700; color: var(--accent); font-family: var(--font-mono); letter-spacing: -0.04em; }
 .blinds-sub-label { font-size: 0.72rem; color: var(--text3); margin-top: 2px; }
 .blinds-answer { padding: 13px 16px; border-radius: var(--radius-sm); text-align: center; font-size: 1.3rem; font-weight: 700; margin-top: 12px; display: none; }
 .blinds-answer.show { display: block; animation: fadeUp 0.25s; }
@@ -738,6 +741,132 @@ body {
 }
 .vf-btn:hover { border-color: var(--accent2); color: var(--accent2); }
 .vf-btn-del:hover { border-color: var(--danger); color: var(--danger); }
+
+/* Mixed action popup */
+.mix-popup {
+  position: fixed; z-index: 500;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px;
+  width: 260px; box-shadow: 0 16px 48px rgba(0,0,0,0.45);
+  animation: fadeUp 0.18s ease;
+}
+.mix-popup-title { font-size:0.78rem; font-weight:700; margin-bottom:12px; color:var(--text); }
+.mix-row { display:flex; align-items:center; gap:7px; margin-bottom:8px; }
+.mix-dot { width:10px; height:10px; border-radius:3px; flex-shrink:0; }
+.mix-action-label { flex:1; font-size:0.78rem; font-weight:500; color:var(--text2); }
+.mix-pct-input {
+  width:52px; background:var(--surface2); border:1px solid var(--border);
+  border-radius:4px; padding:4px 6px; font-family:var(--font-mono);
+  font-size:0.8rem; color:var(--text); outline:none; text-align:center;
+}
+.mix-pct-input:focus { border-color:var(--accent); }
+.mix-pm {
+  width:26px; height:26px; border-radius:4px; flex-shrink:0;
+  background:var(--surface2); border:1px solid var(--border);
+  font-size:1.1rem; color:var(--text); cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  font-weight:700; line-height:1; transition:all .12s;
+}
+.mix-pm:hover { border-color:var(--accent); color:var(--accent); }
+.mix-pm:active { transform:scale(0.88); }
+.mix-val {
+  font-family:var(--font-mono); font-size:0.85rem;
+  font-weight:700; color:var(--text); min-width:26px; text-align:center;
+}
+.mix-pct-sign { font-size:0.72rem; color:var(--text3); }
+.mix-total-row { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-top:1px solid var(--border); margin-top:4px; }
+.mix-total-label { font-size:0.72rem; color:var(--text3); }
+.mix-total-value { font-family:var(--font-mono); font-size:0.82rem; font-weight:700; }
+.mix-total-value.ok { color:var(--accent3); }
+.mix-total-value.over { color:var(--danger); }
+.mix-footer { display:flex; gap:6px; margin-top:10px; }
+.mix-preview { height:6px; border-radius:3px; overflow:hidden; display:flex; margin-bottom:10px; }
+
+/* Blinds exercise compact */
+.blinds-question-block {
+  text-align: center; padding: 6px 0 10px;
+}
+.blinds-q-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 16px; margin-bottom: 4px;
+}
+.blinds-q-item { text-align: center; }
+.blinds-q-label { font-size: 0.62rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--text3); margin-bottom: 2px; }
+.blinds-q-value { font-size: 1.35rem; font-weight: 800; font-family: var(--font-mono); color: var(--accent); letter-spacing: -0.03em; }
+.blinds-q-sep { font-size: 1.4rem; color: var(--text3); font-weight: 300; margin-top: 14px; }
+.blinds-q-sub { font-size: 0.75rem; color: var(--text2); margin-top: 4px; }
+.blinds-input-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+.blinds-answer-input {
+  flex: 1; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 10px 13px;
+  font-family: var(--font-mono); font-size: 16px; font-weight: 600;
+  color: var(--text); outline: none;
+}
+.blinds-answer-input:focus { border-color: var(--accent); }
+.blinds-stats-row { display: flex; align-items: center; gap: 16px; }
+.blinds-stat { text-align: center; }
+.blinds-stat-num { font-size: 1.1rem; font-weight: 800; font-family: var(--font-mono); }
+.blinds-stat-lbl { font-size: 0.65rem; color: var(--text2); margin-top: 1px; }
+
+/* ═══════════════════════════════════════
+   SESSION — CALCULATEURS
+═══════════════════════════════════════ */
+.mko-grid {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 10px; margin-bottom: 14px;
+}
+.mko-field { display: flex; flex-direction: column; gap: 3px; }
+.mko-label {
+  font-size: 0.62rem; font-weight: 600;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--text3);
+}
+.mko-input-wrap {
+  display: flex; align-items: center;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); overflow: hidden;
+  transition: border-color .15s;
+}
+.mko-input-wrap:focus-within { border-color: var(--accent); }
+.mko-input {
+  flex: 1; background: none; border: none; outline: none;
+  padding: 9px 10px; font-family: var(--font-mono);
+  font-size: 16px; font-weight: 600; color: var(--text);
+  min-width: 0;
+}
+.mko-unit {
+  padding: 0 9px; font-size: 0.72rem; color: var(--text3);
+  font-weight: 600; white-space: nowrap;
+}
+.mko-result {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 14px 16px;
+  text-align: center; margin-bottom: 12px;
+  animation: fadeUp .2s ease;
+}
+.mko-result-label { font-size: 0.65rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--text3); margin-bottom: 4px; }
+.mko-result-value { font-size: 2rem; font-weight: 800; font-family: var(--font-mono); color: var(--accent); letter-spacing: -0.03em; }
+.mko-result-sub { font-size: 0.72rem; color: var(--text2); margin-top: 4px; font-family: var(--font-mono); }
+.mko-formula {
+  text-align: center; padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.mko-formula-text { font-size: 0.68rem; color: var(--text3); font-family: var(--font-mono); }
+
+/* Force portrait, prevent horizontal overflow */
+@media screen and (orientation: landscape) and (max-height: 600px) {
+  body::before {
+    content: 'Veuillez utiliser l\'application en mode portrait.';
+    position: fixed; inset: 0; z-index: 9999;
+    background: var(--bg); color: var(--text);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font); font-size: 1rem; text-align: center;
+    padding: 20px;
+  }
+  body > * { display: none !important; }
+}
+html, body { overflow-x: hidden; max-width: 100vw; }
+* { box-sizing: border-box; }
 </style>
 </head>
 <body>
@@ -788,12 +917,66 @@ body {
 
     <!-- ── SESSION ── -->
     <div id="page-session" class="page">
-      <div class="coming-soon">
-        <div class="coming-soon-icon">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      <div class="study-tabs">
+        <button class="study-tab active" onclick="showSessionTab('calculateurs', this)">Calculateurs</button>
+      </div>
+
+      <!-- CALCULATEURS -->
+      <div id="session-calculateurs" class="subview active">
+
+        <!-- Mystery KO -->
+        <div class="card">
+          <div class="card-title" style="display:flex;align-items:center;gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Mystery KO
+          </div>
+          <div style="font-size:0.75rem;color:var(--text3);margin-bottom:14px;line-height:1.5;">
+            Valeur du bounty moyen en big blinds à l'instant T
+          </div>
+
+          <div class="mko-grid">
+            <div class="mko-field">
+              <label class="mko-label">KO moyen restant</label>
+              <div class="mko-input-wrap">
+                <input class="mko-input" id="mko-ko" type="number" inputmode="decimal" placeholder="0" oninput="calcMKO()">
+                <span class="mko-unit">€</span>
+              </div>
+            </div>
+            <div class="mko-field">
+              <label class="mko-label">Prix du tournoi</label>
+              <div class="mko-input-wrap">
+                <input class="mko-input" id="mko-prix" type="number" inputmode="decimal" placeholder="0" oninput="calcMKO()">
+                <span class="mko-unit">€</span>
+              </div>
+            </div>
+            <div class="mko-field">
+              <label class="mko-label">Stack de départ</label>
+              <div class="mko-input-wrap">
+                <input class="mko-input" id="mko-starting" type="number" inputmode="numeric" placeholder="0" oninput="calcMKO()">
+                <span class="mko-unit">j.</span>
+              </div>
+            </div>
+            <div class="mko-field">
+              <label class="mko-label">Big blind actuelle</label>
+              <div class="mko-input-wrap">
+                <input class="mko-input" id="mko-bb" type="number" inputmode="numeric" placeholder="0" oninput="calcMKO()">
+                <span class="mko-unit">j.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Result -->
+          <div class="mko-result" id="mko-result" style="display:none;">
+            <div class="mko-result-label">Valeur du KO</div>
+            <div class="mko-result-value" id="mko-result-value">—</div>
+            <div class="mko-result-sub" id="mko-result-sub"></div>
+          </div>
+
+          <div class="mko-formula">
+            <span class="mko-formula-text">KO€ ÷ Prix€ × Starting ÷ BB = BB</span>
+          </div>
         </div>
-        <h3>En cours de développement</h3>
-        <p>Les outils de session (timer de blinds, calculateur, suivi de stack) arriveront ici.</p>
+
       </div>
     </div>
 
@@ -976,6 +1159,7 @@ body {
             <div class="range-toolbar" id="range-toolbar">
               <div id="range-action-tabs" class="range-action-tabs"></div>
               <div class="range-toolbar-right">
+                <button class="range-add-action-btn" onclick="openMixPopup()" id="btn-mix-action" title="Action mixée" style="font-size:0.65rem;font-weight:700;padding:0 8px;width:auto;">Mix</button>
                 <button class="range-add-action-btn" onclick="addCustomAction()" id="btn-add-action" title="Ajouter action">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" pointer-events="none"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                 </button>
@@ -1009,62 +1193,53 @@ body {
 
             <!-- BLINDS -->
       <div id="study-blinds" class="subview">
-        <div class="card">
-          <div class="card-title">Stack en Big Blinds</div>
-          <div class="blinds-hero">
-            <div class="blinds-chips" id="blinds-stack-display">—</div>
-            <div class="blinds-sub-label">jetons dans le stack</div>
-          </div>
-          <hr class="divider">
-          <div style="margin-bottom:12px;">
-            <div style="font-size:0.72rem;color:var(--text2);margin-bottom:6px;">Stack</div>
-            <div class="presets">
-              <button class="preset-btn" onclick="setStack(5000)">5k</button>
-              <button class="preset-btn" onclick="setStack(10000)">10k</button>
-              <button class="preset-btn" onclick="setStack(15000)">15k</button>
-              <button class="preset-btn" onclick="setStack(25000)">25k</button>
-              <button class="preset-btn" onclick="setStack(50000)">50k</button>
+        <div class="card" style="padding:12px 14px;">
+
+          <!-- Question -->
+          <div class="blinds-question-block">
+            <div class="blinds-q-row">
+              <div class="blinds-q-item">
+                <div class="blinds-q-label">Stack</div>
+                <div class="blinds-q-value" id="blinds-stack-display">—</div>
+              </div>
+              <div class="blinds-q-sep">/</div>
+              <div class="blinds-q-item">
+                <div class="blinds-q-label">Big Blind</div>
+                <div class="blinds-q-value" id="blinds-bb-display">—</div>
+              </div>
             </div>
-            <input class="input" type="number" id="blinds-stack" placeholder="Jetons..." oninput="updateBlindDisplay()">
+            <div class="blinds-q-sub">Combien de BB ?</div>
           </div>
-          <div style="margin-bottom:12px;">
-            <div style="font-size:0.72rem;color:var(--text2);margin-bottom:6px;">Big Blind</div>
-            <div class="presets">
-              <button class="preset-btn" onclick="setBlind(100)">100</button>
-              <button class="preset-btn" onclick="setBlind(200)">200</button>
-              <button class="preset-btn" onclick="setBlind(300)">300</button>
-              <button class="preset-btn" onclick="setBlind(500)">500</button>
-              <button class="preset-btn" onclick="setBlind(1000)">1k</button>
-            </div>
-            <input class="input" type="number" id="blinds-bb" placeholder="Big blind..." oninput="updateBlindDisplay()">
+
+          <!-- Answer input -->
+          <div class="blinds-input-row">
+            <input class="blinds-answer-input" type="number" inputmode="decimal"
+              id="blinds-guess" placeholder="Votre réponse en BB"
+              onkeydown="if(event.key==='Enter')checkBlinds();">
+            <button class="btn btn-primary" onclick="checkBlinds()" style="flex-shrink:0;">Valider</button>
           </div>
-          <div>
-            <div style="font-size:0.72rem;color:var(--text2);margin-bottom:6px;">Ta réponse (en BB)</div>
-            <input class="input" type="number" id="blinds-guess" placeholder="Ex: 62" onkeydown="if(event.key==='Enter')checkBlinds();" style="margin-bottom:0;">
-          </div>
-          <div class="btn-row">
-            <button class="btn btn-primary btn-full" onclick="checkBlinds()">Valider</button>
-          </div>
+
+          <!-- Feedback -->
           <div class="blinds-answer" id="blinds-answer">
             <div id="blinds-answer-text"></div>
             <div class="blinds-answer-sub" id="blinds-answer-sub"></div>
           </div>
-          <div id="blinds-next-row" style="display:none;margin-top:10px;">
-            <button class="btn btn-ghost btn-full" onclick="randomBlindExercise()">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
-              Exercice aléatoire
-            </button>
-          </div>
+
+          <!-- Next -->
+          <button class="btn btn-ghost btn-full" id="blinds-next-row"
+            onclick="randomBlindExercise()" style="display:none;margin-top:10px;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+            Nouvel exercice
+          </button>
         </div>
-        <div class="card">
-          <div class="card-title">Session</div>
-          <div class="stat-row">
-            <div class="stat-box"><div class="stat-num" style="color:var(--accent3);" id="b-correct">0</div><div class="stat-lbl">Corrects</div></div>
-            <div class="stat-box"><div class="stat-num" style="color:var(--danger);" id="b-wrong">0</div><div class="stat-lbl">Erronés</div></div>
-            <div class="stat-box"><div class="stat-num" style="color:var(--accent2);" id="b-total">0</div><div class="stat-lbl">Total</div></div>
-          </div>
-          <div style="margin-top:12px;">
-            <button class="btn btn-ghost btn-sm" onclick="resetBlindStats()">Réinitialiser</button>
+
+        <!-- Stats -->
+        <div class="card" style="padding:14px;">
+          <div class="blinds-stats-row">
+            <div class="blinds-stat"><div class="blinds-stat-num" style="color:var(--accent3);" id="b-correct">0</div><div class="blinds-stat-lbl">Corrects</div></div>
+            <div class="blinds-stat"><div class="blinds-stat-num" style="color:var(--danger);" id="b-wrong">0</div><div class="blinds-stat-lbl">Erronés</div></div>
+            <div class="blinds-stat"><div class="blinds-stat-num" style="color:var(--accent2);" id="b-total">0</div><div class="blinds-stat-lbl">Total</div></div>
+            <button class="btn btn-ghost btn-sm" onclick="resetBlindStats()" style="margin-left:auto;">Reset</button>
           </div>
         </div>
       </div>
@@ -1228,6 +1403,7 @@ function showStudyTab(tab, btn) {
   btn.classList.add('active');
   document.querySelectorAll('#page-study > div.study-tabs ~ .subview').forEach(v => v.classList.remove('active'));
   document.getElementById('study-' + tab).classList.add('active');
+  if (tab === 'blinds') randomBlindExercise();
 }
 
 // ═══════════════════════════════════════
@@ -1577,6 +1753,144 @@ let editingRangeId = null; // null = new range, id = editing existing
 
 const PALETTE = ['#e8c97a','#5b8af0','#e05c5c','#4fd1a0','#f472b6','#a78bfa','#fb923c','#38bdf8','#facc15','#f87171','#34d399','#818cf8','#ffffff','#94a3b8'];
 
+// ── Mixed action state ──
+// A "mixed" action is a virtual action composed of multiple base actions with %
+// Stored as: { id:'mix_X', label:'Mix', isMixed:true, parts:[{id,pct,color,label}] }
+
+// ── Mixed action ──
+function openMixPopup() {
+  document.querySelectorAll('.r-popup').forEach(p => p.remove());
+  const baseActions = rangeActions.filter(a => !a.isMixed);
+  if (baseActions.length < 2) { showToast('Il faut au moins 2 actions pour créer un mix.'); return; }
+
+  // parts[id] = pct — start with 50/50 on first two
+  const parts = {};
+  baseActions.forEach((a, i) => {
+    const n = Math.min(baseActions.length, 3);
+    if (i === 0) parts[a.id] = n <= 1 ? 100 : n === 2 ? 50 : 33.3;
+    else if (i === 1) parts[a.id] = n === 2 ? 50 : 33.3;
+    else if (i === 2) parts[a.id] = 33.4;
+    else parts[a.id] = 0;
+  });
+
+  // Build popup HTML once (no re-render on input)
+  const popup = document.createElement('div');
+  popup.className = 'r-popup mix-popup';
+  const rowsHTML = baseActions.map(a =>
+    `<div class="mix-row">
+      <span class="mix-dot" style="background:${a.color}"></span>
+      <span class="mix-action-label">${h(a.label)}</span>
+      <button class="mix-pm" data-id="${a.id}" data-d="-1">−</button>
+      <span class="mix-val" id="mv-${a.id}">${parts[a.id]}</span>
+      <button class="mix-pm" data-id="${a.id}" data-d="1">+</button>
+      <span class="mix-pct-sign">%</span>
+    </div>`
+  ).join('');
+
+  popup.innerHTML = `
+    <div class="mix-popup-title">Action mixée</div>
+    <div class="mix-preview" id="mix-preview-bar" style="height:6px;border-radius:3px;overflow:hidden;display:flex;margin-bottom:12px;"></div>
+    ${rowsHTML}
+    <div class="mix-total-row">
+      <span class="mix-total-label">Total</span>
+      <span class="mix-total-value" id="mix-total-display"></span>
+    </div>
+    <div style="font-size:0.7rem;color:var(--text3);margin-bottom:10px;">La somme doit être exactement 100%</div>
+    <div class="mix-footer">
+      <button class="btn btn-primary btn-sm" id="mix-ok" style="flex:1;justify-content:center;">Créer l'action</button>
+      <button class="btn btn-ghost btn-sm" id="mix-cancel">Annuler</button>
+    </div>`;
+  document.body.appendChild(popup);
+
+  function updateUI() {
+    const total = Object.values(parts).reduce((s,v)=>s+v, 0);
+    // update value displays
+    baseActions.forEach(a => {
+      const el = popup.querySelector('#mv-'+a.id);
+      const v = parts[a.id];
+      if (el) {
+        const disp = Math.round(v*10)/10;
+        // Display integers without decimal, others with 1 decimal
+        // Special case: 33.4 internal → show 33.3 (represents 33.333...)
+        let txt = disp % 1 === 0 ? String(disp) : disp.toFixed(1);
+        if (txt === '33.4') txt = '33.3';
+        el.textContent = txt;
+      }
+    });
+    // update total
+    const totEl = popup.querySelector('#mix-total-display');
+    const roundedTotal = Math.round(total * 10) / 10;
+    const isOk = Math.abs(total - 100) < 0.05;
+    if (totEl) { totEl.textContent = (Number.isInteger(roundedTotal)?roundedTotal:roundedTotal)+'%'; totEl.className='mix-total-value '+(isOk?'ok':'over'); }
+    // update preview bar
+    const bar = popup.querySelector('#mix-preview-bar');
+    if (bar) bar.innerHTML = baseActions.filter(a=>parts[a.id]>0)
+      .map(a=>`<div style="flex:${parts[a.id]};background:${a.color};"></div>`).join('');
+  }
+
+  // +/- buttons — adjust with float precision, auto-balance to keep sum at 100
+  popup.querySelectorAll('.mix-pm').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.id;
+      const delta = parseFloat(btn.dataset.d);
+      const newVal = Math.round(Math.max(0, Math.min(100, parts[id] + delta)) * 10) / 10;
+      const diff = Math.round((newVal - parts[id]) * 10) / 10;
+      if (diff === 0) return;
+      parts[id] = newVal;
+      // Auto-balance: take/give from the largest other active action
+      const others = baseActions.filter(a => a.id !== id);
+      const activeOthers = others.filter(a => parts[a.id] > 0).sort((a,b)=>parts[b.id]-parts[a.id]);
+      if (activeOthers.length > 0) {
+        const target = activeOthers[0];
+        parts[target.id] = Math.round(Math.max(0, Math.min(100, parts[target.id] - diff)) * 10) / 10;
+      }
+      updateUI();
+    });
+  });
+
+  popup.querySelector('#mix-ok').addEventListener('click', () => {
+    const total = Object.values(parts).reduce((s,v)=>s+v, 0);
+    if (Math.abs(total - 100) > 0.05) { showToast('Le total doit être 100%.'); return; }
+    const activeParts = baseActions.filter(a=>parts[a.id]>0.001).map(a=>({
+      id:a.id, pct:Math.round(parts[a.id]*10)/10, color:a.color, label:a.label
+    }));
+    if (activeParts.length < 2) { showToast('Sélectionne au moins 2 actions.'); return; }
+    const mixId = 'mix_'+Date.now();
+    const mixLabel = activeParts.map(p=>p.pct+'%').join('/');
+    rangeActions.push({ id:mixId, label:mixLabel, color:activeParts[0].color, isMixed:true, parts:activeParts });
+    currentActionId = mixId;
+    popup.remove();
+    renderActionTabs();
+  });
+  popup.querySelector('#mix-cancel').addEventListener('click', () => popup.remove());
+
+  updateUI();
+
+  // Position popup
+  const mixBtn = document.getElementById('btn-mix-action');
+  if (mixBtn) {
+    const rect = mixBtn.getBoundingClientRect();
+    const pw = 250;
+    let left = Math.max(8, Math.min(rect.right - pw, window.innerWidth - pw - 8));
+    let top = rect.bottom + 6;
+    if (top + 320 > window.innerHeight) top = Math.max(8, rect.top - 330);
+    popup.style.top = top+'px';
+    popup.style.left = left+'px';
+    popup.style.width = pw+'px';
+  }
+
+  // Close on outside click
+  setTimeout(() => {
+    function closeOut(e) {
+      if (!popup.contains(e.target) && !document.getElementById('btn-mix-action')?.contains(e.target)) {
+        popup.remove(); document.removeEventListener('click', closeOut);
+      }
+    }
+    document.addEventListener('click', closeOut);
+  }, 150);
+}
+
+
 // ── View / Edit toggle ──
 function setRangeMode(mode, btn) {
   currentRangeViewMode = mode;
@@ -1597,7 +1911,13 @@ function renderActionTabs() {
     const tab = document.createElement('button');
     tab.className = 'range-action-tab' + (a.id === currentActionId ? ' active' : '');
     tab.style.setProperty('--ac', a.color);
-    tab.innerHTML = `<span class="rat-dot" style="background:${a.color}"></span><span class="rat-label">${h(a.label)}</span>${rangeActions.length > 1 ? `<span class="rat-del" data-del="${a.id}">×</span>` : ''}`;
+    if (a.isMixed) {
+      // Segmented dot for mixed action
+      const dotHTML = `<span class="rat-dot-mix">${a.parts.map(p=>`<span style="flex:${p.pct};background:${p.color};"></span>`).join('')}</span>`;
+      tab.innerHTML = `${dotHTML}<span class="rat-label">${h(a.label)}</span><span class="rat-del" data-del="${a.id}">×</span>`;
+    } else {
+      tab.innerHTML = `<span class="rat-dot" style="background:${a.color}"></span><span class="rat-label">${h(a.label)}</span>${rangeActions.length > 1 ? `<span class="rat-del" data-del="${a.id}">×</span>` : ''}`;
+    }
     tab.querySelector('.rat-label')?.addEventListener('click', (e) => { e.stopPropagation(); currentActionId = a.id; renderActionTabs(); });
     tab.querySelector('.rat-dot')?.addEventListener('click', (e) => { e.stopPropagation(); currentActionId = a.id; renderActionTabs(); });
     tab.addEventListener('click', (e) => {
@@ -1782,16 +2102,40 @@ function buildRangeGrid() {
   updateRangeStats();
 }
 
-// tap: if same action exists → remove; otherwise replace all with current action
+// Build data dict for current action (handles mixed)
+function buildActionData() {
+  const a = rangeActions.find(x => x.id === currentActionId);
+  if (!a) return { [currentActionId]: currentFreqPct };
+  if (a.isMixed) {
+    // For mixed: store each part scaled by currentFreqPct (float precision)
+    const data = {};
+    a.parts.forEach(p => { data[p.id] = Math.round(p.pct * currentFreqPct) / 100; });
+    return data;
+  }
+  return { [currentActionId]: currentFreqPct };
+}
+
+function isSameAction(existing) {
+  if (!existing || !Object.keys(existing).length) return false;
+  const a = rangeActions.find(x => x.id === currentActionId);
+  if (!a) return false;
+  if (a.isMixed) {
+    // Mixed: all part IDs present and no extra keys
+    const partIds = a.parts.map(p => p.id).sort().join(',');
+    const existIds = Object.keys(existing).sort().join(',');
+    return partIds === existIds;
+  }
+  // Simple: cell has exactly this one action
+  const keys = Object.keys(existing);
+  return keys.length === 1 && keys[0] === currentActionId;
+}
+
+// tap: if same action exists → remove; otherwise replace
 function applyPaint(cell, key) {
-  const existing = currentRangeData[key];
-  const sameAction = existing && Object.keys(existing).length === 1 && existing[currentActionId] !== undefined;
-  if (sameAction) {
-    // toggle off
+  if (isSameAction(currentRangeData[key])) {
     delete currentRangeData[key];
   } else {
-    // replace entirely with current action at current freq
-    currentRangeData[key] = { [currentActionId]: currentFreqPct };
+    currentRangeData[key] = buildActionData();
   }
   paintCell(cell, key);
   updateRangeStats();
@@ -1799,10 +2143,8 @@ function applyPaint(cell, key) {
 
 // drag: set current action (replace)
 function applyPaintDrag(cell, key) {
-  const existing = currentRangeData[key];
-  const alreadyThis = existing && Object.keys(existing).length === 1 && existing[currentActionId] !== undefined;
-  if (!alreadyThis) {
-    currentRangeData[key] = { [currentActionId]: currentFreqPct };
+  if (!isSameAction(currentRangeData[key])) {
+    currentRangeData[key] = buildActionData();
     paintCell(cell, key);
     updateRangeStats();
   }
@@ -1942,9 +2284,10 @@ function renderFoldersView() {
         setRangeMode('edit', document.getElementById('rmt-edit'));
         openFolder(f.id);
         setTimeout(() => {
+          rIsDown=false; rStartKey=null; rMoved=false;
           currentRangeData = JSON.parse(JSON.stringify(r.data));
           if (r.actions) { rangeActions=JSON.parse(JSON.stringify(r.actions)); currentActionId=rangeActions[0].id; }
-          editingRangeId = r.id; // mark as editing
+          editingRangeId = r.id;
           const nameIn=document.getElementById('range-name-top');
           if(nameIn) nameIn.value=r.name;
           buildRangeGrid();
@@ -1989,8 +2332,12 @@ function switchToEditFromView() {
     openFolder(fid);
     const range = folders.find(f=>f.id===fid)?.ranges.find(r=>r.id===rid);
     if (range) {
+      rIsDown=false; rStartKey=null; rMoved=false;
       currentRangeData = JSON.parse(JSON.stringify(range.data));
       if (range.actions) { rangeActions=JSON.parse(JSON.stringify(range.actions)); currentActionId=rangeActions[0].id; }
+      editingRangeId=rid;
+      const nameIn=document.getElementById('range-name-top');
+      if(nameIn) nameIn.value=range.name;
       buildRangeGrid();
     }
   }
@@ -2121,6 +2468,7 @@ function saveRange(){
 function loadRange(rid){
   const folder=folders.find(f=>f.id===currentFolderId);
   const range=folder?.ranges.find(r=>r.id===rid);if(!range)return;
+  rIsDown=false; rStartKey=null; rMoved=false;
   currentRangeData=JSON.parse(JSON.stringify(range.data));
   if(range.actions){rangeActions=JSON.parse(JSON.stringify(range.actions));currentActionId=rangeActions[0].id;}
   editingRangeId=rid;
@@ -2160,40 +2508,101 @@ function clearRange(){
 }
 
 // ═══════════════════════════════════════
+//  SESSION — CALCULATEURS
+// ═══════════════════════════════════════
+function showSessionTab(tab, btn) {
+  document.querySelectorAll('#page-session .study-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#page-session .subview').forEach(v => v.classList.remove('active'));
+  document.getElementById('session-' + tab).classList.add('active');
+}
+
+function calcMKO() {
+  const ko       = parseFloat(document.getElementById('mko-ko').value);
+  const prix     = parseFloat(document.getElementById('mko-prix').value);
+  const starting = parseFloat(document.getElementById('mko-starting').value);
+  const bb       = parseFloat(document.getElementById('mko-bb').value);
+
+  const resultEl  = document.getElementById('mko-result');
+  const valueEl   = document.getElementById('mko-result-value');
+  const subEl     = document.getElementById('mko-result-sub');
+
+  if (!ko || !prix || !starting || !bb || prix === 0 || bb === 0) {
+    resultEl.style.display = 'none';
+    return;
+  }
+
+  // Formule : (KO€ / Prix€) * Starting / BB
+  const koJetons = (ko / prix) * starting;
+  const koBB     = koJetons / bb;
+  const koBBRound = Math.round(koBB * 10) / 10;
+
+  resultEl.style.display = 'block';
+  valueEl.textContent = koBBRound.toLocaleString('fr-FR') + ' BB';
+  subEl.textContent   = `(${ko}€ ÷ ${prix}€) × ${starting.toLocaleString('fr-FR')} ÷ ${bb.toLocaleString('fr-FR')} = ${koBBRound} BB`;
+}
+
+// ═══════════════════════════════════════
 //  BLINDS
 // ═══════════════════════════════════════
-function setStack(v) { document.getElementById('blinds-stack').value = v; updateBlindDisplay(); }
-function setBlind(v) { document.getElementById('blinds-bb').value = v; updateBlindDisplay(); }
-function updateBlindDisplay() {
-  const stack = parseInt(document.getElementById('blinds-stack').value);
-  document.getElementById('blinds-stack-display').textContent = stack ? stack.toLocaleString('fr-FR') : '—';
+// ── Blinds exercise ──
+let bStack = 0, bBB = 0;
+
+function fmt(n) { return n.toLocaleString('fr-FR'); }
+
+function randomBlindExercise() {
+  // Real tournament blind levels (SB/BB pairs like in the screenshots)
+  // These are the actual BB values used in online/live tournaments
+  const bbLevels = [
+    1000, 1200, 1400, 1500, 1600, 2000, 2500, 3000,
+    3500, 4000, 5000, 6000, 7000, 8000, 10000, 12000,
+    14000, 15000, 16000, 20000, 25000, 30000, 35000,
+    40000, 50000, 60000, 75000, 100000, 120000, 150000,
+    200000, 250000, 300000, 400000, 500000
+  ];
+
+  // Realistic stack sizes seen at those levels — deliberately non-round
+  // Stack = BB * some irregular multiplier between 8 and 110
+  const pick = bbLevels[Math.floor(Math.random() * bbLevels.length)];
+  bBB = pick;
+
+  // Generate a stack that's NOT a clean multiple — adds realistic noise
+  const baseMult = 8 + Math.floor(Math.random() * 103); // 8–110 BB deep
+  const noise = [-3, -2, -1, 1, 2, 3, 5, 7, 9, 11, 13, 17, 19, 23][Math.floor(Math.random() * 14)];
+  bStack = bBB * baseMult + bBB * noise / 10;
+  // Round to nearest 100 to look realistic but keep non-trivial
+  bStack = Math.round(bStack / 100) * 100;
+  // Make sure result isn't a clean integer — add small offset if needed
+  if (Math.round(bStack / bBB) === bStack / bBB) {
+    bStack += bBB % 2 === 0 ? bBB / 2 : Math.round(bBB * 0.3 / 100) * 100 || 100;
+  }
+  bStack = Math.max(bBB * 4, bStack); // at least 4BB
+
+  document.getElementById('blinds-stack-display').textContent = fmt(bStack);
+  document.getElementById('blinds-bb-display').textContent = fmt(bBB);
   document.getElementById('blinds-answer').className = 'blinds-answer';
   document.getElementById('blinds-next-row').style.display = 'none';
   document.getElementById('blinds-guess').value = '';
+  setTimeout(() => document.getElementById('blinds-guess')?.focus(), 100);
 }
+
 function checkBlinds() {
-  const stack = parseInt(document.getElementById('blinds-stack').value);
-  const bb    = parseInt(document.getElementById('blinds-bb').value);
+  if (!bStack || !bBB) { showToast('Lance un exercice.'); return; }
   const guess = parseFloat(document.getElementById('blinds-guess').value);
-  if (!stack || !bb || isNaN(guess)) { showToast('Remplis tous les champs.'); return; }
-  const real = Math.round((stack / bb) * 10) / 10;
-  const diff = Math.abs(guess - real); const pctOff = diff / real;
+  if (isNaN(guess)) { showToast('Entre ta réponse.'); return; }
+  const real = Math.round((bStack / bBB) * 10) / 10;
+  const diff = Math.abs(guess - real);
+  const pctOff = diff / real;
   let cls, msg;
-  if (diff === 0)              { cls = 'exact'; msg = 'Parfait.';      bCorrect++; }
-  else if (pctOff <= 0.05 || diff <= 1) { cls = 'close'; msg = 'Très proche.'; bCorrect++; }
-  else                         { cls = 'far';   msg = 'Incorrect.';    bWrong++; }
+  if (diff < 0.05)                      { cls='exact'; msg='Parfait !';      bCorrect++; }
+  else if (pctOff <= 0.05 || diff <= 1) { cls='close'; msg='Très proche.';  bCorrect++; }
+  else if (pctOff <= 0.10 || diff <= 3) { cls='close'; msg='Acceptable.';   bCorrect++; }
+  else                                   { cls='far';   msg='Incorrect.';    bWrong++; }
   document.getElementById('blinds-answer-text').textContent = `${msg}  ${real} BB`;
-  document.getElementById('blinds-answer-sub').textContent  = `${stack.toLocaleString('fr-FR')} ÷ ${bb} = ${real} BB`;
+  document.getElementById('blinds-answer-sub').textContent  = `${fmt(bStack)} ÷ ${fmt(bBB)} = ${real} BB`;
   document.getElementById('blinds-answer').className = `blinds-answer show ${cls}`;
   document.getElementById('blinds-next-row').style.display = 'block';
   updateBlindStats();
-}
-function randomBlindExercise() {
-  const stacks = [5000,7500,10000,12500,15000,18000,20000,25000,30000,40000,50000];
-  const blinds = [100,150,200,250,300,400,500,600,800,1000];
-  setStack(stacks[Math.floor(Math.random() * stacks.length)]);
-  setBlind(blinds[Math.floor(Math.random() * blinds.length)]);
-  document.getElementById('blinds-guess').focus();
 }
 function updateBlindStats() {
   document.getElementById('b-correct').textContent = bCorrect;
@@ -2233,6 +2642,7 @@ initColorGrid();
 renderQuestions();
 renderFolders();
 updateDashboard();
+randomBlindExercise();
 </script>
 </body>
 </html>
