@@ -4,7 +4,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="screen-orientation" content="portrait">
 <title>Poker Tracker</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -1460,8 +1459,13 @@ function toggleTheme() {
   document.getElementById('dark-toggle').checked = !light;
 }
 function toggleThemeSwitch(input) {
-  if (!input.checked) document.documentElement.classList.add('light');
-  else document.documentElement.classList.remove('light');
+  if (!input.checked) {
+    document.documentElement.classList.add('light');
+    try { localStorage.setItem('pokeriq_theme', 'light'); } catch(e) {}
+  } else {
+    document.documentElement.classList.remove('light');
+    try { localStorage.setItem('pokeriq_theme', 'dark'); } catch(e) {}
+  }
 }
 
 // ═══════════════════════════════════════
@@ -1480,6 +1484,20 @@ const COLORS = [
 let selectedColor = 0;
 
 function initColorGrid() {
+  // Restore saved accent
+  try {
+    const savedIdx = localStorage.getItem('pokeriq_accent_idx');
+    if (savedIdx !== null) setAccentColor(parseInt(savedIdx));
+    const savedTheme = localStorage.getItem('pokeriq_theme');
+    const darkToggle = document.getElementById('dark-toggle');
+    if (savedTheme === 'light') {
+      document.documentElement.classList.add('light');
+      if (darkToggle) darkToggle.checked = false;
+    } else {
+      document.documentElement.classList.remove('light');
+      if (darkToggle) darkToggle.checked = true;
+    }
+  } catch(e) {}
   const grid = document.getElementById('color-grid');
   COLORS.forEach((c, i) => {
     const dot = document.createElement('div');
@@ -1492,6 +1510,7 @@ function initColorGrid() {
 }
 
 function setAccentColor(idx) {
+  try { localStorage.setItem('pokeriq_accent_idx', idx); } catch(e) {}
   selectedColor = idx;
   const c = COLORS[idx];
   document.documentElement.style.setProperty('--accent', c.value);
