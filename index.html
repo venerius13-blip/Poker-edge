@@ -2599,7 +2599,7 @@ function randomBlindExercise() {
   bBB = pick;
 
   // Generate a stack that's NOT a clean multiple — adds realistic noise
-  const baseMult = 8 + Math.floor(Math.random() * 103); // 8–110 BB deep
+  const baseMult = 8 + Math.floor(Math.random() * 103); // 8--110 BB deep
   const noise = [-3, -2, -1, 1, 2, 3, 5, 7, 9, 11, 13, 17, 19, 23][Math.floor(Math.random() * 14)];
   bStack = bBB * baseMult + bBB * noise / 10;
   // Round to nearest 100 to look realistic but keep non-trivial
