@@ -2689,7 +2689,7 @@ renderQuestions();
 renderFolders();
 updateDashboard();
 randomBlindExercise();
-initAuth();
+try { initAuth(); } catch(e) { console.log("Auth init failed:", e); }
 
 // ═══════════════════════════════════════
 //  SUPABASE AUTH + SYNC (pure fetch, no SDK)
@@ -2720,42 +2720,52 @@ async function supaFetch(path, method = 'GET', body = null, extraHeaders = {}) {
 
 // ── Auth ──
 async function initAuth() {
-  // Try to restore session from localStorage
   try {
     const saved = localStorage.getItem('supa_session');
-    if (saved) {
-      const session = JSON.parse(saved);
-      // Refresh token
-      const res = await fetch(SUPA_URL + '/auth/v1/token?grant_type=refresh_token', {
-        method: 'POST',
-        headers: { 'apikey': SUPA_KEY, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ refresh_token: session.refresh_token })
-      });
-      if (res.ok) {
-        const data = await res.json();
-        supaToken = data.access_token;
-        localStorage.setItem('supa_session', JSON.stringify({ refresh_token: data.refresh_token }));
-        setLoggedIn({ email: data.user.email, id: data.user.id });
-        await loadRangesFromCloud();
-      } else {
-        localStorage.removeItem('supa_session');
-      }
+    if (!saved) return;
+    const session = JSON.parse(saved);
+    const res = await fetch(SUPA_URL + '/auth/v1/token?grant_type=refresh_token', {
+      method: 'POST',
+      headers: { 'apikey': SUPA_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refresh_token: session.refresh_token })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      supaToken = data.access_token;
+      localStorage.setItem('supa_session', JSON.stringify({ refresh_token: data.refresh_token }));
+      setLoggedIn({ email: data.user.email, id: data.user.id });
+      await loadRangesFromCloud();
+    } else {
+      localStorage.removeItem('supa_session');
     }
-  } catch(e) { console.log('Auth restore failed', e); }
+  } catch(e) {
+    console.log('Auth restore failed:', e);
+    try { localStorage.removeItem('supa_session'); } catch(e2) {}
+  }
 }
 
 function setLoggedIn(user) {
-  supaUser = user;
-  document.getElementById('auth-logged-out').style.display = 'none';
-  document.getElementById('auth-logged-in').style.display = 'block';
-  document.getElementById('auth-email-display').textContent = user.email;
-  document.getElementById('auth-avatar').textContent = user.email[0].toUpperCase();
+  try {
+    supaUser = user;
+    const out = document.getElementById('auth-logged-out');
+    const inn = document.getElementById('auth-logged-in');
+    const emailEl = document.getElementById('auth-email-display');
+    const avatarEl = document.getElementById('auth-avatar');
+    if (out) out.style.display = 'none';
+    if (inn) inn.style.display = 'block';
+    if (emailEl) emailEl.textContent = user.email;
+    if (avatarEl) avatarEl.textContent = user.email[0].toUpperCase();
+  } catch(e) { console.log('setLoggedIn error:', e); }
 }
 
 function setLoggedOut() {
-  supaUser = null; supaToken = null;
-  document.getElementById('auth-logged-out').style.display = 'block';
-  document.getElementById('auth-logged-in').style.display = 'none';
+  try {
+    supaUser = null; supaToken = null;
+    const out = document.getElementById('auth-logged-out');
+    const inn = document.getElementById('auth-logged-in');
+    if (out) out.style.display = 'block';
+    if (inn) inn.style.display = 'none';
+  } catch(e) { console.log('setLoggedOut error:', e); }
 }
 
 function showAuthError(msg) {
