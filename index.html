@@ -6,7 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="screen-orientation" content="portrait">
 <title>Poker Tracker</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -2690,24 +2689,59 @@ renderQuestions();
 renderFolders();
 updateDashboard();
 randomBlindExercise();
-initAuth().then(() => loadRangesFromCloud());
+initAuth();
 
 // ═══════════════════════════════════════
-//  SUPABASE AUTH + SYNC
+//  SUPABASE AUTH + SYNC (pure fetch, no SDK)
 // ═══════════════════════════════════════
 const SUPA_URL = 'https://hjkhjcqfhpternmowblt.supabase.co';
 const SUPA_KEY = 'sb_publishable_Y5-3ZYR51m17yStHxAE6kA_C-W4n2aK';
-const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
 let supaUser = null;
+let supaToken = null; // JWT access token
 
-// ── Init auth state ──
-async function initAuth() {
-  const { data: { session } } = await supa.auth.getSession();
-  if (session) setLoggedIn(session.user);
-  supa.auth.onAuthStateChange((_event, session) => {
-    if (session) setLoggedIn(session.user);
-    else setLoggedOut();
+// ── Helper: Supabase REST fetch ──
+async function supaFetch(path, method = 'GET', body = null, extraHeaders = {}) {
+  const headers = {
+    'apikey': SUPA_KEY,
+    'Content-Type': 'application/json',
+    ...extraHeaders
+  };
+  if (supaToken) headers['Authorization'] = 'Bearer ' + supaToken;
+  const res = await fetch(SUPA_URL + path, {
+    method,
+    headers,
+    body: body ? JSON.stringify(body) : undefined
   });
+  if (res.status === 204) return { data: null, error: null };
+  const json = await res.json();
+  if (!res.ok) return { data: null, error: json };
+  return { data: json, error: null };
+}
+
+// ── Auth ──
+async function initAuth() {
+  // Try to restore session from localStorage
+  try {
+    const saved = localStorage.getItem('supa_session');
+    if (saved) {
+      const session = JSON.parse(saved);
+      // Refresh token
+      const res = await fetch(SUPA_URL + '/auth/v1/token?grant_type=refresh_token', {
+        method: 'POST',
+        headers: { 'apikey': SUPA_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refresh_token: session.refresh_token })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        supaToken = data.access_token;
+        localStorage.setItem('supa_session', JSON.stringify({ refresh_token: data.refresh_token }));
+        setLoggedIn({ email: data.user.email, id: data.user.id });
+        await loadRangesFromCloud();
+      } else {
+        localStorage.removeItem('supa_session');
+      }
+    }
+  } catch(e) { console.log('Auth restore failed', e); }
 }
 
 function setLoggedIn(user) {
@@ -2719,7 +2753,7 @@ function setLoggedIn(user) {
 }
 
 function setLoggedOut() {
-  supaUser = null;
+  supaUser = null; supaToken = null;
   document.getElementById('auth-logged-out').style.display = 'block';
   document.getElementById('auth-logged-in').style.display = 'none';
 }
@@ -2734,32 +2768,66 @@ async function authLogin() {
   const email = document.getElementById('auth-email').value.trim();
   const password = document.getElementById('auth-password').value;
   if (!email || !password) { showAuthError('Remplis tous les champs.'); return; }
-  const { error } = await supa.auth.signInWithPassword({ email, password });
-  if (error) showAuthError(error.message);
-  else { showToast('Connecté !'); await syncRanges(); }
+  try {
+    const res = await fetch(SUPA_URL + '/auth/v1/token?grant_type=password', {
+      method: 'POST',
+      headers: { 'apikey': SUPA_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    if (!res.ok) { showAuthError(data.error_description || data.msg || 'Erreur connexion'); return; }
+    supaToken = data.access_token;
+    localStorage.setItem('supa_session', JSON.stringify({ refresh_token: data.refresh_token }));
+    setLoggedIn({ email: data.user.email, id: data.user.id });
+    showToast('Connecté !');
+    await loadRangesFromCloud();
+  } catch(e) { showAuthError('Erreur réseau.'); }
 }
 
 async function authSignup() {
   const email = document.getElementById('auth-email').value.trim();
   const password = document.getElementById('auth-password').value;
   if (!email || !password) { showAuthError('Remplis tous les champs.'); return; }
-  if (password.length < 6) { showAuthError('Mot de passe trop court (6 caractères min).'); return; }
-  const { error } = await supa.auth.signUp({ email, password });
-  if (error) showAuthError(error.message);
-  else showToast('Compte créé ! Vérifie ton email.');
+  if (password.length < 6) { showAuthError('Mot de passe trop court (6 min).'); return; }
+  try {
+    const res = await fetch(SUPA_URL + '/auth/v1/signup', {
+      method: 'POST',
+      headers: { 'apikey': SUPA_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    if (!res.ok) { showAuthError(data.error_description || data.msg || 'Erreur inscription'); return; }
+    // Auto-login after signup
+    if (data.access_token) {
+      supaToken = data.access_token;
+      localStorage.setItem('supa_session', JSON.stringify({ refresh_token: data.refresh_token }));
+      setLoggedIn({ email: data.user.email, id: data.user.id });
+      showToast('Compte créé et connecté !');
+    } else {
+      showToast('Compte créé ! Vérifie ton email.');
+    }
+  } catch(e) { showAuthError('Erreur réseau.'); }
 }
 
 async function authLogout() {
-  await supa.auth.signOut();
+  try {
+    await fetch(SUPA_URL + '/auth/v1/logout', {
+      method: 'POST',
+      headers: { 'apikey': SUPA_KEY, 'Authorization': 'Bearer ' + supaToken }
+    });
+  } catch(e) {}
+  localStorage.removeItem('supa_session');
+  setLoggedOut();
   showToast('Déconnecté.');
 }
 
-// ── Sync: push local ranges to Supabase ──
+// ── Sync ranges to cloud ──
 async function syncRanges() {
-  if (!supaUser) { showToast('Connecte-toi d\'abord.'); return; }
+  if (!supaUser) { showToast('Connecte-toi dabord.'); return; }
   showToast('Synchronisation...');
-  // Delete all existing ranges for this user and re-insert
-  await supa.from('ranges').delete().eq('user_id', supaUser.id);
+  // Delete existing
+  await supaFetch('/rest/v1/ranges?user_id=eq.' + supaUser.id, 'DELETE');
+  // Insert all
   const rows = [];
   folders.forEach(f => {
     f.ranges.forEach(r => {
@@ -2773,33 +2841,29 @@ async function syncRanges() {
     });
   });
   if (rows.length > 0) {
-    const { error } = await supa.from('ranges').insert(rows);
-    if (error) { showToast('Erreur sync: ' + error.message); return; }
+    const { error } = await supaFetch('/rest/v1/ranges', 'POST', rows, { 'Prefer': 'return=minimal' });
+    if (error) { showToast('Erreur: ' + (error.message || JSON.stringify(error))); return; }
   }
-  showToast(`${rows.length} range(s) synchronisé(s) ✓`);
+  showToast(rows.length + ' range(s) synchronisé(s) ✓');
 }
 
-// ── Load ranges from Supabase ──
+// ── Load ranges from cloud ──
 async function loadRangesFromCloud() {
   if (!supaUser) return;
-  const { data, error } = await supa.from('ranges').select('*').eq('user_id', supaUser.id);
+  const { data, error } = await supaFetch('/rest/v1/ranges?user_id=eq.' + supaUser.id + '&select=*');
   if (error || !data || !data.length) return;
-  // Rebuild folders structure from flat rows
   const foldersMap = {};
   data.forEach(row => {
     if (!foldersMap[row.folder_name]) {
       foldersMap[row.folder_name] = { id: nextFolderId++, name: row.folder_name, ranges: [] };
     }
     foldersMap[row.folder_name].ranges.push({
-      id: row.id,
-      name: row.range_name,
-      data: row.data,
-      actions: row.actions
+      id: row.id, name: row.range_name, data: row.data, actions: row.actions
     });
   });
   folders = Object.values(foldersMap);
   renderFolders(); renderFoldersView(); updateDashboard();
-  showToast(`${data.length} range(s) chargé(s) depuis le cloud`);
+  showToast(data.length + ' range(s) chargé(s) ✓');
 }
 
 </script>
