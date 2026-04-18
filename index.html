@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -9,7 +9,7 @@
 <meta name="theme-color" content="#0e0e10">
 <title>Poker Tracker</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Cormorant+Garamond:ital,wght@1,400;1,500;1,600&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════
    VARIABLES & RESET
@@ -243,6 +243,7 @@ body {
   padding: 10px 13px;
   font-family: var(--font);
   font-size: 0.88rem;
+  font-weight: 400;
   color: var(--text);
   outline: none;
   transition: border-color 0.2s;
@@ -488,7 +489,7 @@ body {
   margin-bottom: 10px; margin-top: -10px;
 }
 .freq-ctrl-label { font-size: 0.65rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--text3); flex-shrink: 0; }
-.freq-ctrl-input { width: 46px; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 4px 6px; font-family: var(--font-mono); font-size: 0.78rem; font-weight: 600; color: var(--text); outline: none; text-align: center; }
+.freq-ctrl-input { width: 46px; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 4px 6px; font-family: var(--font-mono); font-size: 0.78rem; font-weight: 500; color: var(--text); outline: none; text-align: center; }
 .freq-ctrl-input:focus { border-color: var(--accent); }
 .freq-ctrl-pct { font-size: 0.72rem; color: var(--text2); flex-shrink: 0; }
 .freq-ctrl-slider { flex: 1; accent-color: var(--accent); height: 4px; cursor: pointer; min-width: 0; }
@@ -589,9 +590,64 @@ body {
 .stat-num { font-size: 1.6rem; font-weight: 700; font-family: var(--font-mono); }
 .stat-lbl { font-size: 0.68rem; color: var(--text2); margin-top: 2px; }
 
+/* Focus overlay dots */
+.focus-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(255,255,255,0.25); transition: background .3s;
+}
+.focus-dot.active { background: #fff; }
+
+/* Focus overlay dots */
+.focus-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(255,255,255,0.25); transition: background .3s;
+}
+.focus-dot.active { background: #fff; }
+
+/* Focus overlay dots */
+.focus-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(255,255,255,0.25); transition: background .3s;
+}
+.focus-dot.active { background: #fff; }
+
+/* ═══════════════════════════════════════
 /* ═══════════════════════════════════════
    SUIVI (placeholder)
 ═══════════════════════════════════════ */
+/* Auto-eval */
+.eval-grid {
+  display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px;
+}
+.eval-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.eval-row-name {
+  font-size: 0.82rem; font-weight: 600; color: var(--text);
+  flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.eval-input {
+  width: 48px; background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); padding: 5px 6px;
+  font-family: var(--font-mono); font-size: 0.9rem; font-weight: 700;
+  color: var(--accent); text-align: center; outline: none;
+  -webkit-appearance: none; appearance: none;
+}
+.eval-input:focus { border-color: var(--accent); }
+.eval-row-max {
+  font-size: 0.75rem; color: var(--text3); font-family: var(--font-mono);
+  white-space: nowrap;
+}
+.eval-del {
+  background: none; border: none; color: var(--text3);
+  cursor: pointer; padding: 0 2px; font-size: 0.85rem; line-height: 1;
+  transition: color .15s; flex-shrink: 0;
+}
+.eval-del:hover { color: var(--danger); }
+
 .coming-soon {
   display: flex; flex-direction: column; align-items: center;
   justify-content: center; padding: 60px 20px; text-align: center;
@@ -664,7 +720,7 @@ body {
 .range-name-input {
   flex: 1; background: var(--surface); border: 1.5px solid var(--accent);
   border-radius: var(--radius-sm); padding: 9px 13px;
-  font-family: var(--font); font-size: 16px; font-weight: 600;
+  font-family: var(--font); font-size: 16px; font-weight: 500;
   color: var(--text); outline: none;
 }
 .range-name-input:focus { border-color: var(--accent); }
@@ -801,7 +857,7 @@ body {
 .blinds-answer-input {
   flex: 1; background: var(--surface2); border: 1px solid var(--border);
   border-radius: var(--radius-sm); padding: 10px 13px;
-  font-family: var(--font-mono); font-size: 16px; font-weight: 600;
+  font-family: var(--font-mono); font-size: 16px; font-weight: 500;
   color: var(--text); outline: none;
 }
 .blinds-answer-input:focus { border-color: var(--accent); }
@@ -815,45 +871,75 @@ body {
 ═══════════════════════════════════════ */
 .mko-grid {
   display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px 10px; margin-bottom: 14px;
+  gap: 10px 12px; margin-bottom: 16px;
 }
-.mko-field { display: flex; flex-direction: column; gap: 3px; }
+.mko-field { display: flex; flex-direction: column; gap: 5px; }
 .mko-label {
-  font-size: 0.62rem; font-weight: 600;
-  letter-spacing: .08em; text-transform: uppercase;
+  font-size: 0.6rem; font-weight: 700;
+  letter-spacing: .1em; text-transform: uppercase;
   color: var(--text3);
 }
 .mko-input-wrap {
   display: flex; align-items: center;
-  background: var(--surface2); border: 1px solid var(--border);
+  background: var(--surface2); border: 1.5px solid var(--border);
   border-radius: var(--radius-sm); overflow: hidden;
-  transition: border-color .15s;
+  transition: border-color .2s, box-shadow .2s;
 }
-.mko-input-wrap:focus-within { border-color: var(--accent); }
+.mko-input-wrap:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.12);
+}
 .mko-input {
   flex: 1; background: none; border: none; outline: none;
-  padding: 9px 10px; font-family: var(--font-mono);
-  font-size: 16px; font-weight: 600; color: var(--text);
+  padding: 10px 10px; font-family: var(--font-mono);
+  font-size: 16px; font-weight: 500; color: var(--text);
   min-width: 0;
 }
 .mko-unit {
-  padding: 0 9px; font-size: 0.72rem; color: var(--text3);
+  padding: 0 10px; font-size: 0.7rem; color: var(--text3);
   font-weight: 600; white-space: nowrap;
+  background: var(--surface3);
+  border-left: 1px solid var(--border);
+  height: 100%; display: flex; align-items: center;
 }
 .mko-result {
-  background: var(--surface2); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 14px 16px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px;
   text-align: center; margin-bottom: 12px;
-  animation: fadeUp .2s ease;
+  animation: fadeUp .25s ease;
 }
-.mko-result-label { font-size: 0.65rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--text3); margin-bottom: 4px; }
-.mko-result-value { font-size: 2rem; font-weight: 800; font-family: var(--font-mono); color: var(--accent); letter-spacing: -0.03em; }
-.mko-result-sub { font-size: 0.72rem; color: var(--text2); margin-top: 4px; font-family: var(--font-mono); }
+.mko-result-label {
+  font-size: 0.6rem; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--accent); opacity: 0.7;
+  margin-bottom: 6px;
+}
+.mko-result-value {
+  font-size: 1.6rem; font-weight: 700; font-family: var(--font-mono);
+  color: var(--accent); letter-spacing: -0.02em;
+}
+.mko-result-sub {
+  font-size: 0.68rem; color: var(--text2); margin-top: 6px;
+  font-family: var(--font-mono); opacity: 0.8;
+}
 .mko-formula {
-  text-align: center; padding-top: 10px;
-  border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px; padding-top: 12px; border-top: 1px solid var(--border);
 }
-.mko-formula-text { font-size: 0.68rem; color: var(--text3); font-family: var(--font-mono); }
+.mko-formula-text {
+  font-size: 0.68rem; color: var(--text3); font-family: var(--font-mono);
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 4px; padding: 4px 10px;
+}
+/* Card title badge style for calculators */
+.calc-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.65rem; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; padding: 3px 8px;
+  border-radius: 4px; margin-left: auto;
+}
+.calc-badge-mko { background: rgba(224,92,92,0.12); color: #e05c5c; }
+.calc-badge-sko { background: rgba(91,138,240,0.12); color: #5b8af0; }
 
 </style>
 </head>
@@ -907,6 +993,8 @@ body {
     <div id="page-session" class="page">
       <div class="study-tabs">
         <button class="study-tab active" onclick="showSessionTab('calculateurs', this)">Calculateurs</button>
+        <button class="study-tab" onclick="showSessionTab('brm', this)">BRM</button>
+        <button class="study-tab" onclick="showSessionTab('focus', this)">Focus</button>
       </div>
 
       <!-- CALCULATEURS -->
@@ -914,11 +1002,11 @@ body {
 
         <!-- Mystery KO -->
         <div class="card">
-          <div class="card-title" style="display:flex;align-items:center;gap:8px;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <div class="card-title" style="display:flex;align-items:center;gap:8px;margin-bottom:4px;font-size:0.9rem;color:var(--text);font-weight:700;text-transform:none;letter-spacing:0;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             Mystery KO
           </div>
-          <div style="font-size:0.75rem;color:var(--text3);margin-bottom:14px;line-height:1.5;">
+          <div style="font-size:0.75rem;color:var(--text3);margin-bottom:16px;line-height:1.5;">
             Valeur du bounty moyen en big blinds à l'instant T
           </div>
 
@@ -965,7 +1053,239 @@ body {
           </div>
         </div>
 
+        <!-- Space KO -->
+        <div class="card">
+          <div class="card-title" style="display:flex;align-items:center;gap:8px;margin-bottom:4px;font-size:0.9rem;color:var(--text);font-weight:700;text-transform:none;letter-spacing:0;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg>
+            Space KO
+          </div>
+          <div style="font-size:0.75rem;color:var(--text3);margin-bottom:16px;line-height:1.5;">
+            Valeur du Space KO en big blinds à l'instant T
+          </div>
+
+          <div class="mko-grid">
+            <div class="mko-field">
+              <label class="mko-label">Token moyen</label>
+              <div class="mko-input-wrap">
+                <input class="mko-input" id="sko-token" type="number" inputmode="decimal" placeholder="0" oninput="calcSKO()">
+                <span class="mko-unit">€</span>
+              </div>
+            </div>
+            <div class="mko-field">
+              <label class="mko-label">Buy-in tournoi</label>
+              <div class="mko-input-wrap">
+                <input class="mko-input" id="sko-buyin" type="number" inputmode="decimal" placeholder="0" oninput="calcSKO()">
+                <span class="mko-unit">€</span>
+              </div>
+            </div>
+            <div class="mko-field">
+              <label class="mko-label">Stack de départ</label>
+              <div class="mko-input-wrap">
+                <input class="mko-input" id="sko-starting" type="number" inputmode="numeric" placeholder="0" oninput="calcSKO()">
+                <span class="mko-unit">j.</span>
+              </div>
+            </div>
+            <div class="mko-field">
+              <label class="mko-label">Big blind actuelle</label>
+              <div class="mko-input-wrap">
+                <input class="mko-input" id="sko-bb" type="number" inputmode="numeric" placeholder="0" oninput="calcSKO()">
+                <span class="mko-unit">j.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mko-result" id="sko-result" style="display:none;">
+            <div class="mko-result-label">Valeur du Space KO</div>
+            <div class="mko-result-value" id="sko-result-value">—</div>
+            <div class="mko-result-sub" id="sko-result-sub"></div>
+          </div>
+
+          <div class="mko-formula">
+            <span class="mko-formula-text">(Token ÷ 2) ÷ Buyin × Starting ÷ BB = BB</span>
+          </div>
+        </div>
+
+        <!-- KO Progressif -->
+        <div class="card">
+          <div class="card-title" style="display:flex;align-items:center;gap:8px;font-size:0.9rem;color:var(--text);font-weight:700;text-transform:none;letter-spacing:0;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+            KO Progressif
+          </div>
+          <div style="font-size:0.75rem;color:var(--text3);margin-bottom:14px;line-height:1.5;">Valeur d'une prime en BB selon le stade du tournoi</div>
+          <div class="mko-grid">
+            <div class="mko-field">
+              <label class="mko-label">Montant de la prime</label>
+              <div class="mko-input-wrap">
+                <input class="mko-input" id="pko-prime" type="number" inputmode="decimal" placeholder="0" oninput="calcPKO()">
+                <span class="mko-unit">€</span>
+              </div>
+            </div>
+            <div class="mko-field">
+              <label class="mko-label">Prime de base</label>
+              <div class="mko-input-wrap">
+                <input class="mko-input" id="pko-base" type="number" inputmode="decimal" placeholder="0" oninput="calcPKO()">
+                <span class="mko-unit">€</span>
+              </div>
+            </div>
+            <div class="mko-field">
+              <label class="mko-label">Stack de départ</label>
+              <div class="mko-input-wrap">
+                <input class="mko-input" id="pko-starting" type="number" inputmode="numeric" placeholder="0" oninput="calcPKO()">
+                <span class="mko-unit">j.</span>
+              </div>
+            </div>
+            <div class="mko-field">
+              <label class="mko-label">Big blind actuelle</label>
+              <div class="mko-input-wrap">
+                <input class="mko-input" id="pko-bb" type="number" inputmode="numeric" placeholder="0" oninput="calcPKO()">
+                <span class="mko-unit">j.</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;margin-bottom:14px;">
+            <button class="btn btn-sm" id="pko-stade-debut" onclick="setPKOStade('debut')" style="flex:1;justify-content:center;background:var(--accent);color:#111;border:none;">Début</button>
+            <button class="btn btn-ghost btn-sm" id="pko-stade-itm" onclick="setPKOStade('itm')" style="flex:1;justify-content:center;">ITM</button>
+            <button class="btn btn-ghost btn-sm" id="pko-stade-tf" onclick="setPKOStade('tf')" style="flex:1;justify-content:center;">Table Finale</button>
+          </div>
+          <div class="mko-result" id="pko-result" style="display:none;">
+            <div class="mko-result-label">Valeur du KO</div>
+            <div class="mko-result-value" id="pko-result-value">—</div>
+            <div class="mko-result-sub" id="pko-result-sub"></div>
+          </div>
+          <div class="mko-formula">
+            <span class="mko-formula-text">(Prime ÷ Base) × % Starting ÷ BB = BB</span>
+          </div>
+        </div>
+
+        <!-- Cotes -->
+        <div class="card">
+          <div class="card-title" style="display:flex;align-items:center;gap:8px;font-size:0.9rem;color:var(--text);font-weight:700;text-transform:none;letter-spacing:0;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            Calculateur de cotes
+          </div>
+          <div style="font-size:0.75rem;color:var(--text3);margin-bottom:14px;line-height:1.5;">Rentabilité d'un appel — équité minimum nécessaire</div>
+          <div class="mko-grid">
+            <div class="mko-field">
+              <label class="mko-label">Mise à appeler</label>
+              <div class="mko-input-wrap">
+                <input class="mko-input" id="cote-call" type="number" inputmode="numeric" placeholder="0" oninput="calcCote()">
+                <span class="mko-unit">j.</span>
+              </div>
+            </div>
+            <div class="mko-field">
+              <label class="mko-label">Taille du pot</label>
+              <div class="mko-input-wrap">
+                <input class="mko-input" id="cote-pot" type="number" inputmode="numeric" placeholder="0" oninput="calcCote()">
+                <span class="mko-unit">j.</span>
+              </div>
+            </div>
+          </div>
+          <div class="mko-result" id="cote-result" style="display:none;">
+            <div class="mko-result-label">Équité minimum nécessaire</div>
+            <div class="mko-result-value" id="cote-result-value">—</div>
+            <div class="mko-result-sub" id="cote-result-sub"></div>
+          </div>
+          <div class="mko-formula">
+            <span class="mko-formula-text">Mise ÷ (Pot + Mise) = % équité</span>
+          </div>
+        </div>
+
       </div>
+
+      <!-- FOCUS -->
+      <!-- BRM -->
+      <!-- BRM -->
+      <div id="session-brm" class="subview">
+
+        <div class="card">
+          <div class="card-title" style="display:flex;align-items:center;gap:8px;font-size:0.9rem;color:var(--text);font-weight:700;text-transform:none;letter-spacing:0;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+            Bankroll Management
+          </div>
+          <div style="font-size:0.75rem;color:var(--text3);margin-bottom:16px;line-height:1.5;">Buyin max recommand&#233; selon ta bankroll</div>
+          <div class="mko-grid">
+            <div class="mko-field">
+              <label class="mko-label">Bankroll totale</label>
+              <div class="mko-input-wrap">
+                <input class="mko-input" id="brm-bankroll" type="number" inputmode="decimal" placeholder="0" oninput="calcBRM()">
+                <span class="mko-unit">&#8364;</span>
+              </div>
+            </div>
+            <div class="mko-field">
+              <label class="mko-label">Nombre de buyins</label>
+              <div class="mko-input-wrap">
+                <input class="mko-input" id="brm-nbuyins" type="number" inputmode="numeric" placeholder="ex: 50" oninput="calcBRM()">
+                <span class="mko-unit">x</span>
+              </div>
+            </div>
+          </div>
+          <div class="mko-result" id="brm-result" style="display:none;">
+            <div class="mko-result-label">Buyin max recommand&#233;</div>
+            <div class="mko-result-value" id="brm-result-value">&#8212;</div>
+            <div class="mko-result-sub" id="brm-result-sub"></div>
+          </div>
+          <div class="mko-formula">
+            <span class="mko-formula-text">Bankroll &#247; Nb buyins = Buyin max</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title" style="display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:0.9rem;color:var(--text);font-weight:700;text-transform:none;letter-spacing:0;display:flex;align-items:center;gap:8px;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              Suivi des tournois
+            </span>
+            <button class="btn btn-danger btn-sm" onclick="resetBRMLog()">Reset</button>
+          </div>
+          <div style="font-size:0.75rem;color:var(--text3);margin-bottom:14px;line-height:1.5;">Enregistre chaque tournoi pour suivre ton buyin moyen r&#233;el</div>
+          <div class="input-row" style="margin-bottom:14px;">
+            <div class="mko-input-wrap" style="flex:1;">
+              <input class="mko-input" id="brm-add-amount" type="number" inputmode="decimal" placeholder="Montant du buyin" style="font-size:16px;">
+              <span class="mko-unit">&#8364;</span>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="addBRMEntry()" style="flex-shrink:0;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" pointer-events="none"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Ajouter
+            </button>
+          </div>
+          <div id="brm-stats" style="display:none;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;">
+            <div class="stat-card" style="padding:12px;">
+              <div class="stat-card-label" style="margin-bottom:6px;">Tournois</div>
+              <div class="stat-card-value" id="brm-count" style="font-size:1.3rem;line-height:1;">0</div>
+            </div>
+            <div class="stat-card" style="padding:12px;">
+              <div class="stat-card-label" style="margin-bottom:6px;">Total</div>
+              <div class="stat-card-value" id="brm-total" style="font-size:1.3rem;line-height:1;">0&#8364;</div>
+            </div>
+            <div class="stat-card" style="padding:12px;">
+              <div class="stat-card-label" style="margin-bottom:6px;">Moy. buyin</div>
+              <div class="stat-card-value" id="brm-avg" style="font-size:1.3rem;line-height:1;color:var(--accent);">&#8212;</div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div id="session-focus" class="subview">
+        <div class="card">
+          <div class="card-title" style="display:flex;align-items:center;justify-content:space-between;">
+            <span>Mes phrases</span>
+            <button class="btn btn-primary btn-sm" onclick="startFocus()" id="focus-start-btn" style="display:none;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" pointer-events="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Lancer
+            </button>
+          </div>
+          <div class="input-row" style="margin-bottom:12px;">
+            <input class="input" id="focus-input" placeholder="Ajoute une phrase..." style="margin:0;font-size:16px;" onkeydown="if(event.key==='Enter')addFocusPhrase();">
+            <button class="btn btn-ghost btn-sm" onclick="addFocusPhrase()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+          </div>
+          <div id="focus-list"><div class="empty-state" style="padding:16px 0;">Aucune phrase. Ajoutes-en une pour commencer.</div></div>
+        </div>
+      </div>
+
     </div>
 
     <!-- ── STUDY ── -->
@@ -1236,13 +1556,52 @@ body {
 
     <!-- ── SUIVI ── -->
     <div id="page-suivi" class="page">
-      <div class="coming-soon">
-        <div class="coming-soon-icon">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+
+      <div class="card">
+        <!-- Header -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+          <div>
+            <div style="font-size:0.9rem;font-weight:700;color:var(--text);">Session du <span id="eval-date"></span></div>
+            <div style="font-size:0.72rem;color:var(--text3);margin-top:2px;">Note-toi sur chaque critère</div>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="resetEval()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" pointer-events="none"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg>
+            Reset
+          </button>
         </div>
-        <h3>En cours de développement</h3>
-        <p>L'historique des sessions, la bankroll et les graphiques de progression seront ici.</p>
+
+        <!-- Criteria -->
+        <div class="eval-grid" id="eval-criteria-list"></div>
+
+        <!-- Average -->
+        <div id="eval-result" style="display:none;">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0 10px;">
+            <span style="font-size:0.78rem;color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:.06em;">Score global</span>
+            <span id="eval-avg-display" style="font-size:1.4rem;font-weight:800;font-family:var(--font-mono);letter-spacing:-0.02em;"></span>
+          </div>
+          <div style="height:6px;border-radius:99px;background:var(--surface2);overflow:hidden;">
+            <div id="eval-avg-fill" style="height:100%;border-radius:99px;background:var(--accent);transition:width 0.5s ease;width:0%;"></div>
+          </div>
+        </div>
+
+        <!-- Add form (hidden) -->
+        <div id="eval-add-form" style="display:none;margin-top:14px;padding:12px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);">
+          <input class="input" id="eval-criterion-name" placeholder="Nom du critère..." style="margin-bottom:8px;font-size:16px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:0.72rem;color:var(--text3);white-space:nowrap;">/ </span>
+            <input class="input" id="eval-criterion-max" type="number" inputmode="numeric" min="2" max="10" value="5" style="margin:0;width:60px;font-size:16px;text-align:center;">
+            <button class="btn btn-primary btn-sm" onclick="addEvalCriterion()">OK</button>
+            <button class="btn btn-ghost btn-sm" onclick="toggleEvalForm(false)">Annuler</button>
+          </div>
+        </div>
+
+        <!-- Add button -->
+        <button class="btn btn-ghost btn-sm" id="eval-add-btn" onclick="toggleEvalForm(true)" style="margin-top:12px;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" pointer-events="none"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Ajouter un critère
+        </button>
       </div>
+
     </div>
 
     <!-- ── PARAMETRES ── -->
@@ -1297,7 +1656,7 @@ body {
             <div class="settings-row-sub">Thème de l'interface</div>
           </div>
           <label class="toggle">
-            <input type="checkbox" id="dark-toggle" checked onchange="toggleThemeSwitch(this)">
+            <input type="checkbox" id="dark-toggle" onchange="toggleThemeSwitch(this)">
             <span class="toggle-slider"></span>
           </label>
         </div>
@@ -1365,6 +1724,14 @@ body {
   </nav>
 
 </div><!-- /app -->
+
+<!-- FOCUS FULLSCREEN -->
+<div id="focus-overlay" style="display:none;position:fixed;inset:0;z-index:1000;background:#0a0a0c;flex-direction:column;align-items:center;justify-content:center;padding:40px 30px;">
+  <button onclick="stopFocus()" style="position:absolute;top:20px;right:20px;background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;padding:8px;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <div id="focus-phrase" style="font-family:'Cormorant Garamond',Georgia,serif;font-style:italic;font-size:clamp(1.6rem,5.5vw,2.4rem);font-weight:500;color:#fff;text-align:center;line-height:1.7;max-width:560px;transition:opacity 0.8s ease;letter-spacing:0.01em;"></div>
+</div>
 
 <!-- MODAL QUIZ CONFIG -->
 <div class="modal-overlay hidden" id="quiz-modal" onclick="if(event.target===this)closeQuizConfig()">
@@ -1444,8 +1811,13 @@ function toggleTheme() {
   document.getElementById('dark-toggle').checked = !light;
 }
 function toggleThemeSwitch(input) {
-  if (!input.checked) document.documentElement.classList.add('light');
-  else document.documentElement.classList.remove('light');
+  if (!input.checked) {
+    document.documentElement.classList.add('light');
+    try { localStorage.setItem('piq_theme', 'light'); } catch(e) {}
+  } else {
+    document.documentElement.classList.remove('light');
+    try { localStorage.setItem('piq_theme', 'dark'); } catch(e) {}
+  }
 }
 
 // ═══════════════════════════════════════
@@ -1464,15 +1836,35 @@ const COLORS = [
 let selectedColor = 0;
 
 function initColorGrid() {
+  // Restore saved theme (default: light)
+  try {
+    const theme = localStorage.getItem('piq_theme');
+    const toggle = document.getElementById('dark-toggle');
+    if (theme === 'dark') {
+      document.documentElement.classList.remove('light');
+      if (toggle) toggle.checked = true;
+    } else {
+      document.documentElement.classList.add('light');
+      if (toggle) toggle.checked = false;
+    }
+  } catch(e) {}
+  // Build color grid
   const grid = document.getElementById('color-grid');
   COLORS.forEach((c, i) => {
     const dot = document.createElement('div');
-    dot.className = `color-dot${i === 0 ? ' selected' : ''}`;
+    dot.className = 'color-dot';
     dot.style.background = c.value;
     dot.title = c.name;
     dot.addEventListener('click', () => setAccentColor(i));
     grid.appendChild(dot);
   });
+  // Restore saved color (default: violet = index 4)
+  try {
+    const savedColor = localStorage.getItem('piq_color');
+    setAccentColor(savedColor !== null ? parseInt(savedColor) : 4);
+  } catch(e) {
+    setAccentColor(4);
+  }
 }
 
 function setAccentColor(idx) {
@@ -1481,6 +1873,7 @@ function setAccentColor(idx) {
   document.documentElement.style.setProperty('--accent', c.value);
   document.documentElement.style.setProperty('--accent-rgb', c.rgb);
   document.querySelectorAll('.color-dot').forEach((d, i) => d.classList.toggle('selected', i === idx));
+  try { localStorage.setItem('piq_color', idx); } catch(e) {}
 }
 
 // ═══════════════════════════════════════
@@ -1561,7 +1954,7 @@ function addQuestion() {
   const w2 = document.getElementById('q-wrong2').value.trim();
   const w3 = document.getElementById('q-wrong3').value.trim();
   if (!q || !c || !w1 || !w2 || !w3) { showToast('Tous les champs sont obligatoires.'); return; }
-  questions.push({ id: nextId++, q, correct: c, wrong: [w1, w2, w3], tags: [...formTags] });
+  questions.push({ id: nextId++, q: q, correct: c, wrong: [w1, w2, w3], tags: formTags.slice() });
   clearQuizForm();
   showQuizView('list', null);
   updateDashboard();
@@ -1594,7 +1987,7 @@ function filterByTag(tag, el) {
   if (el) el.classList.add('active');
   renderQuestions();
 }
-function getAllTags() { return [...new Set(questions.flatMap(q => q.tags))].sort(); }
+function getAllTags() { var all=[]; questions.forEach(function(q){q.tags.forEach(function(t){if(all.indexOf(t)<0)all.push(t);});}); return all.sort(); }
 
 function renderTagFilters() {
   const allTags = getAllTags();
@@ -1710,7 +2103,7 @@ function renderQuizQuestion() {
   document.getElementById('quiz-question').textContent = q.q;
   document.getElementById('quiz-feedback').className = 'quiz-feedback';
   document.getElementById('quiz-next-btn').style.display = 'none';
-  const opts = shuffle([q.correct, ...q.wrong]);
+  const opts = shuffle([q.correct].concat(q.wrong));
   const letters = ['A', 'B', 'C', 'D'];
   const container = document.getElementById('quiz-options');
   container.innerHTML = '';
@@ -1912,7 +2305,7 @@ function openMixPopup() {
   // Close on outside click
   setTimeout(() => {
     function closeOut(e) {
-      if (!popup.contains(e.target) && !document.getElementById('btn-mix-action')?.contains(e.target)) {
+      if (!popup.contains(e.target) && !(document.getElementById('btn-mix-action') && document.getElementById('btn-mix-action').contains(e.target))) {
         popup.remove(); document.removeEventListener('click', closeOut);
       }
     }
@@ -1948,8 +2341,8 @@ function renderActionTabs() {
     } else {
       tab.innerHTML = `<span class="rat-dot" style="background:${a.color}"></span><span class="rat-label">${h(a.label)}</span>${rangeActions.length > 1 ? `<span class="rat-del" data-del="${a.id}">×</span>` : ''}`;
     }
-    tab.querySelector('.rat-label')?.addEventListener('click', (e) => { e.stopPropagation(); currentActionId = a.id; renderActionTabs(); });
-    tab.querySelector('.rat-dot')?.addEventListener('click', (e) => { e.stopPropagation(); currentActionId = a.id; renderActionTabs(); });
+    var rl = tab.querySelector('.rat-label'); if(rl) rl.addEventListener('click', function(e) { e.stopPropagation(); currentActionId = a.id; renderActionTabs(); });
+    var rd = tab.querySelector('.rat-dot'); if(rd) rd.addEventListener('click', function(e) { e.stopPropagation(); currentActionId = a.id; renderActionTabs(); });
     tab.addEventListener('click', (e) => {
       if (e.target.classList.contains('rat-del')) return;
       currentActionId = a.id; renderActionTabs();
@@ -2115,7 +2508,7 @@ function buildRangeGrid() {
 
   grid.addEventListener('touchstart', e => {
     const t = e.touches[0];
-    const cell = document.elementFromPoint(t.clientX, t.clientY)?.closest('.range-cell');
+    var _el = document.elementFromPoint(t.clientX, t.clientY); var cell = _el ? _el.closest('.range-cell') : null;
     if (!cell) return;
     rIsDown = true; rMoved = false; rStartKey = cell.dataset.key;
     applyPaint(cell, cell.dataset.key);
@@ -2124,7 +2517,7 @@ function buildRangeGrid() {
   grid.addEventListener('touchmove', e => {
     if (!rIsDown) return;
     const t = e.touches[0];
-    const cell = document.elementFromPoint(t.clientX, t.clientY)?.closest('.range-cell');
+    var _el = document.elementFromPoint(t.clientX, t.clientY); var cell = _el ? _el.closest('.range-cell') : null;
     if (cell && cell.dataset.key !== rStartKey) {
       rMoved = true; rStartKey = cell.dataset.key;
       applyPaintDrag(cell, cell.dataset.key);
@@ -2270,7 +2663,7 @@ const viewOpenFolders = new Set();
 function renderFoldersView() {
   const list = document.getElementById('folders-list-view');
   if (!list) return;
-  if (!folders.flatMap(f=>f.ranges).length) {
+  var _allRanges=[]; folders.forEach(function(f){_allRanges=_allRanges.concat(f.ranges);}); if (!_allRanges.length) {
     list.innerHTML = '<div class="empty-state">Aucun range.<br>Passe en mode Créer pour en ajouter.</div>';
     return;
   }
@@ -2343,7 +2736,7 @@ function renderFoldersView() {
 
 function openReadonlyRange(folderId, rangeId) {
   const folder = folders.find(f=>f.id===folderId);
-  const range = folder?.ranges.find(r=>r.id===rangeId);
+  const range = folder && folder.ranges ? folder.ranges.find(function(r){return r.id===rangeId;}) : null;
   if (!range) return;
   viewingFolderId = folderId; viewingRangeId = rangeId;
   document.getElementById('range-view-folders-v').style.display = 'none';
@@ -2365,7 +2758,7 @@ function switchToEditFromView() {
   setRangeMode('edit', document.getElementById('rmt-edit'));
   if (fid) {
     openFolder(fid);
-    const range = folders.find(f=>f.id===fid)?.ranges.find(r=>r.id===rid);
+    var _f2 = folders.find(function(f){return f.id===fid;}); var range = _f2 ? _f2.ranges.find(function(r){return r.id===rid;}) : null;
     if (range) {
       rIsDown=false; rStartKey=null; rMoved=false;
       currentRangeData = JSON.parse(JSON.stringify(range.data));
@@ -2486,7 +2879,7 @@ function saveRange(){
     folders.forEach(f=>{
       const idx=f.ranges.findIndex(r=>r.id===editingRangeId);
       if(idx>=0){
-        f.ranges[idx]={...f.ranges[idx],name,data:JSON.parse(JSON.stringify(currentRangeData)),actions:JSON.parse(JSON.stringify(rangeActions))};
+        f.ranges[idx]=Object.assign({},f.ranges[idx],{name:name,data:JSON.parse(JSON.stringify(currentRangeData)),actions:JSON.parse(JSON.stringify(rangeActions))});
         found=true;
       }
     });
@@ -2499,12 +2892,15 @@ function saveRange(){
   if(nameIn) nameIn.value='';
   editingRangeId=null;
   renderSavedRanges();renderFoldersView();updateDashboard();
-  // Auto-sync to cloud if logged in
-  if (supaUser) syncRanges();
+  // Auto-sync avec délai pour éviter les appels multiples rapides
+  if (supaUser) {
+    clearTimeout(window._syncTimer);
+    window._syncTimer = setTimeout(() => syncRanges(), 1500);
+  }
 }
 function loadRange(rid){
   const folder=folders.find(f=>f.id===currentFolderId);
-  const range=folder?.ranges.find(r=>r.id===rid);if(!range)return;
+  const range=folder&&folder.ranges?folder.ranges.find(function(r){return r.id===rid;}):null;if(!range)return;
   rIsDown=false; rStartKey=null; rMoved=false;
   currentRangeData=JSON.parse(JSON.stringify(range.data));
   if(range.actions){rangeActions=JSON.parse(JSON.stringify(range.actions));currentActionId=rangeActions[0].id;}
@@ -2518,7 +2914,10 @@ function deleteRange(rid){
     const folder=folders.find(f=>f.id===currentFolderId);
     if(folder)folder.ranges=folder.ranges.filter(r=>r.id!==rid);
     renderSavedRanges();updateDashboard();
-    if (supaUser) syncRanges();
+    if (supaUser) {
+      clearTimeout(window._syncTimer);
+      window._syncTimer = setTimeout(() => syncRanges(), 1500);
+    }
   });
 }
 function renderSavedRanges(){
@@ -2581,6 +2980,33 @@ function calcMKO() {
 }
 
 // ═══════════════════════════════════════
+//  SPACE KO CALCULATOR
+// ═══════════════════════════════════════
+function calcSKO() {
+  const token   = parseFloat(document.getElementById('sko-token').value);
+  const buyin   = parseFloat(document.getElementById('sko-buyin').value);
+  const starting = parseFloat(document.getElementById('sko-starting').value);
+  const bb      = parseFloat(document.getElementById('sko-bb').value);
+
+  const resultEl = document.getElementById('sko-result');
+  const valueEl  = document.getElementById('sko-result-value');
+  const subEl    = document.getElementById('sko-result-sub');
+
+  if (!token || !buyin || !starting || !bb || buyin === 0 || bb === 0) {
+    resultEl.style.display = 'none';
+    return;
+  }
+
+  // Formule : (Token / 2) / Buyin * Starting / BB
+  const spaceKOBB = (token / 2) / buyin * starting / bb;
+  const rounded   = Math.round(spaceKOBB * 10) / 10;
+
+  resultEl.style.display = 'block';
+  valueEl.textContent = rounded.toLocaleString('fr-FR') + ' BB';
+  subEl.textContent   = `(${token}€ ÷ 2) ÷ ${buyin}€ × ${starting.toLocaleString('fr-FR')} ÷ ${bb.toLocaleString('fr-FR')} = ${rounded} BB`;
+}
+
+// ═══════════════════════════════════════
 //  BLINDS
 // ═══════════════════════════════════════
 // ── Blinds exercise ──
@@ -2621,7 +3047,7 @@ function randomBlindExercise() {
   document.getElementById('blinds-answer').className = 'blinds-answer';
   document.getElementById('blinds-next-row').style.display = 'none';
   document.getElementById('blinds-guess').value = '';
-  setTimeout(() => document.getElementById('blinds-guess')?.focus(), 100);
+  setTimeout(function(){ var bg=document.getElementById('blinds-guess'); if(bg) bg.focus(); }, 100);
 }
 
 function checkBlinds() {
@@ -2674,14 +3100,294 @@ function h(s) {
 }
 
 // ═══════════════════════════════════════
+//  AUTO-EVAL
+// ═══════════════════════════════════════
+let evalCriteria = []; // [{id, name, max, score}]
+let evalNextId = 1;
+
+function toggleEvalForm(show) {
+  const form = document.getElementById('eval-add-form');
+  const btn  = document.getElementById('eval-add-btn');
+  form.style.display = show ? 'block' : 'none';
+  btn.style.display  = show ? 'none'  : 'inline-flex';
+  if (show) document.getElementById('eval-criterion-name').focus();
+}
+
+function addEvalCriterion() {
+  const nameEl = document.getElementById('eval-criterion-name');
+  const maxEl  = document.getElementById('eval-criterion-max');
+  const name = nameEl.value.trim();
+  const max  = Math.max(1, parseInt(maxEl.value) || 10);
+  if (!name) { showToast('Entre un nom de critère.'); return; }
+  evalCriteria.push({ id: evalNextId++, name: name, max: max, score: Math.round(max / 2) });
+  nameEl.value = '';
+  maxEl.value = '10';
+  toggleEvalForm(false);
+  renderEvalCriteria();
+}
+
+function renderEvalCriteria() {
+  var list = document.getElementById('eval-criteria-list');
+  var result = document.getElementById('eval-result');
+  var dateEl = document.getElementById('eval-date');
+  if (dateEl) dateEl.textContent = new Date().toLocaleDateString('fr-FR', {day:'numeric', month:'long'});
+
+  if (!evalCriteria.length) {
+    list.innerHTML = '<div class="empty-state" style="padding:8px 0;font-size:0.8rem;">Aucun crit\u00e8re.</div>';
+    if (result) result.style.display = 'none';
+    return;
+  }
+
+  list.innerHTML = '';
+  evalCriteria.forEach(function(c) {
+    var row = document.createElement('div');
+    row.className = 'eval-row';
+
+    // Name
+    var nameEl = document.createElement('span');
+    nameEl.className = 'eval-row-name';
+    nameEl.textContent = c.name;
+    row.appendChild(nameEl);
+
+    // Input
+    var input = document.createElement('input');
+    input.className = 'eval-input';
+    input.type = 'number';
+    input.inputMode = 'numeric';
+    input.min = '0';
+    input.max = String(c.max);
+    input.value = c.score > 0 ? String(c.score) : '';
+    input.placeholder = '—';
+    input.style.fontSize = '16px';
+    (function(crit) {
+      input.addEventListener('input', function() {
+        var v = parseInt(this.value);
+        if (isNaN(v) || v < 0) { crit.score = 0; }
+        else if (v > crit.max) { crit.score = crit.max; this.value = crit.max; }
+        else { crit.score = v; }
+        updateEvalAverage();
+      });
+    })(c);
+    row.appendChild(input);
+
+    // Max label
+    var maxEl = document.createElement('span');
+    maxEl.className = 'eval-row-max';
+    maxEl.textContent = '/ ' + c.max;
+    row.appendChild(maxEl);
+
+    // Delete
+    var delBtn = document.createElement('button');
+    delBtn.className = 'eval-del';
+    delBtn.innerHTML = '&#x2715;';
+    (function(crit) {
+      delBtn.addEventListener('click', function() {
+        evalCriteria = evalCriteria.filter(function(x){ return x.id !== crit.id; });
+        renderEvalCriteria();
+      });
+    })(c);
+    row.appendChild(delBtn);
+
+    list.appendChild(row);
+  });
+
+  if (result) result.style.display = 'block';
+  updateEvalAverage();
+}
+
+function updateEvalAverage() {
+  if (!evalCriteria.length) return;
+  var totalPct = evalCriteria.reduce(function(s, c) { return s + (c.score / c.max); }, 0);
+  var avgPct = totalPct / evalCriteria.length;
+  var avgOn10 = Math.round(avgPct * 100) / 10;
+  var displayEl = document.getElementById('eval-avg-display');
+  var fillEl = document.getElementById('eval-avg-fill');
+  if (!displayEl || !fillEl) return;
+  displayEl.textContent = avgOn10.toLocaleString('fr-FR') + ' / 10';
+  fillEl.style.width = (avgPct * 100).toFixed(1) + '%';
+  var color = avgPct >= 0.7 ? 'var(--accent3)' : avgPct >= 0.4 ? 'var(--accent)' : 'var(--danger)';
+  displayEl.style.color = color;
+  fillEl.style.background = color;
+}
+
+function removeEvalCriterion(id) {
+  evalCriteria = evalCriteria.filter(function(c){ return c.id !== id; });
+  renderEvalCriteria();
+}
+
+function resetEval() {
+  evalCriteria.forEach(function(c){ c.score = 0; });
+  renderEvalCriteria();
+}
+
+// ═══════════════════════════════════════
+//  KO PROGRESSIF
+// ═══════════════════════════════════════
+var pkoStade = 'debut';
+var pkoRatios = { debut: 0.25, itm: 0.35, tf: 0.45 };
+var pkoLabels = { debut: 'Début (25%)', itm: 'ITM (35%)', tf: 'Table Finale (45%)' };
+
+function setPKOStade(stade) {
+  pkoStade = stade;
+  ['debut','itm','tf'].forEach(function(s) {
+    var btn = document.getElementById('pko-stade-' + s);
+    if (!btn) return;
+    if (s === stade) {
+      btn.style.background = 'var(--accent)';
+      btn.style.color = '#111';
+      btn.style.border = 'none';
+      btn.className = 'btn btn-sm';
+    } else {
+      btn.style.background = '';
+      btn.style.color = '';
+      btn.style.border = '';
+      btn.className = 'btn btn-ghost btn-sm';
+    }
+    btn.style.flex = '1';
+    btn.style.justifyContent = 'center';
+  });
+  calcPKO();
+}
+
+function calcPKO() {
+  var prime    = parseFloat(document.getElementById('pko-prime').value);
+  var base     = parseFloat(document.getElementById('pko-base').value);
+  var starting = parseFloat(document.getElementById('pko-starting').value);
+  var bb       = parseFloat(document.getElementById('pko-bb').value);
+  var resultEl = document.getElementById('pko-result');
+  var valueEl  = document.getElementById('pko-result-value');
+  var subEl    = document.getElementById('pko-result-sub');
+  if (!prime || !base || !starting || !bb || base === 0 || bb === 0) {
+    resultEl.style.display = 'none'; return;
+  }
+  var ratio = pkoRatios[pkoStade];
+  var valJetons = (prime / base) * (ratio * starting);
+  var valBB = valJetons / bb;
+  var rounded = Math.round(valBB * 10) / 10;
+  resultEl.style.display = 'block';
+  valueEl.textContent = rounded.toLocaleString('fr-FR') + ' BB';
+  subEl.textContent = '(' + prime + '€ ÷ ' + base + '€) × ' + Math.round(ratio*100) + '% × ' + starting.toLocaleString('fr-FR') + ' ÷ ' + bb.toLocaleString('fr-FR') + ' = ' + rounded + ' BB';
+}
+
+// ═══════════════════════════════════════
+//  COTES
+// ═══════════════════════════════════════
+
+// ═══════════════════════════════════════
 //  INIT
 // ═══════════════════════════════════════
-initColorGrid();
-renderQuestions();
-renderFolders();
-updateDashboard();
-randomBlindExercise();
-try { initAuth(); } catch(e) { console.log("Auth init failed:", e); }
+//  FOCUS MODE
+// ═══════════════════════════════════════
+// ═══════════════════════════════════════
+//  BRM
+// ═══════════════════════════════════════
+let brmLog = []; // [{amount, date}]
+
+function calcBRM() {
+  const bankroll = parseFloat(document.getElementById('brm-bankroll').value);
+  const nb = parseFloat(document.getElementById('brm-nbuyins').value);
+  const resultEl = document.getElementById('brm-result');
+  const valueEl = document.getElementById('brm-result-value');
+  const subEl = document.getElementById('brm-result-sub');
+  if (!bankroll || !nb || nb === 0) { resultEl.style.display = 'none'; return; }
+  const max = Math.round((bankroll / nb) * 100) / 100;
+  resultEl.style.display = 'block';
+  valueEl.textContent = max.toLocaleString('fr-FR') + ' €';
+  subEl.textContent = bankroll.toLocaleString('fr-FR') + '€ ÷ ' + nb + ' = ' + max.toLocaleString('fr-FR') + '€';
+}
+
+function addBRMEntry() {
+  const input = document.getElementById('brm-add-amount');
+  const amount = parseFloat(input.value);
+  if (!amount || amount <= 0) { showToast('Entre un montant valide.'); return; }
+  brmLog.push({ amount, date: new Date().toLocaleDateString('fr-FR') });
+  input.value = '';
+  renderBRMLog();
+}
+
+function renderBRMLog() {
+  var stats = document.getElementById('brm-stats');
+  if (!brmLog.length) {
+    stats.style.display = 'none';
+    return;
+  }
+  stats.style.display = 'grid';
+  var total = brmLog.reduce(function(s, e) { return s + e.amount; }, 0);
+  var avg = Math.round((total / brmLog.length) * 100) / 100;
+  document.getElementById('brm-count').textContent = brmLog.length;
+  document.getElementById('brm-total').textContent = total.toLocaleString('fr-FR') + '€';
+  document.getElementById('brm-avg').textContent = avg.toLocaleString('fr-FR') + '€';
+}
+
+function resetBRMLog() {
+  showConfirm('Réinitialiser le suivi ?', function() {
+    brmLog = [];
+    renderBRMLog();
+  });
+}
+
+
+let focusPhrases = [];
+let focusIndex = 0;
+let focusTimer = null;
+
+function renderFocusList() {
+  const list = document.getElementById('focus-list');
+  const btn = document.getElementById('focus-start-btn');
+  if (!focusPhrases.length) {
+    list.innerHTML = '<div class="empty-state" style="padding:16px 0;">Aucune phrase. Ajoutes-en une pour commencer.</div>';
+    if (btn) btn.style.display = 'none';
+    return;
+  }
+  if (btn) btn.style.display = 'inline-flex';
+  list.innerHTML = '';
+  focusPhrases.forEach(function(p, i) {
+    const div = document.createElement('div');
+    div.className = 'list-item';
+    div.style.cssText = 'cursor:default;';
+    div.innerHTML = '<span class="list-item-name" style="font-size:0.83rem;">' + h(p) + '</span><button class="btn btn-danger btn-sm"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" pointer-events="none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>';
+    div.querySelector('button').addEventListener('click', function() {
+      focusPhrases.splice(i, 1);
+      renderFocusList();
+    });
+    list.appendChild(div);
+  });
+}
+
+function addFocusPhrase() {
+  const input = document.getElementById('focus-input');
+  const val = input.value.trim();
+  if (!val) return;
+  focusPhrases.push(val);
+  input.value = '';
+  renderFocusList();
+}
+
+function startFocus() {
+  if (!focusPhrases.length) return;
+  focusIndex = 0;
+  document.getElementById('focus-overlay').style.display = 'flex';
+  showFocusPhrase();
+}
+
+function showFocusPhrase() {
+  const el = document.getElementById('focus-phrase');
+  el.style.opacity = '0';
+  setTimeout(function() {
+    el.textContent = focusPhrases[focusIndex];
+    el.style.opacity = '1';
+  }, 400);
+  clearTimeout(focusTimer);
+  focusTimer = setTimeout(function() {
+    focusIndex = (focusIndex + 1) % focusPhrases.length;
+    showFocusPhrase();
+  }, 30000);
+}
+
+function stopFocus() {
+  clearTimeout(focusTimer);
+  document.getElementById('focus-overlay').style.display = 'none';
+}
 
 // ═══════════════════════════════════════
 //  SUPABASE AUTH + SYNC (pure fetch, no SDK)
@@ -2693,11 +3399,11 @@ let supaToken = null; // JWT access token
 
 // ── Helper: Supabase REST fetch ──
 async function supaFetch(path, method = 'GET', body = null, extraHeaders = {}) {
-  const headers = {
+  var headers = {
     'apikey': SUPA_KEY,
-    'Content-Type': 'application/json',
-    ...extraHeaders
+    'Content-Type': 'application/json'
   };
+  if (extraHeaders) Object.keys(extraHeaders).forEach(function(k){ headers[k] = extraHeaders[k]; });
   if (supaToken) headers['Authorization'] = 'Bearer ' + supaToken;
   const res = await fetch(SUPA_URL + path, {
     method,
@@ -2741,6 +3447,26 @@ async function initAuth() {
       setLoggedIn({ email: data.user.email, id: data.user.id });
       await loadRangesFromCloud();
     } else {
+      // refresh_token expired — try auto-reconnect with saved credentials
+      if (session.creds) {
+        try {
+          const { e, p } = JSON.parse(atob(session.creds));
+          const r2 = await fetch(SUPA_URL + '/auth/v1/token?grant_type=password', {
+            method: 'POST',
+            headers: { 'apikey': SUPA_KEY, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: e, password: p })
+          });
+          if (r2.ok) {
+            const d2 = await r2.json();
+            supaToken = d2.access_token;
+            const newSession = { access_token: d2.access_token, refresh_token: d2.refresh_token, user_email: d2.user.email, user_id: d2.user.id, creds: session.creds };
+            saveSession(newSession);
+            setLoggedIn({ email: d2.user.email, id: d2.user.id });
+            await loadRangesFromCloud();
+            return;
+          }
+        } catch(ex) {}
+      }
       clearSession(); setLoggedOut();
     }
   } catch(e) {
@@ -2817,8 +3543,15 @@ async function authLogin() {
     const data = await res.json();
     if (!res.ok) { showAuthError(data.error_description || data.msg || 'Erreur connexion'); return; }
     supaToken = data.access_token;
-    const remember = document.getElementById('auth-remember')?.checked !== false;
-    saveSession({ access_token: data.access_token, refresh_token: data.refresh_token, user_email: data.user.email, user_id: data.user.id }, remember);
+    var _rem = document.getElementById('auth-remember'); var remember = _rem ? _rem.checked !== false : true;
+    const sessionData = { access_token: data.access_token, refresh_token: data.refresh_token, user_email: data.user.email, user_id: data.user.id };
+    if (remember) {
+      // Also save credentials for auto-reconnect if all tokens expire
+      try {
+        sessionData.creds = btoa(JSON.stringify({ e: email, p: password }));
+      } catch(ex) {}
+    }
+    saveSession(sessionData, remember);
     setLoggedIn({ email: data.user.email, id: data.user.id });
     showToast('Connecté !');
     await loadRangesFromCloud();
@@ -2864,7 +3597,6 @@ async function authLogout() {
 // ── Sync ranges to cloud ──
 async function syncRanges() {
   if (!supaUser) { showToast('Connecte-toi dabord.'); return; }
-  // Build rows to sync
   const rows = [];
   folders.forEach(f => {
     f.ranges.forEach(r => {
@@ -2877,15 +3609,14 @@ async function syncRanges() {
       });
     });
   });
-  // Step 1: insert new rows first (safe — no data loss if fails)
+  // DELETE toutes les ranges existantes
+  const { error: delErr } = await supaFetch('/rest/v1/ranges?user_id=eq.' + supaUser.id, 'DELETE');
+  if (delErr) { showToast('Erreur sync: ' + (delErr.message || JSON.stringify(delErr))); return; }
+  // INSERT les nouvelles seulement si il y en a
   if (rows.length > 0) {
-    const { error } = await supaFetch('/rest/v1/ranges', 'POST', rows, { 'Prefer': 'return=minimal' });
-    if (error) { showToast('Erreur sync: ' + (error.message || JSON.stringify(error))); return; }
+    const { error: insErr } = await supaFetch('/rest/v1/ranges', 'POST', rows, { 'Prefer': 'return=minimal' });
+    if (insErr) { showToast('Erreur sync: ' + (insErr.message || JSON.stringify(insErr))); return; }
   }
-  // Step 2: delete old rows only AFTER successful insert
-  // Keep only rows inserted in the last 10 seconds
-  const cutoff = new Date(Date.now() - 10000).toISOString();
-  await supaFetch('/rest/v1/ranges?user_id=eq.' + supaUser.id + '&created_at=lt.' + cutoff, 'DELETE');
   showToast(rows.length + ' range(s) synchronisé(s) ✓');
 }
 
@@ -2907,6 +3638,68 @@ async function loadRangesFromCloud() {
   renderFolders(); renderFoldersView(); updateDashboard();
   showToast(data.length + ' range(s) chargé(s) ✓');
 }
+
+// ═══════════════════════════════════════
+
+// ═══════════════════════════════════════
+//  KO PROGRESSIF
+// ═══════════════════════════════════════
+var pkoStade = 'debut';
+var pkoRatios = { debut: 0.25, itm: 0.35, tf: 0.45 };
+var pkoLabels = { debut: 'Début (25%)', itm: 'ITM (35%)', tf: 'Table Finale (45%)' };
+
+
+
+// ═══════════════════════════════════════
+//  COTES
+// ═══════════════════════════════════════
+function calcCote() {
+  var call = parseFloat(document.getElementById('cote-call').value);
+  var pot  = parseFloat(document.getElementById('cote-pot').value);
+  var resultEl = document.getElementById('cote-result');
+  var valueEl  = document.getElementById('cote-result-value');
+  var subEl    = document.getElementById('cote-result-sub');
+  if (!call || !pot || (pot + call) === 0) {
+    resultEl.style.display = 'none'; return;
+  }
+  var equity = call / (pot + call) * 100;
+  var rounded = Math.round(equity * 10) / 10;
+  // Also show pot odds ratio
+  var ratio = Math.round(pot / call * 10) / 10;
+  resultEl.style.display = 'block';
+  valueEl.textContent = rounded.toLocaleString('fr-FR') + '%';
+  subEl.textContent = call.toLocaleString('fr-FR') + ' ÷ (' + pot.toLocaleString('fr-FR') + ' + ' + call.toLocaleString('fr-FR') + ') — Cote: ' + ratio + ':1';
+// ═══════════════════════════════════════
+//  KO PROGRESSIF
+// ═══════════════════════════════════════
+var pkoStade = 'debut';
+var pkoRatios = { debut: 0.25, itm: 0.35, tf: 0.45 };
+
+
+
+// ═══════════════════════════════════════
+//  COTES
+// ═══════════════════════════════════════
+
+}
+
+// ═══════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════
+initColorGrid();
+renderQuestions();
+renderFolders();
+updateDashboard();
+randomBlindExercise();
+// Default eval criteria
+evalCriteria = [
+  { id: evalNextId++, name: 'Concentration',       max: 5, score: 0 },
+  { id: evalNextId++, name: 'Technique',            max: 5, score: 0 },
+  { id: evalNextId++, name: 'Gestion émotions', max: 5, score: 0 },
+  { id: evalNextId++, name: 'Énergie',          max: 5, score: 0 },
+];
+renderEvalCriteria();
+try { initAuth(); } catch(e) { console.log('Auth init failed:', e); }
 
 </script>
 </body>
