@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="PokerIQ">
+<meta name="apple-mobile-web-app-title" content="MyEdge">
 <meta name="theme-color" content="#0e0e10">
-<title>Poker Tracker</title>
+<title>MyEdge</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Cormorant+Garamond:ital,wght@1,400;1,500;1,600&display=swap" rel="stylesheet">
 <style>
@@ -50,7 +50,7 @@
   --border2: #d0d0d8;
 
   --text: #111114;
-  --text2: #52546a;
+  --text2: #6b6e85;
   --text3: #a0a2b8;
 }
 html.light .range-cell.pair    { background: #dde0ea; }
@@ -210,8 +210,8 @@ body {
 
 .section-label {
   font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  font-weight: 500;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text3);
   margin-bottom: 10px;
@@ -228,8 +228,8 @@ body {
 }
 .card-title {
   font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  font-weight: 500;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text3);
   margin-bottom: 14px;
@@ -329,8 +329,8 @@ body {
   border-radius: var(--radius);
   padding: 16px;
 }
-.stat-card-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); margin-bottom: 6px; }
-.stat-card-value { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.03em; color: var(--text); font-family: var(--font-mono); }
+.stat-card-label { font-size: 0.65rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); margin-bottom: 6px; }
+.stat-card-value { font-size: 1.6rem; font-weight: 600; letter-spacing: -0.03em; color: var(--text); font-family: var(--font-mono); }
 .stat-card-sub { font-size: 0.7rem; color: var(--text2); margin-top: 2px; }
 
 .dashboard-placeholder {
@@ -579,9 +579,9 @@ body {
 .blinds-sub-label { font-size: 0.72rem; color: var(--text3); margin-top: 2px; }
 .blinds-answer { padding: 13px 16px; border-radius: var(--radius-sm); text-align: center; font-size: 1.3rem; font-weight: 700; margin-top: 12px; display: none; }
 .blinds-answer.show { display: block; animation: fadeUp 0.25s; }
-.blinds-answer.exact { background: rgba(79,209,160,0.08); color: var(--accent3); border: 1px solid rgba(79,209,160,0.2); }
-.blinds-answer.close { background: rgba(var(--accent-rgb),0.08); color: var(--accent); border: 1px solid rgba(var(--accent-rgb),0.2); }
-.blinds-answer.far   { background: rgba(224,92,92,0.08); color: var(--danger); border: 1px solid rgba(224,92,92,0.2); }
+.blinds-answer.exact { background: rgba(var(--accent-rgb),0.08); color: var(--accent); border: 1px solid rgba(var(--accent-rgb),0.2); }
+.blinds-answer.close { background: rgba(var(--accent-rgb),0.06); color: var(--text2); border: 1px solid var(--border); }
+.blinds-answer.far   { background: rgba(var(--accent-rgb),0.06); color: var(--text2); border: 1px solid var(--border); }
 .blinds-answer-sub { font-size: 0.72rem; font-weight: 400; margin-top: 3px; opacity: 0.7; font-family: var(--font-mono); }
 .presets { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 8px; }
 .preset-btn { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 4px 10px; font-family: var(--font-mono); font-size: 0.68rem; color: var(--text2); cursor: pointer; transition: all 0.15s; }
@@ -618,36 +618,37 @@ body {
 ═══════════════════════════════════════ */
 /* Auto-eval */
 .eval-grid {
-  display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px;
+  display: flex; flex-direction: column; gap: 0; margin-bottom: 14px;
+  border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden;
 }
 .eval-row {
   display: flex; align-items: center; gap: 10px;
-  padding: 9px 12px;
-  background: var(--surface2); border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  background: var(--surface); border-bottom: 1px solid var(--border);
 }
+.eval-row:last-child { border-bottom: none; }
 .eval-row-name {
-  font-size: 0.82rem; font-weight: 600; color: var(--text);
+  font-size: 0.82rem; font-weight: 400; color: var(--text2);
   flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .eval-input {
-  width: 48px; background: var(--surface); border: 1.5px solid var(--border);
-  border-radius: var(--radius-sm); padding: 5px 6px;
-  font-family: var(--font-mono); font-size: 0.9rem; font-weight: 700;
-  color: var(--accent); text-align: center; outline: none;
+  width: 44px; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 5px; padding: 4px 5px;
+  font-family: var(--font-mono); font-size: 0.88rem; font-weight: 500;
+  color: var(--text); text-align: center; outline: none;
   -webkit-appearance: none; appearance: none;
 }
-.eval-input:focus { border-color: var(--accent); }
+.eval-input:focus { border-color: var(--accent); color: var(--accent); }
 .eval-row-max {
-  font-size: 0.75rem; color: var(--text3); font-family: var(--font-mono);
+  font-size: 0.72rem; color: var(--text3); font-family: var(--font-mono);
   white-space: nowrap;
 }
 .eval-del {
   background: none; border: none; color: var(--text3);
-  cursor: pointer; padding: 0 2px; font-size: 0.85rem; line-height: 1;
-  transition: color .15s; flex-shrink: 0;
+  cursor: pointer; padding: 0 2px; font-size: 0.75rem; line-height: 1;
+  transition: color .15s; flex-shrink: 0; opacity: 0.5;
 }
-.eval-del:hover { color: var(--danger); }
+.eval-del:hover { color: var(--danger); opacity: 1; }
 
 .coming-soon {
   display: flex; flex-direction: column; align-items: center;
@@ -943,28 +944,37 @@ body {
 .calc-badge-sko { background: rgba(91,138,240,0.12); color: #5b8af0; }
 
 
-/* Habits */
-.habit-item { display:flex; align-items:center; gap:12px; padding:11px 12px; background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius-sm); margin-bottom:8px; }
-.habit-check { width:26px; height:26px; border-radius:50%; border:2px solid var(--border); background:none; cursor:pointer; flex-shrink:0; transition:all .15s; position:relative; }
-.habit-check.done { background:var(--accent3); border-color:var(--accent3); }
-.habit-check.done::after { content:""; position:absolute; left:6px; top:3px; width:9px; height:6px; border-left:2px solid #0d1a14; border-bottom:2px solid #0d1a14; transform:rotate(-45deg); }
-.habit-emoji { font-size:1.15rem; flex-shrink:0; }
-.habit-label { flex:1; min-width:0; }
-.habit-name { font-size:0.84rem; font-weight:500; color:var(--text); }
-.habit-name.done { text-decoration:line-through; color:var(--text3); }
-.habit-streak { font-size:0.68rem; font-family:var(--font-mono); color:var(--accent); font-weight:600; margin-top:1px; }
-.habit-del-btn { background:none; border:none; color:var(--text3); cursor:pointer; padding:0 2px; font-size:0.9rem; transition:color .15s; flex-shrink:0; }
-.habit-del-btn:hover { color:var(--danger); }
-.habit-emoji-opt { width:34px; height:34px; border-radius:7px; background:var(--surface3); border:1.5px solid var(--border); font-size:1.05rem; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .12s; }
-.habit-emoji-opt.selected { border-color:var(--accent); background:rgba(var(--accent-rgb),.12); }
-.week-table { width:100%; border-collapse:separate; border-spacing:4px; }
-.week-th { font-size:0.58rem; font-weight:700; text-transform:uppercase; color:var(--text3); text-align:center; padding-bottom:4px; white-space:nowrap; }
-.week-th.today-col { color:var(--accent); }
-.week-habit-label { font-size:0.72rem; font-weight:500; color:var(--text2); padding-right:8px; white-space:nowrap; max-width:90px; overflow:hidden; text-overflow:ellipsis; }
-.week-dot-cell { text-align:center; }
-.wdot { display:inline-block; width:10px; height:10px; border-radius:50%; background:var(--surface3); }
-.wdot.done { background:var(--accent3); }
-.wdot.today { outline:2px solid var(--accent); outline-offset:1px; }
+/* Anti-zoom iOS */
+input,textarea,select{font-size:16px !important;}
+.habit-item{display:flex;align-items:center;gap:12px;padding:11px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:8px;}
+.habit-check{width:26px;height:26px;border-radius:50%;border:2px solid var(--border);background:none;cursor:pointer;flex-shrink:0;transition:all .15s;display:flex;align-items:center;justify-content:center;}
+.habit-check.done{background:var(--accent);border-color:var(--accent);}
+.habit-check.done::after{content:"";display:block;width:9px;height:6px;border-left:2.5px solid #111;border-bottom:2.5px solid #111;transform:rotate(-45deg) translate(0,-1px);}
+.habit-emoji{width:20px;height:20px;flex-shrink:0;color:var(--text2);display:flex;align-items:center;justify-content:center;}
+.habit-label{flex:1;min-width:0;}
+.habit-name{font-size:.84rem;font-weight:500;color:var(--text);}
+.habit-name.done{text-decoration:line-through;color:var(--text3);}
+.habit-streak{font-size:.68rem;font-family:var(--font-mono);color:var(--accent);font-weight:600;margin-top:1px;}
+.habit-del-btn{background:none;border:none;color:var(--text3);cursor:pointer;padding:0 2px;font-size:.9rem;transition:color .15s;flex-shrink:0;}
+.habit-del-btn:hover{color:var(--danger);}
+.habit-emoji-opt{width:34px;height:34px;border-radius:7px;background:var(--surface3);border:1.5px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s;color:var(--text2);}
+.habit-emoji-opt.selected{border-color:var(--accent);background:rgba(var(--accent-rgb),.12);color:var(--accent);}
+.week-table{width:100%;border-collapse:separate;border-spacing:4px;}
+.week-th{font-size:.58rem;font-weight:700;text-transform:uppercase;color:var(--text3);text-align:center;padding-bottom:4px;}
+.week-th.today-col{color:var(--accent);}
+.week-habit-label{font-size:.72rem;font-weight:500;color:var(--text2);padding-right:8px;white-space:nowrap;max-width:90px;overflow:hidden;text-overflow:ellipsis;}
+.week-dot-cell{text-align:center;}
+.wdot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--surface3);}
+.wdot.done{background:var(--accent);}
+.wdot.today{outline:2px solid var(--accent);outline-offset:1px;}
+.dash-action-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px 12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);font-family:var(--font);font-size:.82rem;font-weight:600;color:var(--text2);cursor:pointer;transition:all .15s;}
+.dash-action-btn:hover{border-color:var(--accent);color:var(--accent);}
+.dash-habit-mini{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);}
+.dash-habit-mini:last-child{border-bottom:none;}
+.dash-habit-dot{width:10px;height:10px;border-radius:50%;background:var(--surface3);flex-shrink:0;transition:background .2s;}
+.dash-habit-dot.done{background:var(--accent);}
+.dash-habit-name{flex:1;font-size:.8rem;color:var(--text2);}
+.dash-habit-name.done{color:var(--text3);}
 
 </style>
 </head>
@@ -973,7 +983,7 @@ body {
 
   <!-- HEADER (mobile only) -->
   <header class="app-header">
-    <div class="app-logo">Poker<span>IQ</span></div>
+    <div class="app-logo">My<span>Edge</span></div>
   </header>
 
   <!-- BODY -->
@@ -981,37 +991,53 @@ body {
 
     <!-- ── DASHBOARD ── -->
     <div id="page-dashboard" class="page active">
-      <div class="stats-grid">
+
+      <!-- Greeting -->
+      <div style="margin-bottom:16px;">
+        <div style="font-size:1.05rem;font-weight:600;color:var(--text);letter-spacing:-.01em;" id="dash-greeting">Bonjour</div>
+        <div style="font-size:.75rem;color:var(--text3);margin-top:3px;font-weight:400;" id="dash-date"></div>
+      </div>
+
+      <!-- Graphique bankroll 15 sessions -->
+      <div class="card" id="dash-chart-card" style="padding:16px 16px 12px;display:none;margin-bottom:12px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <span style="font-size:0.65rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);">Bankroll</span>
+          <span style="font-size:0.78rem;font-family:var(--font-mono);font-weight:500;color:var(--accent);" id="dash-chart-last"></span>
+        </div>
+        <svg id="dash-chart-svg" width="100%" height="130" style="display:block;overflow:visible;"></svg>
+      </div>
+
+      <!-- Stats -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
         <div class="stat-card">
-          <div class="stat-card-label">Sessions</div>
-          <div class="stat-card-value">—</div>
-          <div class="stat-card-sub">à venir</div>
+          <div class="stat-card-label">Bilan 10 sessions</div>
+          <div class="stat-card-value" id="dash-bilan" style="font-size:1.3rem;">—</div>
+          <div class="stat-card-sub" id="dash-bilan-sub">aucune session</div>
         </div>
         <div class="stat-card">
-          <div class="stat-card-label">Bankroll</div>
-          <div class="stat-card-value">—</div>
-          <div class="stat-card-sub">à venir</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card-label">Questions</div>
-          <div class="stat-card-value" id="dash-questions">0</div>
-          <div class="stat-card-sub">dans la base</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card-label">Ranges</div>
-          <div class="stat-card-value" id="dash-ranges">0</div>
-          <div class="stat-card-sub">sauvegardés</div>
+          <div class="stat-card-label">Moyenne éval 7j</div>
+          <div class="stat-card-value" id="dash-eval-avg" style="font-size:1.3rem;">—</div>
+          <div class="stat-card-sub" id="dash-eval-sub">/10</div>
         </div>
       </div>
 
-      <div class="dashboard-placeholder">
-        <div class="dp-title">Activité récente</div>
-        Disponible après vos premières sessions
+      <!-- Habitudes du jour -->
+      <div class="card" style="margin-bottom:16px;padding:14px 16px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-size:.65rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);">Habitudes du jour</span>
+          <span style="font-size:.78rem;font-family:var(--font-mono);font-weight:500;color:var(--accent);" id="dash-habits-score">0/0</span>
+        </div>
+        <div style="height:4px;border-radius:99px;background:var(--surface2);overflow:hidden;margin-bottom:10px;">
+          <div id="dash-habits-bar" style="height:100%;border-radius:99px;background:var(--accent);transition:width .4s;width:0%;"></div>
+        </div>
+        <div style="font-size:.78rem;color:var(--text3);font-weight:400;" id="dash-habits-summary"></div>
       </div>
-      <div class="dashboard-placeholder">
-        <div class="dp-title">Progression</div>
-        Les graphiques apparaîtront ici
+
+      <!-- Citation (sans encadré) -->
+      <div style="padding:0 4px;">
+        <div style="font-size:.78rem;font-style:italic;color:var(--text3);line-height:1.7;font-weight:400;text-align:center;" id="dash-quote"></div>
       </div>
+
     </div>
 
     <!-- ── SESSION ── -->
@@ -1028,7 +1054,7 @@ body {
         <!-- Mystery KO -->
         <div class="card">
           <div class="card-title" style="display:flex;align-items:center;gap:8px;margin-bottom:4px;font-size:0.9rem;color:var(--text);font-weight:700;text-transform:none;letter-spacing:0;">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><text x="12" y="16.5" text-anchor="middle" font-size="13" font-weight="700" fill="var(--accent)" stroke="none">?</text></svg>
             Mystery KO
           </div>
           <div style="font-size:0.75rem;color:var(--text3);margin-bottom:16px;line-height:1.5;">
@@ -1133,7 +1159,7 @@ body {
         <!-- KO Progressif -->
         <div class="card">
           <div class="card-title" style="display:flex;align-items:center;gap:8px;font-size:0.9rem;color:var(--text);font-weight:700;text-transform:none;letter-spacing:0;">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
             KO Progressif
           </div>
           <div style="font-size:0.75rem;color:var(--text3);margin-bottom:14px;line-height:1.5;">Valeur d'une prime en BB selon le stade du tournoi</div>
@@ -1188,7 +1214,7 @@ body {
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
             Calculateur de cotes
           </div>
-          <div style="font-size:0.75rem;color:var(--text3);margin-bottom:14px;line-height:1.5;">Rentabilité d'un appel — équité minimum nécessaire</div>
+          <div style="font-size:0.75rem;color:var(--text3);margin-bottom:14px;line-height:1.5;">Rentabilité d'un call — équité minimum nécessaire</div>
           <div class="mko-grid">
             <div class="mko-field">
               <label class="mko-label">Mise à appeler</label>
@@ -1435,9 +1461,19 @@ body {
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" pointer-events="none"><polyline points="15 18 9 12 15 6"/></svg>
                 Retour
               </button>
-              <div style="flex:1;">
+              <div style="flex:1;min-width:0;">
                 <div class="readonly-folder-name" id="range-readonly-folder"></div>
                 <div class="readonly-range-title" id="range-readonly-title"></div>
+              </div>
+              <!-- Nav prev/next -->
+              <div style="display:flex;align-items:center;gap:2px;" id="range-nav-arrows">
+                <button class="btn btn-ghost btn-sm" id="range-nav-prev" onclick="navigateRange(-1)" style="padding:5px 7px;" title="Range précédente">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" pointer-events="none"><polyline points="15 18 9 12 15 6"/></svg>
+                </button>
+                <span style="font-size:0.68rem;font-family:var(--font-mono);color:var(--text3);min-width:28px;text-align:center;" id="range-nav-index"></span>
+                <button class="btn btn-ghost btn-sm" id="range-nav-next" onclick="navigateRange(1)" style="padding:5px 7px;" title="Range suivante">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" pointer-events="none"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
               </div>
               <button class="btn btn-ghost btn-sm" onclick="switchToEditFromView()">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" pointer-events="none"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
@@ -1592,27 +1628,32 @@ body {
       <div id="suivi-eval" class="subview active">
       <div class="card">
         <!-- Header -->
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
           <div>
-            <div style="font-size:0.9rem;font-weight:700;color:var(--text);">Session du <span id="eval-date"></span></div>
-            <div style="font-size:0.72rem;color:var(--text3);margin-top:2px;">Note-toi sur chaque critère</div>
+            <div style="font-size:0.82rem;font-weight:600;color:var(--text);">Session du <span id="eval-date"></span></div>
           </div>
-          <button class="btn btn-ghost btn-sm" onclick="resetEval()">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" pointer-events="none"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg>
-            Reset
-          </button>
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-ghost btn-sm" onclick="resetEval()" style="padding:5px 9px;">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" pointer-events="none"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg>
+              Reset
+            </button>
+            <button class="btn btn-primary btn-sm" onclick="saveEvalSession()" style="padding:5px 9px;">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" pointer-events="none"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+              Enregistrer
+            </button>
+          </div>
         </div>
 
         <!-- Criteria -->
         <div class="eval-grid" id="eval-criteria-list"></div>
 
         <!-- Average -->
-        <div id="eval-result" style="display:none;">
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 0 10px;">
-            <span style="font-size:0.78rem;color:var(--text2);font-weight:600;text-transform:uppercase;letter-spacing:.06em;">Score global</span>
-            <span id="eval-avg-display" style="font-size:1.4rem;font-weight:800;font-family:var(--font-mono);letter-spacing:-0.02em;"></span>
+        <div id="eval-result" style="display:none;margin-top:12px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+            <span style="font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);">Score global</span>
+            <span id="eval-avg-display" style="font-size:0.95rem;font-weight:600;font-family:var(--font-mono);color:var(--accent);"></span>
           </div>
-          <div style="height:6px;border-radius:99px;background:var(--surface2);overflow:hidden;">
+          <div style="height:4px;border-radius:99px;background:var(--surface2);overflow:hidden;">
             <div id="eval-avg-fill" style="height:100%;border-radius:99px;background:var(--accent);transition:width 0.5s ease;width:0%;"></div>
           </div>
         </div>
@@ -1629,9 +1670,9 @@ body {
         </div>
 
         <!-- Add button -->
-        <button class="btn btn-ghost btn-sm" id="eval-add-btn" onclick="toggleEvalForm(true)" style="margin-top:12px;">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" pointer-events="none"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Ajouter un critère
+        <button class="btn btn-ghost btn-sm" id="eval-add-btn" onclick="toggleEvalForm(true)" style="margin-top:10px;font-size:0.72rem;padding:5px 10px;color:var(--text3);">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" pointer-events="none"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Ajouter
         </button>
       </div>
       </div><!-- /suivi-eval -->
@@ -1688,79 +1729,56 @@ body {
           </button>
         </div>
 
+        <!-- Graphique bankroll -->
+        <div class="card" id="bk-chart-card" style="padding:14px 16px;display:none;margin-bottom:4px;">
+          <div style="font-size:0.65rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;">Évolution de la bankroll</div>
+          <div style="position:relative;width:100%;height:120px;">
+            <svg id="bk-chart-svg" width="100%" height="120" style="overflow:visible;display:block;"></svg>
+          </div>
+        </div>
+
+        <!-- Graphique bankroll -->
+        <div class="card" id="bk-chart-card" style="padding:14px 16px;display:none;margin-bottom:4px;">
+          <div style="font-size:0.65rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;">\u00c9volution de la bankroll</div>
+          <div style="position:relative;width:100%;height:120px;">
+            <svg id="bk-chart-svg" width="100%" height="120" style="overflow:visible;display:block;"></svg>
+          </div>
+        </div>
+
         <!-- Sessions list -->
         <div id="bk-sessions-list"></div>
 
       </div><!-- /suivi-bankroll -->
 
-      <!-- HABITUDES -->
       <div id="suivi-habits" class="subview">
-
-        <!-- Today header -->
         <div class="card" style="padding:14px 16px;margin-bottom:10px;">
           <div style="display:flex;align-items:center;justify-content:space-between;">
-            <div>
-              <div style="font-size:0.9rem;font-weight:700;color:var(--text);" id="habits-today-label">Aujourd&#8217;hui</div>
-              <div style="font-size:0.72rem;color:var(--text3);margin-top:2px;" id="habits-completed-label"></div>
-            </div>
-            <div style="text-align:right;">
-              <span style="font-size:1.8rem;font-weight:800;font-family:var(--font-mono);color:var(--accent);" id="habits-today-score">0</span>
-              <span style="font-size:1rem;color:var(--text3);font-family:var(--font-mono);" id="habits-today-total">/0</span>
-            </div>
+            <div><div style="font-size:.9rem;font-weight:700;color:var(--text);">Aujourd’hui</div><div style="font-size:.72rem;color:var(--text3);margin-top:2px;" id="habits-completed-label"></div></div>
+            <div><span style="font-size:1.8rem;font-weight:800;font-family:var(--font-mono);color:var(--accent);" id="habits-today-score">0</span><span style="font-size:1rem;color:var(--text3);font-family:var(--font-mono);" id="habits-today-total">/0</span></div>
           </div>
-          <div style="height:5px;border-radius:99px;background:var(--surface2);overflow:hidden;margin-top:10px;">
-            <div id="habits-today-bar" style="height:100%;border-radius:99px;background:var(--accent);transition:width .4s ease;width:0%;"></div>
-          </div>
+          <div style="height:5px;border-radius:99px;background:var(--surface2);overflow:hidden;margin-top:10px;"><div id="habits-today-bar" style="height:100%;border-radius:99px;background:var(--accent);transition:width .4s;width:0%;"></div></div>
         </div>
-
-        <!-- Habits list + add -->
         <div class="card" style="padding:14px 16px;margin-bottom:10px;">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-            <span style="font-size:0.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);">Mes habitudes</span>
-            <button class="btn btn-ghost btn-sm" id="habits-add-btn" onclick="toggleHabitForm(true)">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" pointer-events="none"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              Ajouter
-            </button>
+            <span style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);">Mes habitudes</span>
+            <button class="btn btn-ghost btn-sm" id="habits-add-btn" onclick="toggleHabitForm(true)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" pointer-events="none"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Ajouter</button>
           </div>
           <div id="habits-list"></div>
-          <!-- Add form -->
           <div id="habit-add-form" style="display:none;margin-top:10px;padding:12px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);">
-            <input class="input" id="habit-name-input" placeholder="Nom de l&#8217;habitude..." style="margin-bottom:10px;font-size:16px;">
-            <div style="margin-bottom:10px;">
-              <div style="font-size:0.62rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:7px;">Ic&#244;ne</div>
-              <div style="display:flex;gap:6px;flex-wrap:wrap;" id="habit-emoji-picker">
-                <button class="habit-emoji-opt selected" data-emoji="&#x1F9D8;">&#x1F9D8;</button>
-                <button class="habit-emoji-opt" data-emoji="&#x1F4DA;">&#x1F4DA;</button>
-                <button class="habit-emoji-opt" data-emoji="&#x1F3CB;">&#x1F3CB;</button>
-                <button class="habit-emoji-opt" data-emoji="&#x1F634;">&#x1F634;</button>
-                <button class="habit-emoji-opt" data-emoji="&#x1F9E0;">&#x1F9E0;</button>
-                <button class="habit-emoji-opt" data-emoji="&#x1F4F5;">&#x1F4F5;</button>
-                <button class="habit-emoji-opt" data-emoji="&#x1F3AF;">&#x1F3AF;</button>
-                <button class="habit-emoji-opt" data-emoji="&#x270F;&#xFE0F;">&#x270F;&#xFE0F;</button>
-                <button class="habit-emoji-opt" data-emoji="&#x1F4AA;">&#x1F4AA;</button>
-                <button class="habit-emoji-opt" data-emoji="&#x1F951;">&#x1F951;</button>
-              </div>
-            </div>
-            <div style="display:flex;gap:8px;">
-              <button class="btn btn-primary btn-sm" onclick="addHabit()" style="flex:1;justify-content:center;">Ajouter</button>
-              <button class="btn btn-ghost btn-sm" onclick="toggleHabitForm(false)">Annuler</button>
-            </div>
+            <input class="input" id="habit-name-input" placeholder="Nom de l’habitude..." style="margin-bottom:10px;font-size:16px;">
+            <div style="margin-bottom:10px;"><div style="font-size:.62rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:7px;">Icône</div><div style="display:flex;gap:6px;flex-wrap:wrap;" id="habit-emoji-picker"></div></div>
+            <div style="display:flex;gap:8px;"><button class="btn btn-primary btn-sm" onclick="addHabit()" style="flex:1;justify-content:center;">Ajouter</button><button class="btn btn-ghost btn-sm" onclick="toggleHabitForm(false)">Annuler</button></div>
           </div>
         </div>
-
-        <!-- Weekly view -->
         <div class="card" style="padding:14px 16px;margin-bottom:10px;">
-          <div style="font-size:0.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;">Cette semaine</div>
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;">Cette semaine</div>
           <div id="habits-week-grid" style="overflow-x:auto;"></div>
         </div>
-
-        <!-- Stats -->
         <div class="card" style="padding:14px 16px;">
-          <div style="font-size:0.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;">Statistiques</div>
+          <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:12px;">Statistiques</div>
           <div id="habits-stats" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;"></div>
         </div>
-
-      </div><!-- /suivi-habits -->
+      </div>
 
     </div>
 
@@ -1849,7 +1867,7 @@ body {
         <div class="card-title">À propos</div>
         <div class="settings-row">
           <div>
-            <div class="settings-row-label">PokerIQ</div>
+            <div class="settings-row-label">MyEdge</div>
             <div class="settings-row-sub">Version 0.1 — en développement</div>
           </div>
         </div>
@@ -1860,7 +1878,7 @@ body {
 
   <!-- BOTTOM NAV -->
   <nav class="bottom-nav" id="bottom-nav">
-    <div class="pc-logo" style="display:none;">Poker<span>IQ</span></div>
+    <div class="pc-logo" style="display:none;">My<span>Edge</span></div>
     <button class="nav-btn active" onclick="showPage('dashboard', this)">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
       <span>Accueil</span>
@@ -1942,9 +1960,6 @@ let folders = [], nextFolderId = 1, currentFolderId = null;
 let currentRangeMode = 'raise', currentRangeData = {}, isMouseDown = false;
 let currentFreq = 100; // frequency % for new cells
 let bCorrect = 0, bWrong = 0;
-var habitsData = [];
-var habitNextId = 1;
-var habitSelectedEmoji = '🧘';
 
 // ═══════════════════════════════════════
 //  NAVIGATION
@@ -2043,11 +2058,91 @@ function setAccentColor(idx) {
 //  DASHBOARD
 // ═══════════════════════════════════════
 function updateDashboard() {
-  const totalRanges = folders.reduce((s, f) => s + f.ranges.length, 0);
-  const qEl = document.getElementById('dash-questions');
-  const rEl = document.getElementById('dash-ranges');
-  if (qEl) qEl.textContent = questions.length;
-  if (rEl) rEl.textContent = totalRanges;
+  // Greeting
+  var gEl=document.getElementById('dash-greeting'), dEl=document.getElementById('dash-date');
+  if(gEl||dEl){
+    var now=new Date(), hr=now.getHours();
+    var g=hr<12?'Bonjour':hr<18?'Bon après-midi':'Bonsoir';
+    if(gEl)gEl.textContent=g;
+    if(dEl)dEl.textContent=now.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
+  }
+
+  // Phrase motivante
+  var qEl=document.getElementById('dash-quote');
+  if(qEl && !qEl.dataset.set){
+    var phrases=[
+      'Le poker récompense la patience et punit l\'impulsivité.',
+      'Chaque session est une opportunité d\'apprendre, pas juste de gagner.',
+      'La discipline à la table commence par la discipline hors de la table.',
+      'Un bad beat n\'efface pas des années de bon jeu.',
+      'Ta bankroll est le reflet de ta gestion, pas de ta chance.',
+      'Joue le joueur autant que les cartes.',
+      'La constance bat le génie sur le long terme.',
+      'Chaque pli évité au bon moment vaut autant qu\'un pot gagné.',
+      'Le tilt est ton plus grand adversaire — pas les autres joueurs.',
+      'Revois tes mains comme un athlète regarde ses replays.',
+      'L\'EV compte plus que le résultat d\'une seule main.',
+      'Le meilleur joueur n\'est pas celui qui gagne le plus, c\'est celui qui perd le mieux.',
+      'Progresser demande d\'être inconfortable avec ses propres lacunes.',
+      'Une séquence de perte ne définit pas ta valeur en tant que joueur.',
+      'La préparation mentale est aussi importante que la stratégie.',
+      'Joue selon ton jeu, pas selon ta peur.',
+      'Étudie quand les autres s\'amusent. Gagne quand ils travaillent.',
+      'Chaque décision compte, même les plus petites.',
+      'Le poker est un marathon. Pense en termes de milliers de mains.',
+      'Connais tes forces, accepte tes faiblesses, travaille les deux.'
+    ];
+    qEl.textContent = '“ ' + phrases[Math.floor(Math.random()*phrases.length)] + ' ”';
+    qEl.dataset.set='1';
+  }
+
+  // Bilan 10 dernières sessions
+  var bilanEl=document.getElementById('dash-bilan'), bilanSubEl=document.getElementById('dash-bilan-sub');
+  if(bilanEl){
+    var last10=bkSessions.slice(-10);
+    if(!last10.length){bilanEl.textContent='—';bilanEl.style.color='';if(bilanSubEl)bilanSubEl.textContent='aucune session';}
+    else{
+      var total=last10.reduce(function(s,e){return s+(e.end-e.start);},0);
+      var sign=total>=0?'+':'';
+      bilanEl.textContent=sign+Math.round(total).toLocaleString('fr-FR')+'€';
+      bilanEl.style.color=total>=0?'var(--accent3)':'var(--danger)';
+      if(bilanSubEl)bilanSubEl.textContent=last10.length+' session'+(last10.length>1?'s':'');
+    }
+  }
+
+  // Moyenne auto-éval 7 derniers jours
+  var evalEl=document.getElementById('dash-eval-avg'), evalSubEl=document.getElementById('dash-eval-sub');
+  if(evalEl){
+    // evalSessions stored as [{date, score}] — we track last 7 in evalHistory global
+    if(typeof evalHistory !== 'undefined' && evalHistory.length){
+      var last7=evalHistory.slice(-7);
+      var avg=last7.reduce(function(s,e){return s+e;},0)/last7.length;
+      var avgRound=Math.round(avg*10)/10;
+      evalEl.textContent=avgRound.toLocaleString('fr-FR');
+      evalEl.style.color='var(--accent)';
+      if(evalSubEl)evalSubEl.textContent='/10 — '+last7.length+' session'+(last7.length>1?'s':'');
+    } else {
+      evalEl.textContent='—'; evalEl.style.color='';
+      if(evalSubEl)evalSubEl.textContent='/10';
+    }
+  }
+
+  // Habitudes du jour: résumé simple
+  var today=(new Date()).toISOString().split('T')[0];
+  var hd=habitsData.filter(function(x){return x.history[today];}).length, ht=habitsData.length;
+  var hsc=document.getElementById('dash-habits-score'), hbar=document.getElementById('dash-habits-bar');
+  var hsum=document.getElementById('dash-habits-summary');
+  if(hsc)hsc.textContent=hd+'/'+ht;
+  if(hbar){hbar.style.width=ht?(hd/ht*100).toFixed(0)+'%':'0%'; hbar.style.background='var(--accent)';}
+  if(hsum){
+    if(!ht){hsum.textContent='Aucune habitude configurée';}
+    else if(hd===0){hsum.textContent='Aucune habitude cochée aujourd’hui';}
+    else if(hd===ht){hsum.textContent='Toutes les habitudes complétées ✓';}
+    else{
+      var doneNames=habitsData.filter(function(x){return x.history[today];}).map(function(x){return x.name;});
+      hsum.textContent=doneNames.join(', ')+' ✓';
+    }
+  }
 }
 function updateSettingsStats() {
   const totalRanges = folders.reduce((s, f) => s + f.ranges.length, 0);
@@ -2366,9 +2461,7 @@ function openMixPopup() {
     `<div class="mix-row">
       <span class="mix-dot" style="background:${a.color}"></span>
       <span class="mix-action-label">${h(a.label)}</span>
-      <button class="mix-pm" data-id="${a.id}" data-d="-1">−</button>
-      <span class="mix-val" id="mv-${a.id}">${parts[a.id]}</span>
-      <button class="mix-pm" data-id="${a.id}" data-d="1">+</button>
+      <input class="mix-pct-input" id="mv-${a.id}" data-id="${a.id}" type="number" inputmode="decimal" min="0" max="100" step="0.1" value="${parts[a.id]}" style="font-size:16px;">
       <span class="mix-pct-sign">%</span>
     </div>`
   ).join('');
@@ -2388,49 +2481,52 @@ function openMixPopup() {
     </div>`;
   document.body.appendChild(popup);
 
-  function updateUI() {
+  function updateUI(skipInputId) {
     const total = Object.values(parts).reduce((s,v)=>s+v, 0);
-    // update value displays
+    // update input values (skip the one being typed)
     baseActions.forEach(a => {
       const el = popup.querySelector('#mv-'+a.id);
-      const v = parts[a.id];
-      if (el) {
-        const disp = Math.round(v*10)/10;
-        // Display integers without decimal, others with 1 decimal
-        // Special case: 33.4 internal → show 33.3 (represents 33.333...)
-        let txt = disp % 1 === 0 ? String(disp) : disp.toFixed(1);
-        if (txt === '33.4') txt = '33.3';
-        el.textContent = txt;
+      if (el && el.dataset.id !== skipInputId) {
+        const v = Math.round(parts[a.id]*10)/10;
+        el.value = v % 1 === 0 ? String(v) : v.toFixed(1);
       }
     });
     // update total
     const totEl = popup.querySelector('#mix-total-display');
     const roundedTotal = Math.round(total * 10) / 10;
     const isOk = Math.abs(total - 100) < 0.05;
-    if (totEl) { totEl.textContent = (Number.isInteger(roundedTotal)?roundedTotal:roundedTotal)+'%'; totEl.className='mix-total-value '+(isOk?'ok':'over'); }
+    if (totEl) { totEl.textContent = roundedTotal+'%'; totEl.className='mix-total-value '+(isOk?'ok':'over'); }
     // update preview bar
     const bar = popup.querySelector('#mix-preview-bar');
     if (bar) bar.innerHTML = baseActions.filter(a=>parts[a.id]>0)
       .map(a=>`<div style="flex:${parts[a.id]};background:${a.color};"></div>`).join('');
   }
 
-  // +/- buttons — adjust with float precision, auto-balance to keep sum at 100
-  popup.querySelectorAll('.mix-pm').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const id = btn.dataset.id;
-      const delta = parseFloat(btn.dataset.d);
-      const newVal = Math.round(Math.max(0, Math.min(100, parts[id] + delta)) * 10) / 10;
-      const diff = Math.round((newVal - parts[id]) * 10) / 10;
-      if (diff === 0) return;
+  // Input: user types a value directly, auto-balance the others
+  popup.querySelectorAll('.mix-pct-input').forEach(input => {
+    input.addEventListener('input', () => {
+      const id = input.dataset.id;
+      const raw = parseFloat(input.value);
+      if (isNaN(raw)) return;
+      const newVal = Math.round(Math.max(0, Math.min(100, raw)) * 10) / 10;
+      const oldVal = parts[id];
+      const diff = Math.round((newVal - oldVal) * 10) / 10;
       parts[id] = newVal;
-      // Auto-balance: take/give from the largest other active action
+      // Auto-balance: distribute the diff proportionally to others, or just largest
       const others = baseActions.filter(a => a.id !== id);
       const activeOthers = others.filter(a => parts[a.id] > 0).sort((a,b)=>parts[b.id]-parts[a.id]);
       if (activeOthers.length > 0) {
         const target = activeOthers[0];
         parts[target.id] = Math.round(Math.max(0, Math.min(100, parts[target.id] - diff)) * 10) / 10;
       }
-      updateUI();
+      updateUI(id);
+    });
+    input.addEventListener('blur', () => {
+      // On blur, enforce valid value and rebalance cleanly
+      const id = input.dataset.id;
+      const v = Math.round(Math.max(0, Math.min(100, parseFloat(input.value)||0)) * 10) / 10;
+      parts[id] = v;
+      updateUI(null);
     });
   });
 
@@ -2909,6 +3005,36 @@ function openReadonlyRange(folderId, rangeId) {
   if (titleEl) titleEl.textContent = range.name;
   if (folderEl) folderEl.textContent = folder ? folder.name : '';
   buildReadonlyGrid(range.data, range.actions||rangeActions);
+  updateRangeNavArrows();
+}
+function updateRangeNavArrows() {
+  const folder = folders.find(f=>f.id===viewingFolderId);
+  const navDiv = document.getElementById('range-nav-arrows');
+  const idxEl  = document.getElementById('range-nav-index');
+  const prevBtn = document.getElementById('range-nav-prev');
+  const nextBtn = document.getElementById('range-nav-next');
+  if (!folder || !navDiv) return;
+  const ranges = folder.ranges || [];
+  const idx = ranges.findIndex(function(r){return r.id===viewingRangeId;});
+  const total = ranges.length;
+  navDiv.style.display = total > 1 ? 'flex' : 'none';
+  if (idxEl)  idxEl.textContent  = (idx+1) + '/' + total;
+  if (prevBtn) prevBtn.disabled  = idx <= 0;
+  if (nextBtn) nextBtn.disabled  = idx >= total - 1;
+}
+function navigateRange(dir) {
+  const folder = folders.find(f=>f.id===viewingFolderId);
+  if (!folder) return;
+  const ranges = folder.ranges || [];
+  const idx = ranges.findIndex(function(r){return r.id===viewingRangeId;});
+  const newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= ranges.length) return;
+  const newRange = ranges[newIdx];
+  viewingRangeId = newRange.id;
+  const titleEl = document.getElementById('range-readonly-title');
+  if (titleEl) titleEl.textContent = newRange.name;
+  buildReadonlyGrid(newRange.data, newRange.actions||rangeActions);
+  updateRangeNavArrows();
 }
 function closeReadonlyPanel() {
   document.getElementById('range-view-folders-v').style.display = 'block';
@@ -3117,6 +3243,12 @@ function showSuiviTab(tab, btn) {
   document.getElementById('suivi-' + tab).classList.add('active');
 }
 
+function showSuiviTab(tab, btn) {
+  document.querySelectorAll('#page-suivi .study-tab').forEach(function(t){ t.classList.remove('active'); });
+  btn.classList.add('active');
+  document.querySelectorAll('#page-suivi .subview').forEach(function(v){ v.classList.remove('active'); });
+  var el=document.getElementById('suivi-'+tab); if(el) el.classList.add('active');
+}
 function showSessionTab(tab, btn) {
   document.querySelectorAll('#page-session .study-tab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
@@ -3375,9 +3507,8 @@ function updateEvalAverage() {
   if (!displayEl || !fillEl) return;
   displayEl.textContent = avgOn10.toLocaleString('fr-FR') + ' / 10';
   fillEl.style.width = (avgPct * 100).toFixed(1) + '%';
-  var color = avgPct >= 0.7 ? 'var(--accent3)' : avgPct >= 0.4 ? 'var(--accent)' : 'var(--danger)';
-  displayEl.style.color = color;
-  fillEl.style.background = color;
+  displayEl.style.color = 'var(--accent)';
+  fillEl.style.background = 'var(--accent)';
 }
 
 function removeEvalCriterion(id) {
@@ -3388,6 +3519,17 @@ function removeEvalCriterion(id) {
 function resetEval() {
   evalCriteria.forEach(function(c){ c.score = 0; });
   renderEvalCriteria();
+}
+function saveEvalSession() {
+  if(!evalCriteria.length){ showToast('Aucun critère à enregistrer.'); return; }
+  var hasScore = evalCriteria.some(function(c){ return c.score > 0; });
+  if(!hasScore){ showToast('Note au moins un critère avant d\'enregistrer.'); return; }
+  var totalPct = evalCriteria.reduce(function(s,c){ return s+(c.score/c.max); },0);
+  var avg = Math.round(totalPct/evalCriteria.length*100)/10;
+  evalHistory.push(avg);
+  if(evalHistory.length>30) evalHistory.shift();
+  showToast('Session enregistrée — ' + avg.toLocaleString('fr-FR') + '/10');
+  updateDashboard();
 }
 
 // ═══════════════════════════════════════
@@ -3874,6 +4016,92 @@ function addBankrollSession() {
   renderBankroll();
 }
 
+
+function drawBankrollChart(svgId, sessions, height) {
+  var svg = document.getElementById(svgId);
+  if (!svg || !sessions.length) return;
+
+  // Build data: one point per session = bankroll at end
+  var pts = sessions.map(function(s, i) { return { x: i, y: s.end }; });
+  if (pts.length < 2) {
+    // Single point: show as dot
+    pts = [{ x:0, y: pts[0].y }, { x:1, y: pts[0].y }];
+  }
+
+  var W = svg.getBoundingClientRect().width || 300;
+  var H = height;
+  var PAD_L = 4, PAD_R = 4, PAD_T = 8, PAD_B = 18;
+  var innerW = W - PAD_L - PAD_R;
+  var innerH = H - PAD_T - PAD_B;
+
+  var minY = Math.min.apply(null, pts.map(function(p){return p.y;}));
+  var maxY = Math.max.apply(null, pts.map(function(p){return p.y;}));
+  var rangeY = maxY - minY || 1;
+  // Add 10% padding
+  minY -= rangeY * 0.1;
+  maxY += rangeY * 0.1;
+  rangeY = maxY - minY;
+
+  var n = pts.length;
+  function px(i) { return PAD_L + (i / (n-1)) * innerW; }
+  function py(v) { return PAD_T + (1 - (v - minY) / rangeY) * innerH; }
+
+  // Get accent color
+  var accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#9b5cf5';
+  var isLight = document.documentElement.classList.contains('light');
+  var gridColor = isLight ? '#e8e8ec' : '#2a2a2d';
+  var textColor = isLight ? '#a0a2b8' : '#454860';
+
+  var html = '';
+
+  // Horizontal grid lines (3 lines)
+  for (var g = 0; g <= 2; g++) {
+    var gv = minY + (rangeY * g / 2);
+    var gy = py(gv);
+    html += '<line x1="' + PAD_L + '" y1="' + gy.toFixed(1) + '" x2="' + (W - PAD_R) + '" y2="' + gy.toFixed(1) + '" stroke="' + gridColor + '" stroke-width="1"/>';
+    var label = Math.round(gv).toLocaleString('fr-FR') + '€';
+    html += '<text x="' + PAD_L + '" y="' + (gy - 3).toFixed(1) + '" font-size="8" fill="' + textColor + '" font-family="DM Mono,monospace">' + label + '</text>';
+  }
+
+  // Gradient fill
+  var gradId = svgId + '_grad';
+  var y0 = py(minY);
+  html += '<defs><linearGradient id="' + gradId + '" x1="0" y1="0" x2="0" y2="1">'
+    + '<stop offset="0%" stop-color="' + accent + '" stop-opacity="0.18"/>'
+    + '<stop offset="100%" stop-color="' + accent + '" stop-opacity="0"/>'
+    + '</linearGradient></defs>';
+
+  // Area path
+  var areaD = 'M ' + px(0).toFixed(1) + ' ' + y0.toFixed(1);
+  areaD += ' L ' + px(0).toFixed(1) + ' ' + py(pts[0].y).toFixed(1);
+  for (var i = 1; i < n; i++) {
+    areaD += ' L ' + px(i).toFixed(1) + ' ' + py(pts[i].y).toFixed(1);
+  }
+  areaD += ' L ' + px(n-1).toFixed(1) + ' ' + y0.toFixed(1) + ' Z';
+  html += '<path d="' + areaD + '" fill="url(#' + gradId + ')"/>';
+
+  // Line path
+  var lineD = 'M ' + px(0).toFixed(1) + ' ' + py(pts[0].y).toFixed(1);
+  for (var i = 1; i < n; i++) {
+    lineD += ' L ' + px(i).toFixed(1) + ' ' + py(pts[i].y).toFixed(1);
+  }
+  html += '<path d="' + lineD + '" fill="none" stroke="' + accent + '" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>';
+
+  // Dots + last value label
+  for (var i = 0; i < n; i++) {
+    var cx = px(i).toFixed(1), cy = py(pts[i].y).toFixed(1);
+    var isLast = i === n - 1;
+    html += '<circle cx="' + cx + '" cy="' + cy + '" r="' + (isLast ? '3.5' : '2') + '" fill="' + (isLast ? accent : 'var(--surface)') + '" stroke="' + accent + '" stroke-width="1.5"/>';
+  }
+  // Last value
+  var lastX = px(n-1), lastY = py(pts[n-1].y);
+  var lastLabel = Math.round(pts[n-1].y).toLocaleString('fr-FR') + '€';
+  var lx = Math.min(lastX + 6, W - 40);
+  html += '<text x="' + lx.toFixed(1) + '" y="' + (lastY + 4).toFixed(1) + '" font-size="9" font-weight="600" fill="' + accent + '" font-family="DM Mono,monospace">' + lastLabel + '</text>';
+
+  svg.innerHTML = html;
+}
+
 function renderBankroll() {
   var list = document.getElementById('bk-sessions-list');
   var statsCard = document.getElementById('bk-stats-card');
@@ -3896,6 +4124,11 @@ function renderBankroll() {
   if (sessEl) sessEl.textContent = bkSessions.length;
   var curEl = document.getElementById('bk-current');
   if (curEl) curEl.textContent = lastBK.toLocaleString('fr-FR') + '€';
+
+  // Draw chart
+  var chartCard = document.getElementById('bk-chart-card');
+  if (chartCard) chartCard.style.display = 'block';
+  setTimeout(function(){ drawBankrollChart('bk-chart-svg', bkSessions, 120); }, 50);
 
   // Sessions list (most recent first)
   list.innerHTML = '';
@@ -3937,6 +4170,135 @@ function renderBankroll() {
 
 //  INIT
 // ═══════════════════════════════════════
+
+// HABITUDES
+var habitsData=[];
+var evalHistory=[]; // [{score: 7.2}] last sessions
+var habitNextId=1;
+var habitSelectedEmoji="brain";
+var HABIT_ICONS={
+  brain:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+  book:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
+  dumbbell:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><line x1="6" y1="5" x2="6" y2="19"/><line x1="18" y1="5" x2="18" y2="19"/><line x1="2" y1="9" x2="6" y2="9"/><line x1="18" y1="9" x2="22" y2="9"/><line x1="2" y1="15" x2="6" y2="15"/><line x1="18" y1="15" x2="22" y2="15"/><line x1="6" y1="9" x2="18" y2="9"/><line x1="6" y1="15" x2="18" y2="15"/></svg>',
+  moon:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>',
+  target:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
+  zap:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+  heart:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+  coffee:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>',
+  sun:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>',
+  pen:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>',
+  eye:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
+  shield:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>'
+};
+function habitIcon(key){return HABIT_ICONS[key]||HABIT_ICONS["target"];}
+function buildHabitPicker(){
+  var picker=document.getElementById("habit-emoji-picker");if(!picker)return;
+  picker.innerHTML="";
+  Object.keys(HABIT_ICONS).forEach(function(key,i){
+    var btn=document.createElement("button");
+    btn.className="habit-emoji-opt"+(i===0?" selected":"");
+    btn.dataset.emoji=key;
+    btn.innerHTML=HABIT_ICONS[key];
+    btn.onclick=function(e){
+      var t=e.target.closest(".habit-emoji-opt");if(!t)return;
+      habitSelectedEmoji=t.dataset.emoji;
+      picker.querySelectorAll(".habit-emoji-opt").forEach(function(b){b.classList.remove("selected");});
+      t.classList.add("selected");
+    };
+    picker.appendChild(btn);
+  });
+}
+function todayKey(){return new Date().toISOString().split("T")[0];}
+function getWeekDays(){var days=[],now=new Date();for(var i=6;i>=0;i--){var d=new Date(now);d.setDate(now.getDate()-i);days.push(d.toISOString().split("T")[0]);}return days;}
+function getDayLabel(ds){return["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"][new Date(ds+"T12:00:00").getDay()];}
+function getStreak(habit){var s=0,d=new Date();while(true){var k=d.toISOString().split("T")[0];if(habit.history[k]){s++;d.setDate(d.getDate()-1);}else break;}return s;}
+function toggleHabitForm(show){
+  var form=document.getElementById("habit-add-form"),btn=document.getElementById("habits-add-btn");
+  if(!form||!btn)return;
+  form.style.display=show?"block":"none";btn.style.display=show?"none":"inline-flex";
+  if(show){buildHabitPicker();habitSelectedEmoji="brain";var inp=document.getElementById("habit-name-input");if(inp){inp.value="";inp.focus();}}
+}
+function addHabit(){
+  var nameEl=document.getElementById("habit-name-input"),name=nameEl?nameEl.value.trim():"";
+  if(!name){showToast("Entre un nom d'habitude.");return;}
+  habitsData.push({id:habitNextId++,name:name,emoji:habitSelectedEmoji,history:{}});
+  toggleHabitForm(false);renderHabits();updateDashboard();
+}
+function toggleHabitToday(id){
+  var habit=habitsData.find(function(x){return x.id===id;});if(!habit)return;
+  var key=todayKey();if(habit.history[key])delete habit.history[key];else habit.history[key]=true;
+  renderHabits();updateDashboard();
+}
+function deleteHabit(id){
+  var habit=habitsData.find(function(x){return x.id===id;});
+  var name=habit?habit.name:"cette habitude";
+  showConfirm("Supprimer \""+name+"\"?",function(){
+    habitsData=habitsData.filter(function(x){return x.id!==id;});
+    renderHabits();updateDashboard();
+  });
+}
+function renderHabits(){
+  var list=document.getElementById("habits-list");if(!list)return;
+  var today=todayKey(),done=habitsData.filter(function(x){return x.history[today];}).length,total=habitsData.length;
+  var sc=document.getElementById("habits-today-score"),tot=document.getElementById("habits-today-total");
+  var bar=document.getElementById("habits-today-bar"),comp=document.getElementById("habits-completed-label");
+  if(sc)sc.textContent=done;if(tot)tot.textContent="/"+total;
+  if(bar){bar.style.width=total?(done/total*100).toFixed(0)+"%":"0%";bar.style.background="var(--accent)";}
+  if(comp)comp.textContent=(done===total&&total>0)?"Toutes les habitudes complétées !":done+" / "+total+" complétées";
+  list.innerHTML="";
+  if(!habitsData.length){list.innerHTML="<div class=\"empty-state\" style=\"padding:10px 0;font-size:.8rem;\">Aucune habitude.</div>";}
+  else{habitsData.forEach(function(habit){
+    var isDone=!!habit.history[today],streak=getStreak(habit);
+    var item=document.createElement("div");item.className="habit-item";
+    var check=document.createElement("button");check.className="habit-check"+(isDone?" done":"");
+    (function(hid){check.addEventListener("click",function(){toggleHabitToday(hid);});})(habit.id);
+    item.appendChild(check);
+    var ico=document.createElement("span");ico.className="habit-emoji";ico.innerHTML=habitIcon(habit.emoji);item.appendChild(ico);
+    var lbl=document.createElement("div");lbl.className="habit-label";
+    var nm=document.createElement("div");nm.className="habit-name"+(isDone?" done":"");nm.textContent=habit.name;lbl.appendChild(nm);
+    if(streak>0){var st=document.createElement("div");st.className="habit-streak";st.textContent="🔥 "+streak+" jour"+(streak>1?"s":"")+" de suite";lbl.appendChild(st);}
+    item.appendChild(lbl);
+    var del=document.createElement("button");del.className="habit-del-btn";del.innerHTML="&#x2715;";
+    (function(hid){del.addEventListener("click",function(){deleteHabit(hid);});})(habit.id);
+    item.appendChild(del);list.appendChild(item);
+  });}
+  renderWeekGrid();renderHabitStats();
+}
+function renderWeekGrid(){
+  var cont=document.getElementById("habits-week-grid");if(!cont)return;
+  if(!habitsData.length){cont.innerHTML="";return;}
+  var days=getWeekDays(),today=todayKey();
+  var tbl="<table class=\"week-table\"><thead><tr><th class=\"week-th\"></th>";
+  days.forEach(function(d){tbl+="<th class=\"week-th"+(d===today?" today-col":"")+"\">"+getDayLabel(d)+"</th>";});
+  tbl+="</tr></thead><tbody>";
+  habitsData.forEach(function(habit){
+    tbl+="<tr><td class=\"week-habit-label\">"+h(habit.name)+"</td>";
+    days.forEach(function(d){tbl+="<td class=\"week-dot-cell\"><span class=\"wdot"+(habit.history[d]?" done":"")+(d===today?" today":"")+"\"></span></td>";});
+    tbl+="</tr>";
+  });
+  tbl+="</tbody></table>";cont.innerHTML=tbl;
+}
+function renderHabitStats(){
+  var cont=document.getElementById("habits-stats");if(!cont||!habitsData.length){if(cont)cont.innerHTML="";return;}
+  var best=0;habitsData.forEach(function(habit){var s=getStreak(habit);if(s>best)best=s;});
+  var days=getWeekDays(),total=habitsData.length*7,done=0;
+  habitsData.forEach(function(habit){days.forEach(function(d){if(habit.history[d])done++;});});
+  var rate=total?Math.round(done/total*100):0;
+  var checkins=habitsData.reduce(function(s,habit){return s+Object.keys(habit.history).length;},0);
+  cont.innerHTML="<div class=\"stat-card\" style=\"padding:12px;text-align:center;\"><div class=\"stat-card-label\" style=\"margin-bottom:4px;\">Meilleur streak</div><div class=\"stat-card-value\" style=\"font-size:1.4rem;\">"+best+"d</div></div>"    +"<div class=\"stat-card\" style=\"padding:12px;text-align:center;\"><div class=\"stat-card-label\" style=\"margin-bottom:4px;\">Taux semaine</div><div class=\"stat-card-value\" style=\"font-size:1.4rem;\">"+rate+"%</div></div>"    +"<div class=\"stat-card\" style=\"padding:12px;text-align:center;\"><div class=\"stat-card-label\" style=\"margin-bottom:4px;\">Total cochés</div><div class=\"stat-card-value\" style=\"font-size:1.4rem;\">"+checkins+"</div></div>";
+}
+// Init defaults
+habitsData=[
+  {id:habitNextId++,name:"Méditation",      emoji:"brain",    history:{}},
+  {id:habitNextId++,name:"Révision ranges", emoji:"book",     history:{}},
+  {id:habitNextId++,name:"Exercice physique",    emoji:"dumbbell", history:{}},
+  {id:habitNextId++,name:"Sommeil suffisant",    emoji:"moon",     history:{}},
+  {id:habitNextId++,name:"Pas de tilt",          emoji:"eye",      history:{}},
+  {id:habitNextId++,name:"Quiz du jour",         emoji:"target",   history:{}}
+];
+renderHabits();
+
+
 initColorGrid();
 renderQuestions();
 renderFolders();
@@ -3950,191 +4312,7 @@ evalCriteria = [
   { id: evalNextId++, name: 'Énergie',          max: 5, score: 0 },
 ];
 renderEvalCriteria();
-// Default habits
-habitsData = [
-  { id: habitNextId++, name: 'Méditation',       emoji: '🧘', history: {} },
-  { id: habitNextId++, name: 'Révision ranges',  emoji: '📚', history: {} },
-  { id: habitNextId++, name: 'Exercice physique',   emoji: '🏋', history: {} },
-  { id: habitNextId++, name: 'Sommeil suffisant',   emoji: '😴', history: {} },
-  { id: habitNextId++, name: 'Pas de tilt',         emoji: '🧠', history: {} },
-  { id: habitNextId++, name: 'Quiz du jour',        emoji: '🎯', history: {} },
-];
-renderHabits();
 try { initAuth(); } catch(e) { console.log('Auth init failed:', e); }
-
-
-// HABITUDES
-
-function todayKey() {
-  return new Date().toISOString().split('T')[0];
-}
-function getWeekDays() {
-  var days = [];
-  var now = new Date();
-  for (var i = 6; i >= 0; i--) {
-    var d = new Date(now);
-    d.setDate(now.getDate() - i);
-    days.push(d.toISOString().split('T')[0]);
-  }
-  return days;
-}
-function getDayLabel(dateStr) {
-  var d = new Date(dateStr + 'T12:00:00');
-  return ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'][d.getDay()];
-}
-function getStreak(habit) {
-  var streak = 0;
-  var d = new Date();
-  while (true) {
-    var key = d.toISOString().split('T')[0];
-    if (habit.history[key]) { streak++; d.setDate(d.getDate() - 1); }
-    else break;
-  }
-  return streak;
-}
-function toggleHabitForm(show) {
-  var form = document.getElementById('habit-add-form');
-  var btn  = document.getElementById('habits-add-btn');
-  if (!form || !btn) return;
-  form.style.display = show ? 'block' : 'none';
-  btn.style.display  = show ? 'none' : 'inline-flex';
-  if (show) {
-    habitSelectedEmoji = '🧘';
-    document.querySelectorAll('.habit-emoji-opt').forEach(function(b){ b.classList.toggle('selected', b.dataset.emoji === habitSelectedEmoji); });
-    var inp = document.getElementById('habit-name-input');
-    if (inp) { inp.value = ''; inp.focus(); }
-    document.querySelectorAll('.habit-emoji-opt').forEach(function(b) {
-      b.onclick = function() {
-        habitSelectedEmoji = this.dataset.emoji;
-        document.querySelectorAll('.habit-emoji-opt').forEach(function(x){ x.classList.remove('selected'); });
-        this.classList.add('selected');
-      };
-    });
-  }
-}
-function addHabit() {
-  var nameEl = document.getElementById('habit-name-input');
-  var name = nameEl ? nameEl.value.trim() : '';
-  if (!name) { showToast('Entre un nom d\'habitude.'); return; }
-  habitsData.push({ id: habitNextId++, name: name, emoji: habitSelectedEmoji, history: {} });
-  toggleHabitForm(false);
-  renderHabits();
-}
-function toggleHabitToday(id) {
-  var habit = habitsData.find(function(hb){ return hb.id === id; });
-  if (!habit) return;
-  var key = todayKey();
-  if (habit.history[key]) delete habit.history[key];
-  else habit.history[key] = true;
-  renderHabits();
-}
-function deleteHabit(id) {
-  var habit = habitsData.find(function(x){ return x.id === id; });
-  var name = habit ? habit.name : 'cette habitude';
-  showConfirm('Supprimer "' + name + '" ?', function() {
-    habitsData = habitsData.filter(function(x){ return x.id !== id; });
-    renderHabits();
-  });
-}
-function renderHabits() {
-  var list = document.getElementById('habits-list');
-  if (!list) return;
-  var today = todayKey();
-  var done = habitsData.filter(function(hb){ return hb.history[today]; }).length;
-  var total = habitsData.length;
-  var scoreEl = document.getElementById('habits-today-score');
-  var totalEl = document.getElementById('habits-today-total');
-  var barEl   = document.getElementById('habits-today-bar');
-  var compEl  = document.getElementById('habits-completed-label');
-  if (scoreEl) scoreEl.textContent = done;
-  if (totalEl) totalEl.textContent = '/' + total;
-  if (barEl)   barEl.style.width = total ? (done/total*100).toFixed(0)+'%' : '0%';
-  if (compEl)  compEl.textContent = (done === total && total > 0) ? 'Toutes les habitudes compl\xe9t\xe9es !' : done + ' / ' + total + ' compl\xe9t\xe9es';
-  // Color bar
-  if (barEl) {
-    var pct = total ? done/total : 0;
-    barEl.style.background = pct >= 1 ? 'var(--accent3)' : pct >= 0.5 ? 'var(--accent)' : 'var(--danger)';
-  }
-  list.innerHTML = '';
-  if (!habitsData.length) {
-    list.innerHTML = '<div class="empty-state" style="padding:10px 0;font-size:0.8rem;">Aucune habitude.</div>';
-  } else {
-    habitsData.forEach(function(habit) {
-      var isDone = !!habit.history[today];
-      var streak = getStreak(habit);
-      var item = document.createElement('div');
-      item.className = 'habit-item';
-      var checkEl = document.createElement('button');
-      checkEl.className = 'habit-check' + (isDone ? ' done' : '');
-      (function(hid){ checkEl.addEventListener('click', function(){ toggleHabitToday(hid); }); })(habit.id);
-      item.appendChild(checkEl);
-      var emojiEl = document.createElement('span');
-      emojiEl.className = 'habit-emoji';
-      emojiEl.textContent = habit.emoji;
-      item.appendChild(emojiEl);
-      var labelEl = document.createElement('div');
-      labelEl.className = 'habit-label';
-      var nameDiv = document.createElement('div');
-      nameDiv.className = 'habit-name' + (isDone ? ' done' : '');
-      nameDiv.textContent = habit.name;
-      labelEl.appendChild(nameDiv);
-      if (streak > 0) {
-        var streakDiv = document.createElement('div');
-        streakDiv.className = 'habit-streak';
-        streakDiv.textContent = '\uD83D\uDD25 ' + streak + ' jour' + (streak > 1 ? 's' : '') + ' de suite';
-        labelEl.appendChild(streakDiv);
-      }
-      item.appendChild(labelEl);
-      var delBtn = document.createElement('button');
-      delBtn.className = 'habit-del-btn';
-      delBtn.innerHTML = '&#x2715;';
-      (function(hid){ delBtn.addEventListener('click', function(){ deleteHabit(hid); }); })(habit.id);
-      item.appendChild(delBtn);
-      list.appendChild(item);
-    });
-  }
-  renderWeekGrid();
-  renderHabitStats();
-}
-function renderWeekGrid() {
-  var container = document.getElementById('habits-week-grid');
-  if (!container || !habitsData.length) { if(container) container.innerHTML = ''; return; }
-  var weekDays = getWeekDays();
-  var today = todayKey();
-  var tbl = '<table class="week-table"><thead><tr><th class="week-th"></th>';
-  weekDays.forEach(function(d) {
-    var isT = d === today;
-    tbl += '<th class="week-th' + (isT ? ' today-col' : '') + '">' + getDayLabel(d) + '</th>';
-  });
-  tbl += '</tr></thead><tbody>';
-  habitsData.forEach(function(hb) {
-    tbl += '<tr><td class="week-habit-label">' + h(hb.name) + '</td>';
-    weekDays.forEach(function(d) {
-      var isT = d === today;
-      tbl += '<td class="week-dot-cell"><span class="wdot' + (hb.history[d] ? ' done' : '') + (isT ? ' today' : '') + '"></span></td>';
-    });
-    tbl += '</tr>';
-  });
-  tbl += '</tbody></table>';
-  container.innerHTML = tbl;
-}
-function renderHabitStats() {
-  var container = document.getElementById('habits-stats');
-  if (!container) return;
-  if (!habitsData.length) { container.innerHTML = ''; return; }
-  var bestStreak = 0;
-  habitsData.forEach(function(habit){ var s = getStreak(habit); if (s > bestStreak) bestStreak = s; });
-  var weekDays = getWeekDays();
-  var totalSlots = habitsData.length * 7;
-  var doneSlots = 0;
-  habitsData.forEach(function(habit){ weekDays.forEach(function(d){ if(habit.history[d]) doneSlots++; }); });
-  var weekRate = totalSlots ? Math.round(doneSlots / totalSlots * 100) : 0;
-  var totalCheckins = habitsData.reduce(function(sum,habit){ return sum + Object.keys(habit.history).length; }, 0);
-  container.innerHTML =
-    '<div class="stat-card" style="padding:12px;text-align:center;"><div class="stat-card-label" style="margin-bottom:4px;">Meilleur streak</div><div class="stat-card-value" style="font-size:1.4rem;">' + bestStreak + 'd</div></div>'
-    + '<div class="stat-card" style="padding:12px;text-align:center;"><div class="stat-card-label" style="margin-bottom:4px;">Taux semaine</div><div class="stat-card-value" style="font-size:1.4rem;">' + weekRate + '%</div></div>'
-    + '<div class="stat-card" style="padding:12px;text-align:center;"><div class="stat-card-label" style="margin-bottom:4px;">Total coch\xe9s</div><div class="stat-card-value" style="font-size:1.4rem;">' + totalCheckins + '</div></div>';
-}
 
 
 </script>
